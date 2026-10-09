@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: ai-investment-advisor-db
+
+    environment:
+      POSTGRES_USER: investment_user
+      POSTGRES_PASSWORD: investment_password
+      POSTGRES_DB: investment_advisor
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

@@ -1,0 +1,27 @@
+# Environment
+.env
+.env.local
+*.env
+backend/.env
+
+# Python
+.venv/
+backend/.venv/
+__pycache__/
+*.pyc
+*.py[cod]
+
+# Node
+node_modules/
+.next/
+
+# IDE
+.vscode/*
+!.vscode/settings.json
+.idea/
+
+# Logs
+*.log
+
+# Database
+*.sqlite3
