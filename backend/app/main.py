@@ -4,6 +4,8 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from app.api.auth import router as auth_router
+from app.api.goals import router as goals_router
+from app.api.profile import router as profile_router
 from app.core.config import settings
 from app.core.database import get_db
 
@@ -25,6 +27,8 @@ app.add_middleware(
 )
 
 app.include_router(auth_router)
+app.include_router(profile_router)
+app.include_router(goals_router)
 
 
 @app.get("/health")
