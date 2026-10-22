@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from app.models.goal import Goal
     from app.models.profile import Profile
     from app.models.risk_assessment import RiskAssessment
+    from app.models.document import Document
 
 
 class User(Base):
@@ -47,3 +48,9 @@ class User(Base):
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    documents: Mapped[list["Document"]] = relationship(
+        "Document",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+

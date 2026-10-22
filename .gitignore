@@ -108,3 +108,6 @@ logs/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# User-uploaded financial documents
+backend/uploads/
