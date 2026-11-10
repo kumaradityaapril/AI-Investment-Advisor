@@ -2,7 +2,7 @@
 from datetime import datetime
 from typing import TYPE_CHECKING, Literal
 
-from sqlalchemy import DateTime, ForeignKey, Integer, String, func
+from sqlalchemy import DateTime, ForeignKey, Integer, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
@@ -41,6 +41,11 @@ class Document(Base):
     file_size_bytes: Mapped[int] = mapped_column(
         Integer,
         nullable=False,
+    )
+
+    extracted_text: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
     )
 
     status: Mapped[str] = mapped_column(
