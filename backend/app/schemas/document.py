@@ -19,3 +19,16 @@ class DocumentResponse(BaseModel):
     file_size_bytes: int = Field(gt=0)
     status: DocumentStatus
     created_at: datetime
+
+
+class DocumentTextResponse(BaseModel):
+    """Response containing extracted PDF text."""
+
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    original_filename: str
+    status: DocumentStatus
+    extracted_text: str = Field(min_length=1)
+    created_at: datetime
+
