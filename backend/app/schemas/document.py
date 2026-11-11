@@ -32,3 +32,21 @@ class DocumentTextResponse(BaseModel):
     extracted_text: str = Field(min_length=1)
     created_at: datetime
 
+
+DocumentIndexingStatus = Literal[
+    "pending",
+    "indexing",
+    "indexed",
+    "failed",
+]
+
+
+class DocumentIndexResponse(BaseModel):
+    """Response returned after document indexing."""
+
+    id: int
+    indexing_status: DocumentIndexingStatus
+    indexed_at: datetime | None
+    chunk_count: int = Field(ge=0)
+
+

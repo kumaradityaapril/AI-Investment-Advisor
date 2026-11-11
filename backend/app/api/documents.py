@@ -2,12 +2,18 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.api.auth import get_current_user
 from app.core.database import get_db
-from app.models import Document, User
-from app.schemas.document import DocumentResponse, DocumentTextResponse
+from app.models import Document, DocumentChunk, User
+from app.schemas.document import (
+    DocumentIndexResponse,
+    DocumentResponse,
+    DocumentTextResponse,
+)
+from app.services.document_indexing_service import index_document
 from app.services.document_processing_service import process_document
 from app.services.document_service import create_document
 
@@ -49,6 +55,35 @@ def process_uploaded_document(
         document_id=document_id,
         user_id=current_user.id,
     )
+
+
+@router.post(
+    "/{document_id}/index",
+    response_model=DocumentIndexResponse,
+    status_code=status.HTTP_200_OK,
+)
+def index_uploaded_document(
+    document_id: int,
+    current_user: Annotated[User, Depends(get_current_user)],
+    db: Annotated[Session, Depends(get_db)],
+) -> dict:
+    """Generate and persist embeddings for an authenticated user's document."""
+    document = index_document(
+        db=db,
+        document_id=document_id,
+        user_id=current_user.id,
+    )
+    chunk_count = (
+        db.query(func.count(DocumentChunk.id))
+        .filter(DocumentChunk.document_id == document_id)
+        .scalar()
+    )
+    return {
+        "id": document.id,
+        "indexing_status": document.indexing_status,
+        "indexed_at": document.indexed_at,
+        "chunk_count": chunk_count or 0,
+    }
 
 
 @router.get(
