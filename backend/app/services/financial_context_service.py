@@ -2,6 +2,7 @@
 from datetime import datetime, timezone
 from decimal import Decimal
 
+from pydantic import TypeAdapter
 from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 
@@ -14,6 +15,8 @@ from app.schemas.financial_context import (
     InvestorDocumentContext,
     FinancialMetricsContext,
     FinancialGoalAnalysis,
+    RiskCategory,
+    RiskAnswers,
 )
 from app.services.financial_calculation_service import (
     calculate_monthly_surplus,
@@ -174,10 +177,16 @@ def build_financial_context(
     risk_context = None
 
     if latest_assessment is not None:
+        risk_category = TypeAdapter(RiskCategory).validate_python(
+            latest_assessment.risk_category
+        )
+        risk_answers = TypeAdapter(RiskAnswers).validate_python(
+            latest_assessment.answers
+        )
         risk_context = InvestorRiskContext(
             risk_score=latest_assessment.risk_score,
-            risk_category=latest_assessment.risk_category,
-            answers=latest_assessment.answers,
+            risk_category=risk_category,
+            answers=risk_answers,
             assessed_at=latest_assessment.assessed_at,
         )
 

@@ -14,6 +14,22 @@ REQUIRED_RISK_FACTORS = {
     "financial_stability",
 }
 
+RiskFactor = Literal[
+    "investment_experience",
+    "time_horizon",
+    "loss_reaction",
+    "growth_preference",
+    "financial_stability",
+]
+
+RiskCategory = Literal[
+    "conservative",
+    "moderate",
+    "aggressive",
+]
+
+RiskAnswers = dict[RiskFactor, int]
+
 
 class InvestorProfileContext(BaseModel):
     age: int | None = None
@@ -35,33 +51,22 @@ class InvestorGoalContext(BaseModel):
 
 class InvestorRiskContext(BaseModel):
     risk_score: int = Field(ge=0, le=20)
-    risk_category: Literal[
-        "conservative",
-        "moderate",
-        "aggressive",
-    ]
-    answers: dict[
-        Literal[
-            "investment_experience",
-            "time_horizon",
-            "loss_reaction",
-            "growth_preference",
-            "financial_stability",
-        ],
-        int,
-    ]
+    risk_category: RiskCategory
+    answers: RiskAnswers
     assessed_at: datetime
 
     @field_validator("answers")
     @classmethod
-    def validate_answers(cls, v: dict[str, int]) -> dict[str, int]:
+    def validate_answers(cls, v: RiskAnswers) -> RiskAnswers:
         missing = REQUIRED_RISK_FACTORS - set(v.keys())
         if missing:
-            raise ValueError(f"Missing required risk assessment answers: {missing}")
+            raise ValueError(
+                f"Missing required risk assessment answers: {missing}"
+            )
         for key, val in v.items():
-            if not isinstance(val, int) or not (0 <= val <= 4):
+            if not 0 <= val <= 4:
                 raise ValueError(
-                    f"Answer for '{key}' must be an integer between 0 and 4."
+                    f"Answer for '{key}' must be between 0 and 4."
                 )
         return v
 
