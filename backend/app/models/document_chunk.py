@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
+    Computed,
     DateTime,
     ForeignKey,
     Index,
@@ -11,6 +12,7 @@ from sqlalchemy import (
     UniqueConstraint,
     func,
 )
+from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.config import settings
@@ -40,6 +42,11 @@ class DocumentChunk(Base):
                 "embedding": "vector_cosine_ops",
             },
         ),
+        Index(
+            "ix_document_chunks_search_vector_gin",
+            "search_vector",
+            postgresql_using="gin",
+        ),
     )
 
     id: Mapped[int] = mapped_column(
@@ -60,6 +67,14 @@ class DocumentChunk(Base):
     )
     content: Mapped[str] = mapped_column(
         Text,
+        nullable=False,
+    )
+    search_vector: Mapped[str] = mapped_column(
+        TSVECTOR,
+        Computed(
+            "to_tsvector('simple'::regconfig, COALESCE(content, ''::text))",
+            persisted=True,
+        ),
         nullable=False,
     )
     embedding: Mapped[list[float]] = mapped_column(
