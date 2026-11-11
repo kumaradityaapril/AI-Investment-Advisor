@@ -10,6 +10,7 @@ from app.api.risk_assessments import router as risk_assessments_router
 from app.core.config import settings
 from app.core.database import get_db
 from app.api.documents import router as documents_router
+from app.api.financial_analysis import router as financial_analysis_router
 
 app = FastAPI(
     title=settings.app_name,
@@ -33,6 +34,7 @@ app.include_router(profile_router)
 app.include_router(goals_router)
 app.include_router(risk_assessments_router)
 app.include_router(documents_router)
+app.include_router(financial_analysis_router)
 
 
 @app.get("/health")
