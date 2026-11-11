@@ -18,6 +18,12 @@ class Settings(BaseSettings):
     upload_dir: str = "uploads"
     max_upload_size_bytes: int = Field(default=10 * 1024 * 1024, gt=0)
 
+    gemini_api_key: str
+    embedding_model: str = "gemini-embedding-001"
+    embedding_dimensions: int = 768
+
+    indexing_stale_timeout_minutes: int = 30
+
     model_config = SettingsConfigDict(
         env_file=(BASE_DIR / ".env", ".env"),
         extra="ignore",
