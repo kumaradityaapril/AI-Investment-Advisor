@@ -41,23 +41,29 @@ def _claim_document_for_indexing(
     Fails with 409 if the document is not processed, missing text,
     or already being indexed.
     """
-    stmt = (
+    result = db.execute(
         update(Document)
         .where(
             Document.id == document_id,
             Document.user_id == user_id,
             Document.status == "processed",
-            Document.extracted_text.isnot(None),
-            Document.indexing_status != "indexing",
+            Document.extracted_text.is_not(None),
+            Document.indexing_status.in_(
+                ["pending", "failed", "indexed"]
+            ),
         )
         .values(
             indexing_status="indexing",
             indexing_started_at=func.now(),
         )
+        .returning(Document.id)
+        .execution_options(synchronize_session=False)
     )
-    result = db.execute(stmt)
+    claimed_document_id = result.scalar_one_or_none()
 
-    if result.rowcount == 0:
+    if claimed_document_id is None:
+        db.rollback()
+
         document = (
             db.query(Document)
             .filter(
@@ -100,6 +106,12 @@ def _claim_document_for_indexing(
         )
         .first()
     )
+    if document is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Document not found.",
+        )
+
     return document
 
 
@@ -282,10 +294,12 @@ def recover_stale_document_indexing(db: Session) -> int:
                 indexing_status="failed",
                 indexing_started_at=None,
             )
+            .returning(Document.id)
             .execution_options(synchronize_session=False)
         )
+        recovered_ids = result.scalars().all()
         db.commit()
-        return result.rowcount
+        return len(recovered_ids)
     except Exception:
         db.rollback()
         raise
