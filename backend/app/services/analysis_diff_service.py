@@ -196,7 +196,7 @@ def calculate_goal_deltas(
                     current_shortfall=c_short,
                 )
             )
-        else:
+        elif b_item and c_item:
             title = c_item.get("goal_title") or b_item.get("goal_title") or f"Goal {gid}"
             b_short = _to_decimal(b_item.get("monthly_contribution_shortfall"))
             c_short = _to_decimal(c_item.get("monthly_contribution_shortfall"))
