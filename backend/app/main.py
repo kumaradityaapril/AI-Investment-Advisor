@@ -11,6 +11,9 @@ from app.core.config import settings
 from app.core.database import get_db
 from app.api.documents import router as documents_router
 from app.api.financial_analysis import router as financial_analysis_router
+from app.api.investment_comparison import router as investment_comparison_router
+from app.api.advisor import router as advisor_router
+from app.api.research import router as research_router
 
 app = FastAPI(
     title=settings.app_name,
@@ -35,6 +38,9 @@ app.include_router(goals_router)
 app.include_router(risk_assessments_router)
 app.include_router(documents_router)
 app.include_router(financial_analysis_router)
+app.include_router(investment_comparison_router)
+app.include_router(advisor_router)
+app.include_router(research_router)
 
 
 @app.get("/health")

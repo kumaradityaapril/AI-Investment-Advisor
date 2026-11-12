@@ -1,4 +1,5 @@
 from app.core.database import Base
+from app.models.analysis_history import AnalysisHistory
 from app.models.document import Document
 from app.models.document_chunk import DocumentChunk
 from app.models.goal import Goal
@@ -14,4 +15,5 @@ __all__ = [
     "RiskAssessment",
     "Document",
     "DocumentChunk",
+    "AnalysisHistory",
 ]
