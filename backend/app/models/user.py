@@ -7,6 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 if TYPE_CHECKING:
+    from app.models.analysis_history import AnalysisHistory
     from app.models.goal import Goal
     from app.models.profile import Profile
     from app.models.risk_assessment import RiskAssessment
@@ -50,6 +51,11 @@ class User(Base):
     )
     documents: Mapped[list["Document"]] = relationship(
         "Document",
+        back_populates="user",
+        cascade="all, delete-orphan",
+    )
+    analyses: Mapped[list["AnalysisHistory"]] = relationship(
+        "AnalysisHistory",
         back_populates="user",
         cascade="all, delete-orphan",
     )
