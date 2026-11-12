@@ -168,7 +168,7 @@ def calculate_goal_deltas(
         b_item = b_goals.get(gid)
         c_item = c_goals.get(gid)
 
-        if b_item and not c_item:
+        if b_item is not None and c_item is None:
             title = b_item.get("goal_title", f"Goal {gid}")
             status = "removed"
             b_target = _to_decimal(b_item.get("target_amount"))
@@ -182,7 +182,7 @@ def calculate_goal_deltas(
                     baseline_shortfall=b_short,
                 )
             )
-        elif c_item and not b_item:
+        elif c_item is not None and b_item is None:
             title = c_item.get("goal_title", f"Goal {gid}")
             status = "new"
             c_target = _to_decimal(c_item.get("target_amount"))
@@ -196,7 +196,7 @@ def calculate_goal_deltas(
                     current_shortfall=c_short,
                 )
             )
-        elif b_item and c_item:
+        elif b_item is not None and c_item is not None:
             title = c_item.get("goal_title") or b_item.get("goal_title") or f"Goal {gid}"
             b_short = _to_decimal(b_item.get("monthly_contribution_shortfall"))
             c_short = _to_decimal(c_item.get("monthly_contribution_shortfall"))
