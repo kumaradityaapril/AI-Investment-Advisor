@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     reranking_batch_size: int = Field(default=10, ge=1, le=20)
     reranking_max_candidates: int = Field(default=50, ge=1, le=100)
 
+    advisor_model: str = "gemini-2.5-flash"
+
     indexing_stale_timeout_minutes: int = 30
 
     model_config = SettingsConfigDict(
