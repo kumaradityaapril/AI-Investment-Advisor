@@ -14,6 +14,9 @@ from app.api.financial_analysis import router as financial_analysis_router
 from app.api.investment_comparison import router as investment_comparison_router
 from app.api.advisor import router as advisor_router
 from app.api.research import router as research_router
+from app.api.scenarios import router as scenarios_router
+from app.core.exceptions import register_exception_handlers
+from app.core.logging_middleware import AuditLoggingMiddleware
 
 app = FastAPI(
     title=settings.app_name,
@@ -21,6 +24,7 @@ app = FastAPI(
     description="GenAI-powered AI Investment Advisor API",
 )
 
+app.add_middleware(AuditLoggingMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -32,6 +36,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+register_exception_handlers(app)
+
 app.include_router(auth_router)
 app.include_router(profile_router)
 app.include_router(goals_router)
@@ -41,6 +47,7 @@ app.include_router(financial_analysis_router)
 app.include_router(investment_comparison_router)
 app.include_router(advisor_router)
 app.include_router(research_router)
+app.include_router(scenarios_router)
 
 
 @app.get("/health")
