@@ -135,7 +135,7 @@ export default function HistoryPage() {
       <div className="flex flex-col min-h-screen bg-[#f8f9ff]">
         <Navbar />
 
-        <main className="flex-1 pt-28 pb-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto w-full">
+        <main className="flex-1 pt-28 pb-20 px-4 sm:px-8 lg:px-12 2xl:px-16 max-w-[1600px] mx-auto w-full">
           {/* HEADER */}
           <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 border-b border-slate-200 gap-4 mb-8">
             <div>

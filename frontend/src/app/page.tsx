@@ -18,43 +18,59 @@ export default function HomePage() {
     <div className="flex flex-col min-h-screen bg-[#f8f9ff]">
       <Navbar />
 
-      <main className="flex-1 pt-24">
+      <main className="flex-1 pt-20">
         {/* HERO SECTION WITH 3D CANVAS */}
-        <section className="relative overflow-hidden pt-12 pb-20 px-6 lg:px-12 max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <section className="relative overflow-hidden pt-8 sm:pt-12 pb-14 sm:pb-20 px-4 sm:px-8 lg:px-12 2xl:px-16 max-w-[1600px] mx-auto w-full">
+          {/* Subtle Ambient Backdrops */}
+          <div className="absolute top-10 left-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
+          <div className="absolute top-20 right-10 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-center">
             {/* Left Content */}
-            <div className="lg:col-span-7 flex flex-col gap-6 z-10">
-              <div className="inline-flex items-center gap-2 self-start px-3.5 py-1.5 rounded-full bg-[#e1e0ff] text-[#07006c] font-semibold text-xs tracking-wide">
-                <span className="w-2 h-2 rounded-full bg-[#2a14b4] animate-ping"></span>
-                <span>ENTERPRISE WEALTH INTELLIGENCE</span>
+            <div className="lg:col-span-7 xl:col-span-7 flex flex-col gap-6 z-10">
+              <div className="inline-flex items-center gap-2.5 self-start px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100/90 text-indigo-900 font-semibold text-xs tracking-wide shadow-xs">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span>ENTERPRISE WEALTH INTELLIGENCE • SEC &amp; SEBI GROUNDED</span>
               </div>
 
-              <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl text-[#0b1c30] tracking-tight leading-[1.12]">
+              <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-[#0b1c30] tracking-tight leading-[1.08]">
                 Private Wealth Clarity. <br />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2a14b4] via-[#4648d4] to-[#10b981]">
                   Zero Hallucinations.
                 </span>
               </h1>
 
-              <p className="text-base sm:text-lg text-[#464554] max-w-2xl leading-relaxed">
+              <p className="text-base sm:text-lg lg:text-xl text-[#464554] max-w-3xl leading-relaxed">
                 The first autonomous investment advisor backed by deterministic
-                Python math, pgvector hybrid search, and multi-layer regulatory
+                Python Decimal math, pgvector hybrid search, and multi-layer regulatory
                 guardrails. Every financial recommendation is citation-grounded
                 and mathematically verified.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
+              <div className="flex flex-wrap items-center gap-4 pt-1">
                 {user ? (
-                  <Link
-                    href="/dashboard"
-                    className="px-7 py-3.5 rounded-xl bg-[#2a14b4] hover:bg-[#4338ca] text-white font-semibold text-sm shadow-[0_4px_16px_rgba(42,20,180,0.25)] hover:shadow-[0_6px_20px_rgba(42,20,180,0.35)] hover:-translate-y-0.5 transition-all flex items-center gap-2"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">
-                      dashboard
-                    </span>
-                    <span>Go to My Dashboard</span>
-                  </Link>
+                  <>
+                    <Link
+                      href="/dashboard"
+                      className="px-8 py-4 rounded-2xl bg-[#2a14b4] hover:bg-[#4338ca] text-white font-bold text-sm shadow-[0_4px_20px_rgba(42,20,180,0.25)] hover:shadow-[0_8px_24px_rgba(42,20,180,0.35)] hover:-translate-y-0.5 transition-all flex items-center gap-2.5"
+                    >
+                      <span className="material-symbols-outlined text-[20px]">
+                        dashboard
+                      </span>
+                      <span>Go to My Dashboard</span>
+                    </Link>
+
+                    <Link
+                      href="/scenarios"
+                      className="px-6 py-4 rounded-2xl bg-white hover:bg-[#eff4ff] text-[#0b1c30] font-semibold text-sm border border-slate-200 shadow-xs hover:-translate-y-0.5 transition-all flex items-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-[20px] text-indigo-600">
+                        tune
+                      </span>
+                      <span>Simulate Scenarios</span>
+                    </Link>
+                  </>
                 ) : (
                   <>
                     <button
@@ -62,9 +78,9 @@ export default function HomePage() {
                         setAuthMode("register");
                         setIsAuthOpen(true);
                       }}
-                      className="px-7 py-3.5 rounded-xl bg-[#2a14b4] hover:bg-[#4338ca] text-white font-semibold text-sm shadow-[0_4px_16px_rgba(42,20,180,0.25)] hover:shadow-[0_6px_20px_rgba(42,20,180,0.35)] hover:-translate-y-0.5 transition-all flex items-center gap-2 cursor-pointer"
+                      className="px-8 py-4 rounded-2xl bg-[#2a14b4] hover:bg-[#4338ca] text-white font-bold text-sm shadow-[0_4px_20px_rgba(42,20,180,0.25)] hover:shadow-[0_8px_24px_rgba(42,20,180,0.35)] hover:-translate-y-0.5 transition-all flex items-center gap-2.5 cursor-pointer"
                     >
-                      <span className="material-symbols-outlined text-[18px]">
+                      <span className="material-symbols-outlined text-[20px]">
                         rocket_launch
                       </span>
                       <span>Get Started Free</span>
@@ -72,9 +88,9 @@ export default function HomePage() {
 
                     <Link
                       href="/login"
-                      className="px-6 py-3.5 rounded-xl bg-white hover:bg-[#eff4ff] text-[#0b1c30] font-semibold text-sm border border-[#e2e8f0] shadow-sm hover:-translate-y-0.5 transition-all flex items-center gap-2"
+                      className="px-7 py-4 rounded-2xl bg-white hover:bg-[#eff4ff] text-[#0b1c30] font-semibold text-sm border border-slate-200 shadow-xs hover:-translate-y-0.5 transition-all flex items-center gap-2"
                     >
-                      <span className="material-symbols-outlined text-[18px] text-[#2a14b4]">
+                      <span className="material-symbols-outlined text-[20px] text-[#2a14b4]">
                         lock
                       </span>
                       <span>Sign In to Advisor</span>
@@ -83,45 +99,93 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* Key Platform Accreditations */}
-              <div className="grid grid-cols-3 gap-4 pt-6 border-t border-[#e2e8f0]">
-                <div>
-                  <div className="font-display font-bold text-2xl text-[#0b1c30]">
+              {/* Key Platform Accreditations - Expanded 3-Card Glassmorphic Ribbon */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3">
+                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-emerald-200 transition-colors">
+                  <div className="flex items-center gap-1.5 text-emerald-600 mb-1">
+                    <span className="material-symbols-outlined text-[17px]">verified</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Grounding</span>
+                  </div>
+                  <div className="font-display font-extrabold text-2xl text-[#0b1c30]">
                     100%
                   </div>
-                  <div className="text-xs text-[#777586] font-medium">
+                  <div className="text-xs text-[#777586] font-semibold mt-0.5">
                     Claim Ledger Grounding
                   </div>
+                  <div className="text-[11px] text-slate-400 mt-1 leading-snug">
+                    Every currency &amp; % cross-referenced against facts
+                  </div>
                 </div>
-                <div>
-                  <div className="font-display font-bold text-2xl text-[#2a14b4]">
+
+                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-colors">
+                  <div className="flex items-center gap-1.5 text-indigo-600 mb-1">
+                    <span className="material-symbols-outlined text-[17px]">hub</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Hybrid RAG</span>
+                  </div>
+                  <div className="font-display font-extrabold text-2xl text-[#2a14b4]">
                     768-dim
                   </div>
-                  <div className="text-xs text-[#777586] font-medium">
+                  <div className="text-xs text-[#777586] font-semibold mt-0.5">
                     HNSW Vector Embeddings
                   </div>
+                  <div className="text-[11px] text-slate-400 mt-1 leading-snug">
+                    SEC 10-K &amp; statement ingestion in pgvector
+                  </div>
                 </div>
-                <div>
-                  <div className="font-display font-bold text-2xl text-[#10b981]">
+
+                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-teal-200 transition-colors">
+                  <div className="flex items-center gap-1.5 text-teal-600 mb-1">
+                    <span className="material-symbols-outlined text-[17px]">calculate</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider">Exact Math</span>
+                  </div>
+                  <div className="font-display font-extrabold text-2xl text-[#10b981]">
                     Python Decimal
                   </div>
-                  <div className="text-xs text-[#777586] font-medium">
+                  <div className="text-xs text-[#777586] font-semibold mt-0.5">
                     Exact Financial Math
                   </div>
+                  <div className="text-[11px] text-slate-400 mt-1 leading-snug">
+                    Zero floating point drift or LLM hallucination
+                  </div>
                 </div>
+              </div>
+
+              {/* Live Institutional Signal Ribbon */}
+              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-indigo-50/80 via-white to-emerald-50/60 border border-slate-200/80 flex items-center justify-between text-xs text-slate-600 shadow-xs">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <span className="font-semibold text-slate-900">Deterministic Guardrails:</span>
+                  <span className="hidden sm:inline">SEBI Risk Score • Compound Interest Engine • Tenant Isolation</span>
+                </div>
+                <span className="font-mono text-[11px] text-indigo-700 font-bold">SHA-256 Verified</span>
               </div>
             </div>
 
             {/* Right Column: 3D INTERACTIVE HERO SPHERE */}
-            <div className="lg:col-span-5 flex items-center justify-center relative">
+            <div className="lg:col-span-5 xl:col-span-5 flex items-center justify-center relative">
+              {/* Floating Status Pill 1 */}
+              <div className="absolute top-2 right-2 sm:right-6 z-20 hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-sm animate-bounce [animation-duration:3.5s]">
+                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span className="text-xs font-bold text-slate-900">Portfolio Health: 94</span>
+                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Optimal</span>
+              </div>
+
+              {/* Floating Status Pill 2 */}
+              <div className="absolute bottom-4 left-2 sm:left-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-sm">
+                <span className="material-symbols-outlined text-[16px] text-indigo-600">
+                  insights
+                </span>
+                <span className="text-xs font-semibold text-slate-800">Deterministic HNSW Space</span>
+              </div>
+
               <ThreeDHeroSphere />
             </div>
           </div>
         </section>
 
         {/* INTERACTIVE CAPABILITY TABS */}
-        <section className="py-16 px-6 lg:px-12 bg-white border-y border-[#e2e8f0]">
-          <div className="max-w-7xl mx-auto flex flex-col gap-10">
+        <section className="py-16 px-4 sm:px-8 lg:px-12 2xl:px-16 bg-white border-y border-[#e2e8f0]">
+          <div className="max-w-[1600px] mx-auto flex flex-col gap-10">
             <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
               <span className="px-3 py-1 rounded-full bg-[#eff4ff] text-[#2a14b4] text-xs font-semibold mb-2">
                 COMPLETE PRD PLATFORM CAPABILITIES
@@ -356,7 +420,7 @@ export default function HomePage() {
         </section>
 
         {/* 9 MODULAR APP SCREENS CATALOG */}
-        <section className="py-20 px-6 lg:px-12 max-w-7xl mx-auto">
+        <section className="py-20 px-4 sm:px-8 lg:px-12 2xl:px-16 max-w-[1600px] mx-auto w-full">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <span className="px-3 py-1 rounded-full bg-[#eff4ff] text-[#2a14b4] text-xs font-semibold">
               FULL SUITE EXPERIENCE

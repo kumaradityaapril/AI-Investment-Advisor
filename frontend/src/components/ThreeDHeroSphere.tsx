@@ -16,7 +16,7 @@ export default function ThreeDHeroSphere() {
 
     // Scene, Camera, Renderer
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(48, width / height, 0.1, 1000);
     camera.position.z = 4.2;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -184,10 +184,10 @@ export default function ThreeDHeroSphere() {
   }, []);
 
   return (
-    <div className="relative w-full h-[400px] sm:h-[480px] lg:h-[520px] flex items-center justify-center">
+    <div className="relative w-full max-w-[420px] sm:max-w-[460px] lg:max-w-[520px] xl:max-w-[560px] aspect-square flex items-center justify-center mx-auto">
       {/* Ambient background glows */}
       <div className="absolute w-72 h-72 rounded-full bg-indigo-500/15 blur-3xl pointer-events-none"></div>
-      <div className="absolute w-60 h-60 rounded-full bg-emerald-400/10 blur-2xl pointer-events-none translate-x-12 translate-y-12"></div>
+      <div className="absolute w-60 h-60 rounded-full bg-emerald-400/10 blur-2xl pointer-events-none translate-x-8 translate-y-8"></div>
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
     </div>
   );

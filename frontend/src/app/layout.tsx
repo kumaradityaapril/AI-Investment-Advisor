@@ -3,9 +3,9 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
-  title: "Aura AI Wealth — Simple Wealth Advisor & Financial Intelligence",
+  title: "AI Investment Advisor — Intelligent Wealth Planning & Compliance",
   description:
-    "Next-generation AI Investment Advisor with deterministic financial calculations, hybrid RAG document grounding, and verified compliance guardrails.",
+    "Autonomous AI Investment Advisor with deterministic financial calculations, hybrid pgvector RAG document grounding, and SEBI regulatory guardrails.",
 };
 
 export default function RootLayout({

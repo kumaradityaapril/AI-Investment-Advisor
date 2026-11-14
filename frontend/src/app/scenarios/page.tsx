@@ -18,8 +18,17 @@ import {
 } from "lucide-react";
 
 interface ScenarioTemplate {
-  name: string;
+  template_id?: string;
+  title?: string;
+  name?: string;
   description: string;
+  parameters?: {
+    delta_monthly_investment?: number;
+    delta_monthly_income?: number;
+    delta_monthly_expenses?: number;
+    one_time_lump_sum?: number;
+    assumed_annual_return_percent?: number;
+  };
   monthly_investment_delta?: number;
   monthly_income_delta?: number;
   monthly_expenses_delta?: number;
@@ -96,11 +105,15 @@ export default function ScenariosPage() {
   }, []);
 
   const applyTemplate = (tpl: ScenarioTemplate) => {
-    setScenarioName(tpl.name);
-    if (tpl.monthly_investment_delta !== undefined) setSipDelta(tpl.monthly_investment_delta);
-    if (tpl.lump_sum_investment !== undefined) setLumpSum(tpl.lump_sum_investment);
-    if (tpl.time_horizon_years !== undefined) setHorizonYears(tpl.time_horizon_years);
-    if (tpl.expected_annual_return_percent !== undefined) setReturnRate(tpl.expected_annual_return_percent);
+    const title = tpl.title || tpl.name || "Custom Scenario";
+    setScenarioName(title);
+    const sip = tpl.parameters?.delta_monthly_investment ?? tpl.monthly_investment_delta;
+    if (sip !== undefined) setSipDelta(Number(sip));
+    const lump = tpl.parameters?.one_time_lump_sum ?? tpl.lump_sum_investment;
+    if (lump !== undefined) setLumpSum(Number(lump));
+    const returnVal = tpl.parameters?.assumed_annual_return_percent ?? tpl.expected_annual_return_percent;
+    if (returnVal !== undefined) setReturnRate(Number(returnVal));
+    if (tpl.time_horizon_years !== undefined) setHorizonYears(Number(tpl.time_horizon_years));
   };
 
   const handleSimulate = async (e: React.FormEvent) => {
@@ -132,7 +145,7 @@ export default function ScenariosPage() {
       <div className="flex flex-col min-h-screen bg-[#f8f9ff]">
         <Navbar />
 
-        <main className="flex-1 pt-28 pb-20 px-4 sm:px-6 lg:px-12 max-w-7xl mx-auto w-full">
+        <main className="flex-1 pt-28 pb-20 px-4 sm:px-8 lg:px-12 2xl:px-16 max-w-[1600px] mx-auto w-full">
           {/* HEADER */}
           <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 border-b border-slate-200 gap-4 mb-8">
             <div>
@@ -160,26 +173,30 @@ export default function ScenariosPage() {
                     Quick Scenario Presets
                   </h3>
                   <div className="space-y-2">
-                    {templates.map((tpl) => (
-                      <button
-                        key={tpl.name}
-                        type="button"
-                        onClick={() => applyTemplate(tpl)}
-                        className={`w-full p-3 rounded-2xl text-left text-xs font-semibold border transition-all flex items-center justify-between cursor-pointer ${
-                          scenarioName === tpl.name
-                            ? "bg-indigo-50 border-indigo-300 text-indigo-900 shadow-xs"
-                            : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
-                        }`}
-                      >
-                        <div className="pr-2">
-                          <span>{tpl.name}</span>
-                          <span className="block text-[11px] font-normal text-slate-400 mt-0.5">
-                            {tpl.description}
-                          </span>
-                        </div>
-                        <Zap className="w-4 h-4 text-indigo-600 flex-shrink-0" />
-                      </button>
-                    ))}
+                    {templates.map((tpl, idx) => {
+                      const key = tpl.template_id || tpl.title || tpl.name || `tpl-${idx}`;
+                      const title = tpl.title || tpl.name || `Scenario Template ${idx + 1}`;
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => applyTemplate(tpl)}
+                          className={`w-full p-3 rounded-2xl text-left text-xs font-semibold border transition-all flex items-center justify-between cursor-pointer ${
+                            scenarioName === title
+                              ? "bg-indigo-50 border-indigo-300 text-indigo-900 shadow-xs"
+                              : "bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100"
+                          }`}
+                        >
+                          <div className="pr-2">
+                            <span>{title}</span>
+                            <span className="block text-[11px] font-normal text-slate-400 mt-0.5">
+                              {tpl.description}
+                            </span>
+                          </div>
+                          <Zap className="w-4 h-4 text-indigo-600 flex-shrink-0" />
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               )}

@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-white border-t border-[#e2e8f0] py-12 px-6 lg:px-12 text-[#464554]">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-8">
+    <footer className="w-full bg-white border-t border-[#e2e8f0] py-12 px-4 sm:px-8 lg:px-12 2xl:px-16 text-[#464554]">
+      <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row items-start justify-between gap-8">
         <div className="flex flex-col gap-3 max-w-sm">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-xl bg-[#2a14b4] flex items-center justify-center text-white">
@@ -12,7 +12,7 @@ export default function Footer() {
               </span>
             </div>
             <span className="font-display font-bold text-lg text-[#2a14b4]">
-              Aura AI Wealth
+              AI Investment Advisor
             </span>
           </div>
           <p className="text-xs text-[#777586] leading-relaxed">
@@ -75,8 +75,8 @@ export default function Footer() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto mt-10 pt-6 border-t border-[#e2e8f0]/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#777586]">
-        <p>© 2026 Aura AI Wealth Advisor. For educational &amp; analytical guidance.</p>
+      <div className="max-w-[1600px] mx-auto mt-10 pt-6 border-t border-[#e2e8f0]/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#777586]">
+        <p>© 2026 AI Investment Advisor. For educational &amp; analytical guidance.</p>
         <p className="max-w-md text-center sm:text-right">
           Investments carry market risk. Past performance does not guarantee future results.
         </p>
