@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ThreeDHeroSphere from "@/components/ThreeDHeroSphere";
+import HeroWealthShowcase3D from "@/components/HeroWealthShowcase3D";
+import TiltCard from "@/components/TiltCard";
 import AuthModal from "@/components/AuthModal";
 import { useAuth } from "@/context/AuthContext";
 
@@ -99,55 +100,67 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* Key Platform Accreditations - Expanded 3-Card Glassmorphic Ribbon */}
+              {/* Key Platform Accreditations - Interactive 3D Tilt Ribbon */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3">
-                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-emerald-200 transition-colors">
-                  <div className="flex items-center gap-1.5 text-emerald-600 mb-1">
-                    <span className="material-symbols-outlined text-[17px]">verified</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Grounding</span>
+                <TiltCard maxTilt={8} scale={1.03}>
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-emerald-200 transition-colors h-full flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-emerald-600 mb-1">
+                        <span className="material-symbols-outlined text-[17px]">verified</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Grounding</span>
+                      </div>
+                      <div className="font-display font-extrabold text-2xl text-[#0b1c30]">
+                        100%
+                      </div>
+                      <div className="text-xs text-[#777586] font-semibold mt-0.5">
+                        Claim Ledger Grounding
+                      </div>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-2 leading-snug">
+                      Every currency &amp; % cross-referenced against facts
+                    </div>
                   </div>
-                  <div className="font-display font-extrabold text-2xl text-[#0b1c30]">
-                    100%
-                  </div>
-                  <div className="text-xs text-[#777586] font-semibold mt-0.5">
-                    Claim Ledger Grounding
-                  </div>
-                  <div className="text-[11px] text-slate-400 mt-1 leading-snug">
-                    Every currency &amp; % cross-referenced against facts
-                  </div>
-                </div>
+                </TiltCard>
 
-                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-colors">
-                  <div className="flex items-center gap-1.5 text-indigo-600 mb-1">
-                    <span className="material-symbols-outlined text-[17px]">hub</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Hybrid RAG</span>
+                <TiltCard maxTilt={8} scale={1.03}>
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-colors h-full flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-indigo-600 mb-1">
+                        <span className="material-symbols-outlined text-[17px]">hub</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Hybrid RAG</span>
+                      </div>
+                      <div className="font-display font-extrabold text-2xl text-[#2a14b4]">
+                        768-dim
+                      </div>
+                      <div className="text-xs text-[#777586] font-semibold mt-0.5">
+                        HNSW Vector Embeddings
+                      </div>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-2 leading-snug">
+                      SEC 10-K &amp; statement ingestion in pgvector
+                    </div>
                   </div>
-                  <div className="font-display font-extrabold text-2xl text-[#2a14b4]">
-                    768-dim
-                  </div>
-                  <div className="text-xs text-[#777586] font-semibold mt-0.5">
-                    HNSW Vector Embeddings
-                  </div>
-                  <div className="text-[11px] text-slate-400 mt-1 leading-snug">
-                    SEC 10-K &amp; statement ingestion in pgvector
-                  </div>
-                </div>
+                </TiltCard>
 
-                <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-teal-200 transition-colors">
-                  <div className="flex items-center gap-1.5 text-teal-600 mb-1">
-                    <span className="material-symbols-outlined text-[17px]">calculate</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider">Exact Math</span>
+                <TiltCard maxTilt={8} scale={1.03}>
+                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-teal-200 transition-colors h-full flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center gap-1.5 text-teal-600 mb-1">
+                        <span className="material-symbols-outlined text-[17px]">calculate</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider">Exact Math</span>
+                      </div>
+                      <div className="font-display font-extrabold text-2xl text-[#10b981]">
+                        Python Decimal
+                      </div>
+                      <div className="text-xs text-[#777586] font-semibold mt-0.5">
+                        Exact Financial Math
+                      </div>
+                    </div>
+                    <div className="text-[11px] text-slate-400 mt-2 leading-snug">
+                      Zero floating point drift or LLM hallucination
+                    </div>
                   </div>
-                  <div className="font-display font-extrabold text-2xl text-[#10b981]">
-                    Python Decimal
-                  </div>
-                  <div className="text-xs text-[#777586] font-semibold mt-0.5">
-                    Exact Financial Math
-                  </div>
-                  <div className="text-[11px] text-slate-400 mt-1 leading-snug">
-                    Zero floating point drift or LLM hallucination
-                  </div>
-                </div>
+                </TiltCard>
               </div>
 
               {/* Live Institutional Signal Ribbon */}
@@ -161,24 +174,9 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Right Column: 3D INTERACTIVE HERO SPHERE */}
-            <div className="lg:col-span-5 xl:col-span-5 flex items-center justify-center relative">
-              {/* Floating Status Pill 1 */}
-              <div className="absolute top-2 right-2 sm:right-6 z-20 hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-sm animate-bounce [animation-duration:3.5s]">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                <span className="text-xs font-bold text-slate-900">Portfolio Health: 94</span>
-                <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">Optimal</span>
-              </div>
-
-              {/* Floating Status Pill 2 */}
-              <div className="absolute bottom-4 left-2 sm:left-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-white/95 backdrop-blur-md border border-slate-200/80 shadow-sm">
-                <span className="material-symbols-outlined text-[16px] text-indigo-600">
-                  insights
-                </span>
-                <span className="text-xs font-semibold text-slate-800">Deterministic HNSW Space</span>
-              </div>
-
-              <ThreeDHeroSphere />
+            {/* Right Column: INTERACTIVE 3D WEALTH SHOWCASE COMPONENT */}
+            <div className="lg:col-span-5 xl:col-span-5 flex items-center justify-center relative w-full">
+              <HeroWealthShowcase3D />
             </div>
           </div>
         </section>
@@ -500,33 +498,34 @@ export default function HomePage() {
                 tag: "Security",
               },
             ].map((feature, i) => (
-              <Link
-                key={i}
-                href={feature.path}
-                className="group p-6 rounded-2xl bg-white border border-[#e2e8f0] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#eff4ff] text-[#2a14b4] group-hover:bg-[#2a14b4] group-hover:text-white transition-colors flex items-center justify-center">
-                      <span className="material-symbols-outlined text-[22px]">
-                        {feature.icon}
+              <TiltCard key={i} maxTilt={6} scale={1.02} className="h-full">
+                <Link
+                  href={feature.path}
+                  className="group p-6 rounded-2xl bg-white border border-[#e2e8f0] shadow-sm hover:shadow-md transition-all flex flex-col justify-between h-full"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="w-10 h-10 rounded-xl bg-[#eff4ff] text-[#2a14b4] group-hover:bg-[#2a14b4] group-hover:text-white transition-colors flex items-center justify-center">
+                        <span className="material-symbols-outlined text-[22px]">
+                          {feature.icon}
+                        </span>
+                      </div>
+                      <span className="px-2.5 py-0.5 rounded-full bg-[#f1f5f9] text-[#475569] font-medium text-[11px]">
+                        {feature.tag}
                       </span>
                     </div>
-                    <span className="px-2.5 py-0.5 rounded-full bg-[#f1f5f9] text-[#475569] font-medium text-[11px]">
-                      {feature.tag}
-                    </span>
+                    <h3 className="font-display font-bold text-lg text-[#0b1c30] group-hover:text-[#2a14b4] transition-colors">
+                      {feature.title}
+                    </h3>
+                    <p className="text-xs text-[#464554] mt-2 leading-relaxed">
+                      {feature.desc}
+                    </p>
                   </div>
-                  <h3 className="font-display font-bold text-lg text-[#0b1c30] group-hover:text-[#2a14b4] transition-colors">
-                    {feature.title}
-                  </h3>
-                  <p className="text-xs text-[#464554] mt-2 leading-relaxed">
-                    {feature.desc}
-                  </p>
-                </div>
-                <div className="mt-5 pt-3 border-t border-slate-100 flex items-center text-xs font-bold text-[#2a14b4] group-hover:underline">
-                  Launch View →
-                </div>
-              </Link>
+                  <div className="mt-5 pt-3 border-t border-slate-100 flex items-center text-xs font-bold text-[#2a14b4] group-hover:underline">
+                    Launch View →
+                  </div>
+                </Link>
+              </TiltCard>
             ))}
           </div>
         </section>
