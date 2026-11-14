@@ -150,26 +150,26 @@ def calculate_goal_deltas(
 ) -> list[GoalProgressDelta]:
     """Compare goal status and shortfall progression."""
 
-    b_goals = {
+    b_goals: dict[Any, dict[str, Any]] = {
         g.get("goal_id"): g
         for g in baseline_ctx.get("goal_analysis", [])
-        if g.get("goal_id") is not None
+        if isinstance(g, dict) and g.get("goal_id") is not None
     }
-    c_goals = {
+    c_goals: dict[Any, dict[str, Any]] = {
         g.get("goal_id"): g
         for g in current_ctx.get("goal_analysis", [])
-        if g.get("goal_id") is not None
+        if isinstance(g, dict) and g.get("goal_id") is not None
     }
 
     all_ids = set(b_goals.keys()) | set(c_goals.keys())
     deltas: list[GoalProgressDelta] = []
 
     for gid in sorted(all_ids):
-        b_item = b_goals.get(gid)
-        c_item = c_goals.get(gid)
+        b_item: dict[str, Any] | None = b_goals.get(gid)
+        c_item: dict[str, Any] | None = c_goals.get(gid)
 
         if b_item is not None and c_item is None:
-            title = b_item.get("goal_title", f"Goal {gid}")
+            title = str(b_item.get("goal_title") or f"Goal {gid}")
             status = "removed"
             b_target = _to_decimal(b_item.get("target_amount"))
             b_short = _to_decimal(b_item.get("monthly_contribution_shortfall"))
@@ -183,7 +183,7 @@ def calculate_goal_deltas(
                 )
             )
         elif c_item is not None and b_item is None:
-            title = c_item.get("goal_title", f"Goal {gid}")
+            title = str(c_item.get("goal_title") or f"Goal {gid}")
             status = "new"
             c_target = _to_decimal(c_item.get("target_amount"))
             c_short = _to_decimal(c_item.get("monthly_contribution_shortfall"))
@@ -197,7 +197,7 @@ def calculate_goal_deltas(
                 )
             )
         elif b_item is not None and c_item is not None:
-            title = c_item.get("goal_title") or b_item.get("goal_title") or f"Goal {gid}"
+            title = str(c_item.get("goal_title") or b_item.get("goal_title") or f"Goal {gid}")
             b_short = _to_decimal(b_item.get("monthly_contribution_shortfall"))
             c_short = _to_decimal(c_item.get("monthly_contribution_shortfall"))
             short_delta = None

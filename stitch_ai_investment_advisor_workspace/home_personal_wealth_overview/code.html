@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_standard" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "surface-dim": "#cbdbf5", "on-primary-fixed-variant": "#372abf", "outline-variant": "#c7c4d7", "on-surface-variant": "#464554", "surface-variant": "#d3e4fe", "error": "#ba1a1a", "on-background": "#0b1c30", "outline": "#777586", "error-container": "#ffdad6", "tertiary-container": "#005e40", "surface-container-high": "#dce9ff", "primary-fixed-dim": "#c3c0ff", "on-secondary-fixed": "#07006c", "on-secondary-container": "#fffbff", "surface-tint": "#5148d7", "on-primary-container": "#c1beff", "primary": "#2a14b4", "on-primary": "#ffffff", "on-primary-fixed": "#100069", "surface-container-lowest": "#ffffff", "inverse-primary": "#c3c0ff", "background": "#f8f9ff", "surface-container-highest": "#d3e4fe", "surface-bright": "#f8f9ff", "tertiary-fixed-dim": "#68dba9", "inverse-on-surface": "#eaf1ff", "surface": "#f8f9ff", "secondary": "#4648d4", "secondary-fixed-dim": "#c0c1ff", "on-tertiary-fixed-variant": "#005137", "on-tertiary-fixed": "#002114", "surface-container": "#e5eeff", "tertiary": "#00442d", "on-secondary": "#ffffff", "secondary-fixed": "#e1e0ff", "primary-fixed": "#e3dfff", "on-tertiary-container": "#66daa8", "on-tertiary": "#ffffff", "on-secondary-fixed-variant": "#2f2ebe", "on-surface": "#0b1c30", "on-error": "#ffffff", "primary-container": "#4338ca", "secondary-container": "#6063ee", "on-error-container": "#93000a", "surface-container-low": "#eff4ff", "tertiary-fixed": "#85f8c4", "inverse-surface": "#213145" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "space-xs": "0.25rem", "space-lg": "1.5rem", "gutter": "1.5rem", "gutter-mobile": "1rem", "space-sm": "0.5rem", "margin-mobile": "1rem", "space-xl": "2.5rem", "space-md": "1rem", "margin": "2.5rem" }, fontFamily: { "display-lg": ["Plus Jakarta Sans"], "label-sm": ["Plus Jakarta Sans"], "headline-sm": ["Plus Jakarta Sans"], "display-lg-mobile": ["Plus Jakarta Sans"], "headline-lg-mobile": ["Plus Jakarta Sans"], "headline-md": ["Plus Jakarta Sans"], "body-lg": ["Inter"], "body-sm": ["Inter"], "title-md": ["Inter"], "headline-lg": ["Plus Jakarta Sans"], "body-md": ["Inter"], "label-md": ["Plus Jakarta Sans"], "label-lg": ["Plus Jakarta Sans"] }, fontSize: { "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.03em", "fontWeight": "700" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "600" }], "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }], "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }], "title-md": ["18px", { "lineHeight": "26px", "letterSpacing": "-0.005em", "fontWeight": "600" }], "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }], "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }], "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }] } } } };</script></head><body class="bg-background font-body-md text-on-surface antialiased selection:bg-primary-fixed selection:text-on-primary-fixed"><header class="fixed top-0 left-0 right-0 z-50 bg-surface-container-lowest/85 backdrop-blur-xl shadow-[0_4px_20px_-2px_rgba(99,102,241,0.05)]"><div class="h-20 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><div class="flex items-center gap-2"><div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center shadow-[0_2px_8px_rgba(42,20,180,0.25)]"><span class="material-symbols-outlined text-on-primary text-[20px]">auto_awesome</span></div><div class="flex flex-col"><div class="flex items-center gap-2"><span class="font-headline-sm text-headline-sm text-primary tracking-tight">Aura AI</span><span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">Simple Wealth Advisor</span></div></div></div><nav class="hidden xl:flex items-center gap-1 bg-surface-container-low p-1.5 rounded-full" data-active-classes="bg-primary text-on-primary font-semibold shadow-[0_2px_10px_rgba(42,20,180,0.2)]"><a aria-current="page" class="px-3.5 py-1.5 rounded-full transition-all duration-150 bg-primary text-on-primary font-semibold shadow-[0_2px_10px_rgba(42,20,180,0.2)]" data-path="home" href="#">Home</a><a class="px-3.5 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-150 font-label-md text-label-md" data-path="my-profile-and-risk" href="#">My Profile &amp; Risk</a><a class="px-3.5 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-150 font-label-md text-label-md" data-path="read-documents" href="#">Read Documents</a><a class="px-3.5 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-150 font-label-md text-label-md" data-path="compare-stocks" href="#">Compare Stocks</a><a class="px-3.5 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all duration-150 font-label-md text-label-md" data-path="why-this-plan" href="#">Why This Plan</a></nav></div><div class="flex items-center gap-space-sm"><div class="relative hidden lg:flex items-center"><span class="material-symbols-outlined absolute left-3.5 text-outline text-[18px]">search</span><input class="w-72 pl-10 pr-12 py-2 rounded-full bg-surface-container-low font-body-sm text-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-secondary/20 transition-all" placeholder="Search stocks, filings, or ask Aura..." type="text"/><kbd class="absolute right-3 px-1.5 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface-variant">⌘K</kbd></div><div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-lowest shadow-[0_1px_4px_rgba(0,0,0,0.04)]"><span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span><span class="font-label-sm text-label-sm text-on-surface-variant">Verified SEC Data</span></div><button class="w-9 h-9 rounded-full bg-surface-container-lowest flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors shadow-[0_1px_4px_rgba(0,0,0,0.04)]" type="button"><span class="material-symbols-outlined text-[20px]">notifications</span></button><div class="flex items-center gap-2.5 pl-2"><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shadow-[0_2px_6px_rgba(42,20,180,0.2)]"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div><div class="hidden md:flex flex-col text-left"><span class="font-label-md text-label-md text-on-surface leading-tight">Kumar Aditya</span><span class="font-label-sm text-label-sm text-on-surface-variant">Personal Investor</span></div></div></div></div></header><main class="w-full pt-20 bg-background min-h-screen"><div class="max-w-7xl mx-auto px-6 lg:px-12 py-8"><div class="flex flex-col w-full gap-8">
+<!-- Top Welcome & Portfolio Health Bento Card -->
+<section class="relative overflow-hidden rounded-xl bg-surface-container-lowest shadow-[0_4px_24px_-2px_rgba(99,102,241,0.06)] p-6 lg:p-10">
+<div class="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-gradient-to-br from-secondary/10 via-primary-fixed-dim/20 to-transparent blur-3xl pointer-events-none"></div>
+<div class="absolute -left-20 -bottom-20 w-80 h-80 rounded-full bg-tertiary-fixed/30 blur-2xl pointer-events-none"></div>
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- Left Column: Metrics & Actions -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<div class="flex flex-col gap-1.5">
+<div class="inline-flex items-center gap-2 self-start px-3 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+            SEC Real-Time Portfolio Sync
+          </div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+            Welcome back, Kumar! 👋
+          </h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
+            Here is where your money stands today. All calculations are backed by verified SEC filings and systematic risk guardrails.
+          </p>
+</div>
+<!-- Hero Metric -->
+<div class="flex flex-wrap items-baseline gap-4 pt-1">
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Total Tracked Savings &amp; Investments</span>
+<div class="flex items-center gap-3 mt-1">
+<span class="font-display-lg text-display-lg text-on-surface tracking-tight font-bold">$142,500</span>
+<div class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span>+8.4% this year</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Goal Progress Component -->
+<div class="bg-surface-container-low rounded-xl p-4 flex flex-col gap-2.5 max-w-xl">
+<div class="flex items-center justify-between text-body-sm">
+<div class="flex items-center gap-2 font-headline-sm text-body-md text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[20px]">flag</span>
+<span>Target: <strong class="text-on-surface">$250,000</strong> by 2030</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-lowest font-label-sm text-label-sm text-primary font-semibold">57% achieved</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-3 rounded-full bg-surface-container overflow-hidden p-0.5">
+<div class="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-all duration-700" style="width: 57%;"></div>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-body-sm text-body-sm pt-0.5">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-tertiary text-[16px]">check_circle</span>
+<strong class="text-on-surface">$1,500/mo</strong> auto-deposit is on track
+            </span>
+<span class="font-label-sm text-label-sm text-outline">$107,500 remaining</span>
+</div>
+</div>
+<!-- Quick Interactive CTA Buttons -->
+<div class="flex flex-wrap items-center gap-3 pt-2">
+<button class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-primary text-on-primary font-label-lg text-label-lg shadow-sm hover:bg-primary-container transition-all" id="simulateBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span>Simulate Next Deposit</span>
+</button>
+<button class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-secondary-fixed text-on-secondary-fixed font-label-lg text-label-lg hover:bg-secondary-fixed-dim transition-all" id="askCopilotBtn" type="button">
+<span class="material-symbols-outlined text-[20px]">psychology</span>
+<span>Ask AI Copilot</span>
+</button>
+</div>
+</div>
+<!-- Right Column: Visual Glowing Health Card -->
+<div class="lg:col-span-5 flex flex-col justify-center items-center">
+<div class="relative w-full max-w-sm rounded-xl bg-gradient-to-b from-surface-container-low to-surface-container p-6 shadow-sm flex flex-col items-center text-center">
+<!-- Modern Glowing Orb Representation -->
+<div class="relative w-44 h-44 my-2 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full bg-gradient-to-tr from-secondary/30 via-tertiary-fixed-dim/40 to-primary/20 blur-xl animate-pulse"></div>
+<!-- Concentric Tech Rings -->
+<svg class="w-full h-full -rotate-90 transform" viewbox="0 0 120 120">
+<circle class="text-surface-container-highest stroke-current" cx="60" cy="60" fill="none" r="50" stroke-width="8"></circle>
+<circle class="text-secondary stroke-current" cx="60" cy="60" fill="none" r="50" stroke-dasharray="314.159" stroke-dashoffset="65" stroke-linecap="round" stroke-width="8"></circle>
+<circle class="text-tertiary stroke-current" cx="60" cy="60" fill="none" r="38" stroke-dasharray="238.76" stroke-dashoffset="40" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<div class="absolute flex flex-col items-center justify-center bg-surface-container-lowest rounded-full w-24 h-24 shadow-md">
+<span class="material-symbols-outlined text-secondary text-[28px]">verified_user</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold leading-none mt-1">94</span>
+<span class="font-label-sm text-label-sm text-outline">Health Score</span>
+</div>
+</div>
+<div class="mt-3 flex flex-col items-center">
+<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-lowest text-on-surface shadow-xs font-label-md text-label-md">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-bold">Portfolio Health: Strong &amp; Balanced</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-2 max-w-xs">
+              0 Over-concentrated single equities. Diversification benchmark matches target 2030 horizon.
+            </p>
+</div>
+<!-- Mini Verification Badge -->
+<div class="mt-4 pt-3 w-full flex items-center justify-between font-label-sm text-label-sm text-outline border-t border-surface-container-highest/60">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">history</span> Checked 12m ago
+            </span>
+<span class="flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-[14px]">shield</span> SEC Rule 206 Compliant
+            </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Hidden Simulation Tray (Micro-interaction) -->
+<div class="hidden mt-6 pt-6 border-t border-surface-container bg-surface-container-low rounded-xl p-5 transition-all" id="simTray">
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Simulate One-Time Deposit</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">See how an extra $2,500 contribution shifts your 2030 projection.</p>
+</div>
+<div class="flex items-center gap-3">
+<input class="accent-primary w-40 cursor-pointer" id="depositSlider" max="10000" min="500" step="500" type="range" value="2500"/>
+<span class="font-title-md text-title-md text-primary font-bold px-3 py-1.5 bg-surface-container-lowest rounded-lg shadow-xs min-w-[90px] text-center" id="depositDisplay">+$2,500</span>
+<button class="px-4 py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md" id="applySim" type="button">Project Impact</button>
+</div>
+</div>
+<div class="hidden mt-4 p-3 bg-surface-container-lowest rounded-lg text-body-sm text-on-surface flex items-center gap-2" id="simResult">
+<span class="material-symbols-outlined text-tertiary">check</span>
+<span>A <strong id="simAddText">$2,500</strong> boost pulls your 2030 milestone ahead by <strong>4.2 months</strong> and adds ~$610 estimated 5-year dividend yield.</span>
+</div>
+</div>
+</section>
+<!-- Section 2: Explore Your Advisor Tools (4 Modular Action Cards) -->
+<section class="flex flex-col gap-4">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+<div>
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider font-bold">Self-Guided Intelligence</span>
+<h2 class="font-headline-md text-headline-md text-on-surface tracking-tight mt-0.5">
+          Explore Your Advisor Tools
+        </h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        No Wall Street jargon. Clear, deterministic financial actions you can trust.
+      </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1: My Profile & Risk -->
+<div class="group flex flex-col justify-between rounded-xl bg-surface-container-lowest p-6 shadow-[0_4px_20px_-2px_rgba(99,102,241,0.04)] hover:shadow-[0_12px_28px_-4px_rgba(99,102,241,0.08)] hover:-translate-y-1 transition-all duration-200">
+<div class="flex flex-col gap-3">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed flex items-center justify-center text-on-primary-fixed group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[26px]">manage_accounts</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">My Profile &amp; Risk</h3>
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm">Active</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              View your $95k salary profile, change your 6-year target, or redo the 5-question risk quiz (Score: 62 Moderate).
+            </p>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between mt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Profile State:</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Moderate (Score 62)</span>
+</div>
+</div>
+<a class="mt-6 inline-flex items-center justify-between px-4 py-2.5 rounded-lg bg-surface-container-low group-hover:bg-primary group-hover:text-on-primary text-primary font-label-md text-label-md transition-colors" href="#">
+<span>Adjust Profile</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+<!-- Card 2: Read Company Reports -->
+<div class="group flex flex-col justify-between rounded-xl bg-surface-container-lowest p-6 shadow-[0_4px_20px_-2px_rgba(99,102,241,0.04)] hover:shadow-[0_12px_28px_-4px_rgba(99,102,241,0.08)] hover:-translate-y-1 transition-all duration-200">
+<div class="flex flex-col gap-3">
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[26px]">document_scanner</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Read Company Reports</h3>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed-variant font-label-sm text-label-sm">EDGAR 10-K</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Drop in an annual report (10-K). Aura reads the 80-page legal fine print and answers your questions with zero guesswork.
+            </p>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between mt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Ready to scan:</span>
+<span class="font-label-sm text-label-sm text-secondary font-bold">10-K, 10-Q, 8-K</span>
+</div>
+</div>
+<a class="mt-6 inline-flex items-center justify-between px-4 py-2.5 rounded-lg bg-surface-container-low group-hover:bg-primary group-hover:text-on-primary text-primary font-label-md text-label-md transition-colors" href="#">
+<span>Open Document Reader</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+<!-- Card 3: Compare Investments -->
+<div class="group flex flex-col justify-between rounded-xl bg-surface-container-lowest p-6 shadow-[0_4px_20px_-2px_rgba(99,102,241,0.04)] hover:shadow-[0_12px_28px_-4px_rgba(99,102,241,0.08)] hover:-translate-y-1 transition-all duration-200">
+<div class="flex flex-col gap-3">
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[26px]">compare_arrows</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Compare Investments</h3>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">Head-to-Head</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              Put Apple, Tesla, or the S&amp;P 500 head-to-head. See simple health scores, operating leverage, and profit margins.
+            </p>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between mt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Top Matchup:</span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">AAPL vs TSLA vs SPY</span>
+</div>
+</div>
+<a class="mt-6 inline-flex items-center justify-between px-4 py-2.5 rounded-lg bg-surface-container-low group-hover:bg-primary group-hover:text-on-primary text-primary font-label-md text-label-md transition-colors" href="#">
+<span>Start Comparing</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+<!-- Card 4: Why This Plan? -->
+<div class="group flex flex-col justify-between rounded-xl bg-surface-container-lowest p-6 shadow-[0_4px_20px_-2px_rgba(99,102,241,0.04)] hover:shadow-[0_12px_28px_-4px_rgba(99,102,241,0.08)] hover:-translate-y-1 transition-all duration-200">
+<div class="flex flex-col gap-3">
+<div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary group-hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-[26px]">psychology_alt</span>
+</div>
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Why This Plan?</h3>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">AI Proof</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+              See exactly why Aura suggested 65% Stocks, 25% Bonds, and 10% Cash, plus how it survives market crashes.
+            </p>
+</div>
+<div class="p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between mt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Stress Tested:</span>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">2008 &amp; 2020 Crises</span>
+</div>
+</div>
+<a class="mt-6 inline-flex items-center justify-between px-4 py-2.5 rounded-lg bg-surface-container-low group-hover:bg-primary group-hover:text-on-primary text-primary font-label-md text-label-md transition-colors" href="#">
+<span>See AI Reasoning</span>
+<span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</section>
+<!-- Section 3 & 4 Grid: Plan at a Glance + Activity Feed -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Section 3: Recommended Plan at a Glance (7 Cols) -->
+<section class="lg:col-span-7 flex flex-col gap-5 rounded-xl bg-surface-container-lowest p-6 lg:p-8 shadow-[0_4px_20px_-2px_rgba(99,102,241,0.04)]">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">Asset Allocation Architecture</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface tracking-tight mt-0.5">Your Recommended Plan at a Glance</h2>
+</div>
+<!-- Risk Protection Badge -->
+<div class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-low text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-primary text-[16px]">verified</span>
+<span>Max drawdown limit: <strong>-12.0%</strong></span>
+</div>
+</div>
+<!-- Segmented Pill Bar Visualization -->
+<div class="flex flex-col gap-2 pt-2">
+<div class="w-full h-8 rounded-full bg-surface-container flex overflow-hidden p-1 gap-1">
+<!-- 65% Stocks -->
+<div class="h-full rounded-l-full bg-primary flex items-center justify-center text-on-primary font-label-sm text-label-sm transition-all" style="width: 65%;" title="65% Broad Stocks ($92,625)">
+<span class="hidden sm:inline">Broad Stocks 65%</span>
+<span class="sm:hidden">65%</span>
+</div>
+<!-- 25% Bonds -->
+<div class="h-full bg-secondary flex items-center justify-center text-on-secondary font-label-sm text-label-sm transition-all" style="width: 25%;" title="25% Treasury Bonds ($35,625)">
+<span class="hidden sm:inline">Bonds 25%</span>
+<span class="sm:hidden">25%</span>
+</div>
+<!-- 10% Cash Cushion -->
+<div class="h-full rounded-r-full bg-tertiary-fixed-dim flex items-center justify-center text-on-tertiary-fixed-variant font-label-sm text-label-sm transition-all" style="width: 10%;" title="10% Cash Cushion ($14,250)">
+<span class="hidden sm:inline">10%</span>
+</div>
+</div>
+<!-- Legend Pills -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col">
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-on-surface">
+<span class="w-2.5 h-2.5 rounded-full bg-primary"></span>
+<span>Broad Stocks (65%)</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold mt-1">$92,625</span>
+<span class="font-body-sm text-body-sm text-outline">VTI &amp; Low-Fee Global Index</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col">
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-on-surface">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary"></span>
+<span>Treasury Bonds (25%)</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold mt-1">$35,625</span>
+<span class="font-body-sm text-body-sm text-outline">US Gov Short-Med Durations</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col">
+<div class="flex items-center gap-1.5 font-label-md text-label-md text-on-surface">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim"></span>
+<span>Cash Cushion (10%)</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold mt-1">$14,250</span>
+<span class="font-body-sm text-body-sm text-outline">High-Yield liquid reserve</span>
+</div>
+</div>
+</div>
+<!-- Plain English Explanation Box -->
+<div class="rounded-xl bg-surface-container-low p-4 flex gap-3.5 items-start">
+<div class="w-8 h-8 rounded-lg bg-primary-fixed flex-shrink-0 flex items-center justify-center text-primary mt-0.5">
+<span class="material-symbols-outlined text-[20px]">lightbulb</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-md text-label-md text-primary font-bold">Why this mix?</span>
+<p class="font-body-sm text-body-sm text-on-surface leading-relaxed">
+            Because your 6-year time horizon lets you ride out short-term stock swings while your $14,250 cash cushion keeps you safe from emergencies without needing to sell assets during a dip.
+          </p>
+</div>
+</div>
+</section>
+<!-- Section 4: Recent Activity & Verified Updates (5 Cols) -->
+<section class="lg:col-span-5 flex flex-col justify-between rounded-xl bg-surface-container-lowest p-6 lg:p-8 shadow-[0_4px_20px_-2px_rgba(99,102,241,0.04)]">
+<div class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[22px]">history_edu</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Recent Activity</h2>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-outline">Live EDGAR</span>
+</div>
+<!-- Activity Feed List -->
+<div class="flex flex-col gap-3">
+<!-- Item 1 -->
+<div class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-xs flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-primary text-[18px]">verified</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Apple 2023 10-K Indexed</span>
+<span class="font-label-sm text-label-sm text-outline flex-shrink-0">Today</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Verified <strong class="text-on-surface">$99.6B</strong> free cash flow from SEC audited filing.
+              </p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-xs flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-secondary text-[18px]">tune</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Risk Score Synced</span>
+<span class="font-label-sm text-label-sm text-outline flex-shrink-0">Yesterday</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Score locked at <strong class="text-on-surface">62/100</strong> (Moderate Growth trajectory).
+              </p>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-start gap-3 p-3 rounded-lg bg-surface-container-low hover:bg-surface-container transition-colors">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center shadow-xs flex-shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-tertiary text-[18px]">query_stats</span>
+</div>
+<div class="flex flex-col min-w-0 flex-1">
+<div class="flex items-center justify-between gap-2">
+<span class="font-label-md text-label-md text-on-surface font-semibold truncate">Tesla Q3 Balance Sheet</span>
+<span class="font-label-sm text-label-sm text-outline flex-shrink-0">3d ago</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Gross margins and debt-to-equity ratio recalculated for stock compare tool.
+              </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Regulatory & Clean Educational Disclosure -->
+<div class="mt-6 pt-4 border-t border-surface-container flex items-start gap-2.5">
+<span class="material-symbols-outlined text-outline text-[18px] flex-shrink-0 mt-0.5">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+          Aura is an educational decision-support copilot. All metrics are calculated deterministically from verified SEC EDGAR filings.
+        </p>
+</div>
+</section>
+</div>
+<!-- Interactive script for deposit simulation -->
+<script>
+    (function() {
+      const simulateBtn = document.getElementById('simulateBtn');
+      const simTray = document.getElementById('simTray');
+      const depositSlider = document.getElementById('depositSlider');
+      const depositDisplay = document.getElementById('depositDisplay');
+      const applySim = document.getElementById('applySim');
+      const simResult = document.getElementById('simResult');
+      const simAddText = document.getElementById('simAddText');
+
+      if (simulateBtn && simTray) {
+        simulateBtn.addEventListener('click', function() {
+          simTray.classList.toggle('hidden');
+          if (!simTray.classList.contains('hidden')) {
+            simTray.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        });
+      }
+
+      if (depositSlider && depositDisplay) {
+        depositSlider.addEventListener('input', function(e) {
+          const val = Number(e.target.value).toLocaleString();
+          depositDisplay.textContent = '+$' + val;
+          if (simAddText) {
+            simAddText.textContent = '$' + val;
+          }
+        });
+      }
+
+      if (applySim && simResult) {
+        applySim.addEventListener('click', function() {
+          simResult.classList.remove('hidden');
+        });
+      }
+
+      const copilotBtn = document.getElementById('askCopilotBtn');
+      if (copilotBtn) {
+        copilotBtn.addEventListener('click', function() {
+          const searchInput = document.querySelector('header input[type="text"]');
+          if (searchInput) {
+            searchInput.focus();
+            searchInput.value = 'How does my 6-year target hold up in higher interest rates?';
+          }
+        });
+      }
+    })();
+  </script>
+</div></div></main><footer class="w-full bg-surface-container-lowest py-8 mt-12"><div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-4"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-lg bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[14px]">auto_awesome</span></div><span class="font-headline-sm text-body-sm text-primary font-bold">Aura AI</span><span class="font-body-sm text-body-sm text-on-surface-variant">— Simple Wealth Advisor</span></div><p class="font-body-sm text-body-sm text-on-surface-variant text-center">© 2025 Aura Financial Technologies Inc. Real-time disclosures backed by automated SEC EDGAR parsing.</p><div class="flex items-center gap-6"><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Privacy Policy</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Security &amp; Disclaimers</a><a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface transition-colors" href="#">Support</a></div></div></footer></body></html>
