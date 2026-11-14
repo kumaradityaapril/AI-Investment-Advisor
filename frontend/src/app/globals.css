@@ -1,26 +1,57 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8f9ff;
+  --on-background: #0b1c30;
+  --surface: #f8f9ff;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #eff4ff;
+  --surface-container: #e5eeff;
+  --surface-container-high: #dce9ff;
+  --surface-container-highest: #d3e4fe;
+  --on-surface: #0b1c30;
+  --on-surface-variant: #464554;
+  --primary: #2a14b4;
+  --primary-container: #4338ca;
+  --on-primary: #ffffff;
+  --secondary: #4648d4;
+  --secondary-container: #6063ee;
+  --secondary-fixed: #e1e0ff;
+  --on-secondary-fixed: #07006c;
+  --tertiary: #00442d;
+  --tertiary-fixed: #85f8c4;
+  --tertiary-fixed-dim: #68dba9;
+  --on-tertiary-fixed: #002114;
+  --on-tertiary-fixed-variant: #005137;
+  --outline: #777586;
+  --outline-variant: #c7c4d7;
+  --error: #ba1a1a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9ff;
+  color: #0b1c30;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.font-display {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.font-headline {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+.font-mono-numbers {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(226, 232, 240, 0.8);
 }
