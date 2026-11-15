@@ -1,4 +1,4 @@
-from typing import Annotated
+zoofrom typing import Annotated
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -65,7 +65,12 @@ def register(
     db: Session = Depends(get_db),
 ):
     try:
-        user = register_user(db, payload.email, payload.password)
+        user = register_user(
+            db,
+            payload.email,
+            payload.password,
+            name=payload.name,
+        )
         return user
     except ValueError as e:
         raise HTTPException(

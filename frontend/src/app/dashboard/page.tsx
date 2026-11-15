@@ -148,7 +148,7 @@ export default function DashboardPage() {
                 <span>Live Institutional Intelligence</span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display tracking-tight">
-                Welcome back, {user?.email ? user.email.split("@")[0] : "Investor"} 👋
+                Welcome back, {user?.name || (user?.email ? user.email.split("@")[0] : "Investor")} 👋
               </h1>
               <p className="text-sm sm:text-base text-slate-500 mt-1">
                 Here is your live wealth overview calibrated with Python Decimal math and verified SEBI regulatory guardrails.

@@ -13,6 +13,7 @@ import { apiRequest, getAuthToken, setAuthToken } from "@/lib/api";
 export interface User {
   id: number;
   email: string;
+  name?: string | null;
 }
 
 interface AuthContextType {
@@ -20,7 +21,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, name?: string) => Promise<void>;
   logout: () => void;
   refreshUser: () => Promise<void>;
 }
@@ -84,12 +85,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const register = async (email: string, password: string) => {
+  const register = async (email: string, password: string, name?: string) => {
     setIsLoading(true);
     try {
       await apiRequest<User>("/auth/register", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, name: name ? name.trim() : undefined }),
       });
 
       // Automatically sign in upon registration

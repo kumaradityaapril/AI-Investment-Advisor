@@ -111,3 +111,7 @@ desktop.ini
 
 # User-uploaded financial documents
 backend/uploads/
+
+# Design & Reference Mockups
+stitch_ai_investment_advisor_workspace/
+

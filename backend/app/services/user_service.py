@@ -9,10 +9,12 @@ def create_user(
     db: Session,
     email: str,
     hashed_password: str,
+    name: str | None = None,
 ) -> User:
     user = User(
         email=email,
         hashed_password=hashed_password,
+        name=name,
     )
 
     db.add(user)

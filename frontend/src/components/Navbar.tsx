@@ -90,10 +90,12 @@ export default function Navbar() {
                   className="flex items-center gap-2 py-1 px-2.5 rounded-full bg-slate-50 border border-slate-200 hover:bg-indigo-50/60 transition-colors flex-shrink-0"
                 >
                   <div className="w-6 h-6 rounded-full bg-indigo-700 flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0">
-                    {user.email.substring(0, 2).toUpperCase()}
+                    {user.name
+                      ? user.name.trim().substring(0, 2).toUpperCase()
+                      : user.email.substring(0, 2).toUpperCase()}
                   </div>
-                  <span className="text-xs font-semibold text-slate-800 max-w-[120px] truncate hidden sm:inline">
-                    {user.email.split("@")[0]}
+                  <span className="text-xs font-semibold text-slate-800 max-w-[140px] truncate hidden sm:inline">
+                    {user.name || user.email.split("@")[0]}
                   </span>
                 </Link>
 

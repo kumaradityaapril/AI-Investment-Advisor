@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+import logging
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
@@ -8,7 +10,7 @@ from app.api.goals import router as goals_router
 from app.api.profile import router as profile_router
 from app.api.risk_assessments import router as risk_assessments_router
 from app.core.config import settings
-from app.core.database import get_db
+from app.core.database import engine, get_db
 from app.api.documents import router as documents_router
 from app.api.financial_analysis import router as financial_analysis_router
 from app.api.investment_comparison import router as investment_comparison_router
@@ -18,10 +20,31 @@ from app.api.scenarios import router as scenarios_router
 from app.core.exceptions import register_exception_handlers
 from app.core.logging_middleware import AuditLoggingMiddleware
 
+logger = logging.getLogger("app.main")
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Auto-ensure database schema columns exist (e.g. users.name)
+    try:
+        with engine.connect() as conn:
+            conn.execute(
+                text("ALTER TABLE users ADD COLUMN IF NOT EXISTS name VARCHAR(255);")
+            )
+            conn.commit()
+            logger.info("Database schema verified: users.name column ensured.")
+    except Exception as exc:
+        logger.warning(
+            "Database connection check at startup deferred: %s", exc
+        )
+    yield
+
+
 app = FastAPI(
     title=settings.app_name,
     version="0.1.0",
     description="GenAI-powered AI Investment Advisor API",
+    lifespan=lifespan,
 )
 
 app.add_middleware(AuditLoggingMiddleware)

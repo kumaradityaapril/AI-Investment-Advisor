@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { Lock, Mail, AlertCircle, ArrowRight, X } from "lucide-react";
+import { Lock, Mail, AlertCircle, ArrowRight, X, User as UserIcon } from "lucide-react";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -19,6 +19,7 @@ export default function AuthModal({
 }: AuthModalProps) {
   const { login, register } = useAuth();
   const [mode, setMode] = useState<"login" | "register">(initialMode);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -36,7 +37,7 @@ export default function AuthModal({
         if (password.length < 8) {
           throw new Error("Password must be at least 8 characters long.");
         }
-        await register(email, password);
+        await register(email, password, name);
       } else {
         await login(email, password);
       }
@@ -121,6 +122,25 @@ export default function AuthModal({
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {mode === "register" && (
+            <div>
+              <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">
+                Full Name
+              </label>
+              <div className="relative">
+                <UserIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  required
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Rahul Sharma"
+                  className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all text-sm outline-none text-slate-900 bg-slate-50/50"
+                />
+              </div>
+            </div>
+          )}
+
           <div>
             <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1.5">
               Email Address
