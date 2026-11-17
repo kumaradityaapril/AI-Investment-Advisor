@@ -21,6 +21,8 @@ from app.schemas.analysis_diff import (
 )
 from app.services.advisor_output_validation_service import (
     UNSAFE_FINANCIAL_PATTERNS,
+    SOVEREIGN_STATUTORY_PATTERN,
+    MARKET_INSTRUMENT_PATTERN,
     _is_negated,
 )
 from app.services.analysis_history_service import get_user_analysis_by_id
@@ -230,11 +232,30 @@ def _validate_diff_explanation_safety(explanation: AnalysisDiffExplanation) -> N
     for text in texts:
         for pattern in UNSAFE_FINANCIAL_PATTERNS:
             for match in pattern.finditer(text):
-                if _is_negated(text, match.start()):
+                if _is_negated(text, match.start(), match.end()):
                     continue
+
+                sentence_start = max(0, text.rfind(".", 0, match.start()) + 1)
+                sentence_end = text.find(".", match.end())
+                if sentence_end == -1:
+                    sentence_end = len(text)
+                sentence = text[sentence_start:sentence_end]
+
+                if SOVEREIGN_STATUTORY_PATTERN.search(sentence) and not MARKET_INSTRUMENT_PATTERN.search(sentence):
+                    continue
+
+                logger.warning(
+                    "Analysis diff safety violation: pattern '%s' matched '%s' in context '%s'",
+                    pattern.pattern,
+                    match.group(0),
+                    text,
+                )
                 raise AnalysisDiffError(
                     "Diff explanation contains disallowed certainty or risk-free language."
                 )
+
+
+from app.services.groq_service import call_groq_structured, is_groq_enabled
 
 
 def generate_diff_explanation(
@@ -247,14 +268,6 @@ def generate_diff_explanation(
     client: genai.Client | None = None,
 ) -> AnalysisDiffExplanation:
     """Generate structured memory narrative analyzing changes and obsolete advice."""
-
-    if client is None:
-        try:
-            client = _get_gemini_client()
-        except Exception as exc:
-            raise AnalysisDiffError(
-                f"Failed to initialize Gemini client: {exc}"
-            ) from exc
 
     diff_context = {
         "elapsed_days": elapsed_days,
@@ -283,6 +296,20 @@ INSTRUCTIONS:
 4. CRITICAL: Identify which previous recommendations from the baseline session are now STALE, OBSOLETE, or need adjustment due to the changes in their financial context.
 5. Provide updated strategic focus points going forward.
 6. Return your analysis matching the AnalysisDiffExplanation schema."""
+
+    if client is None:
+        logger.info("Generating diff explanation using Groq...")
+        try:
+            explanation = call_groq_structured(
+                prompt=prompt,
+                response_model=AnalysisDiffExplanation,
+                system_instruction="You are an expert AI financial advisor comparing two historical snapshots.",
+                temperature=0.2,
+            )
+            _validate_diff_explanation_safety(explanation)
+            return explanation
+        except Exception as exc:
+            raise AnalysisDiffError(f"Groq diff generation failed: {exc}") from exc
 
     try:
         response = client.models.generate_content(

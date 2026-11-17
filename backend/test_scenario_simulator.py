@@ -291,3 +291,18 @@ def test_scenario_simulate_api_unauthorized():
         },
     )
     assert res.status_code == 401
+
+
+def test_scenario_request_supports_flat_payload():
+    flat_req = ScenarioSimulationRequest.model_validate({
+        "scenario_name": "Flat Parameter Test",
+        "monthly_investment_delta": 5000,
+        "lump_sum_investment": 10000,
+        "time_horizon_years": 10,
+        "expected_annual_return_percent": 12.0,
+    })
+    assert flat_req.scenario_name == "Flat Parameter Test"
+    assert flat_req.parameters.delta_monthly_investment == Decimal("5000")
+    assert flat_req.parameters.one_time_lump_sum == Decimal("10000")
+    assert flat_req.parameters.time_horizon_years == 10
+    assert flat_req.parameters.assumed_annual_return_percent == Decimal("12.0")

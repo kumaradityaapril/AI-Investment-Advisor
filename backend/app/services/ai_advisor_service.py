@@ -7,6 +7,13 @@ from pydantic import ValidationError
 
 from app.core.config import settings
 from app.schemas.ai_advisor import AIAdvisorGenerationResponse
+from app.services.groq_service import (
+    call_groq_structured,
+    GroqRateLimitError,
+    GroqContextLengthError,
+    GroqProviderError,
+    is_groq_enabled,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -53,34 +60,43 @@ def _parse_advisor_response(
         ) from exc
 
 
+def _generate_advisor_with_groq(prompt: str) -> AIAdvisorGenerationResponse:
+    """Generate structured advice using Groq API."""
+    return call_groq_structured(
+        prompt=prompt,
+        response_model=AIAdvisorGenerationResponse,
+        system_instruction=(
+            "You are an expert AI Investment Advisor providing "
+            "objective, evidence-grounded financial advice."
+        ),
+        temperature=0.2,
+        max_output_tokens=2500,
+    )
+
+
 def generate_advisor_response(
     prompt: str = "",
     client: genai.Client | None = None,
 ) -> AIAdvisorGenerationResponse:
     """
-    Generate structured advice from Gemini using the generation schema.
+    Generate structured advice using Groq API as the primary and sole LLM engine.
     """
-    if client is None:
+    # 1. If mock client explicitly provided (for unit tests), execute mock
+    if client is not None:
         try:
-            client = _get_gemini_client()
+            response = client.models.generate_content(
+                model=settings.advisor_model,
+                contents=prompt,
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=AIAdvisorGenerationResponse,
+                    temperature=0.2,
+                ),
+            )
+            return _parse_advisor_response(response)
         except Exception as exc:
-            raise AIAdvisorError(
-                f"Failed to initialize Gemini client: {exc}"
-            ) from exc
+            raise AIAdvisorError(f"Test generation failed: {exc}") from exc
 
-    try:
-        response = client.models.generate_content(
-            model=settings.advisor_model,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                response_mime_type="application/json",
-                response_schema=AIAdvisorGenerationResponse,
-                temperature=0.2,
-            ),
-        )
-    except Exception as exc:
-        raise AIAdvisorError(
-            f"Gemini advisor generation failed: {exc}"
-        ) from exc
-
-    return _parse_advisor_response(response)
+    # 2. Live generation uses Groq exclusively (configured model)
+    logger.info("Generating advisor response via Groq API...")
+    return _generate_advisor_with_groq(prompt)

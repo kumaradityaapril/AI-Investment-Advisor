@@ -18,6 +18,8 @@ from app.schemas.research_agent import (
     ToolSelectionDecision,
 )
 from app.services.advisor_output_validation_service import (
+    MARKET_INSTRUMENT_PATTERN,
+    SOVEREIGN_STATUTORY_PATTERN,
     UNSAFE_FINANCIAL_PATTERNS,
     _is_negated,
 )
@@ -225,8 +227,24 @@ def _validate_research_safety(report: ResearchReport) -> None:
     for text in texts:
         for pattern in UNSAFE_FINANCIAL_PATTERNS:
             for match in pattern.finditer(text):
-                if _is_negated(text, match.start()):
+                if _is_negated(text, match.start(), match.end()):
                     continue
+
+                sentence_start = max(0, text.rfind(".", 0, match.start()) + 1)
+                sentence_end = text.find(".", match.end())
+                if sentence_end == -1:
+                    sentence_end = len(text)
+                sentence = text[sentence_start:sentence_end]
+
+                if SOVEREIGN_STATUTORY_PATTERN.search(sentence) and not MARKET_INSTRUMENT_PATTERN.search(sentence):
+                    continue
+
+                logger.warning(
+                    "Research report safety violation: pattern '%s' matched '%s' in context '%s'",
+                    pattern.pattern,
+                    match.group(0),
+                    text,
+                )
                 raise ResearchAgentError(
                     "Research report contains disallowed certainty or guaranteed returns language."
                 )

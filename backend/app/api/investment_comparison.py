@@ -60,12 +60,9 @@ def compare_investment_options(
             request=request,
             financial_context=financial_context,
         )
-    except InvestmentComparisonError as exc:
+    except InvestmentComparisonError:
         logger.exception("Investment comparison failed for user %s.", current_user.id)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Investment comparison failed: {exc}",
-        ) from exc
+        raise
     except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

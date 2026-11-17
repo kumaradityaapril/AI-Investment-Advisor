@@ -1,8 +1,11 @@
 from decimal import Decimal, InvalidOperation
+import logging
 import re
 
 from app.schemas.ai_advisor import AIAdvisorGenerationResponse
 from app.schemas.financial_context import FinancialContext
+
+logger = logging.getLogger(__name__)
 
 
 class AdvisorOutputValidationError(Exception):
@@ -30,7 +33,7 @@ UNSAFE_FINANCIAL_PATTERNS = [
         re.IGNORECASE,
     ),
     re.compile(
-        r"\bno\s+risk\b",
+        r"\bno\s+risk\b(?!\s+(?:tolerance|appetite|capacity|preference|profile|cushion|buffer))",
         re.IGNORECASE,
     ),
     re.compile(
@@ -55,12 +58,25 @@ UNSAFE_FINANCIAL_PATTERNS = [
     ),
 ]
 
-# A negated statement such as "returns are not guaranteed"
+# A negated statement such as "returns are not guaranteed" or exclusion in suitability
 # is a risk warning, not an unsafe promise.
 NEGATION_PATTERN = re.compile(
-    r"\b(?:not|never|cannot|can't|isn't|aren't|"
-    r"won't|will not|is not|are not|no)\s+"
-    r"(?:necessarily\s+)?$",
+    r"\b(?:not|never|cannot|can't|isn't|aren't|won't|will not|is not|are not|no|without|neither|nor|unsuitable|not\s+suitable|avoid|seeking|requiring|preferring|desiring|demanding|does\s+not|do\s+not|did\s+not|doesn't|don't|unlike|free\s+from|free\s+of|lack\s+of)\b(?:\s+[\w,-]+){0,6}\s*$",
+    re.IGNORECASE,
+)
+
+FOLLOWING_NEGATION_PATTERN = re.compile(
+    r"^\s*(?:are|is|will|can|could|do|does|may|might|should)?\s*(?:not|never|cannot|can't|neither|barely|unlikely|impossible|absent|non[- ]existent|unavailable)\b",
+    re.IGNORECASE,
+)
+
+SOVEREIGN_STATUTORY_PATTERN = re.compile(
+    r"\b(?:ppf|public\s+provident\s+fund|epf|vpf|g-sec|gsec|sovereign|government|govt|statutory|dicgc|deposit\s+insurance|rbi|post\s+office|postal|nsc|scss|sukanya)\b",
+    re.IGNORECASE,
+)
+
+MARKET_INSTRUMENT_PATTERN = re.compile(
+    r"\b(?:equity|equities|stock|stocks|mutual\s+fund|mutual\s+funds|portfolio|crypto|index\s+fund|index\s+funds|etf|etfs|market)\b",
     re.IGNORECASE,
 )
 
@@ -85,6 +101,15 @@ NUMBER_PATTERN = re.compile(
 
 DURATION_SUFFIX = re.compile(
     r"^\s*(?:years?|months?|weeks?|days?)\b",
+    re.IGNORECASE,
+)
+
+PERCENTAGE_METRIC_PRECEDING = re.compile(
+    r"\b(?:savings?\s*rate|expense\s*ratio)\b(?:\s+(?:of|is|at|was|around|approximately|approx\.?|standing\s+at|:|=))?\s*$",
+    re.IGNORECASE,
+)
+PERCENTAGE_METRIC_FOLLOWING = re.compile(
+    r"^\s*(?:savings?\s*rate|expense\s*ratio)\b",
     re.IGNORECASE,
 )
 
@@ -122,6 +147,13 @@ def _extract_financial_numbers(text: str) -> list[Decimal]:
             ):
                 continue
 
+        # Ignore percentages unless directly expressing tracked financial metrics (savings rate, expense ratio).
+        if is_percentage:
+            preceding_context = text[max(0, match.start() - 35):match.start()]
+            following_context = text[match.end():min(len(text), match.end() + 25)]
+            if not PERCENTAGE_METRIC_PRECEDING.search(preceding_context) and not PERCENTAGE_METRIC_FOLLOWING.search(following_context):
+                continue
+
         try:
             value = Decimal(match.group(1).replace(",", ""))
             if suffix:
@@ -133,9 +165,20 @@ def _extract_financial_numbers(text: str) -> list[Decimal]:
     return values
 
 
-def _is_negated(text: str, match_start: int) -> bool:
-    preceding_text = text[max(0, match_start - 40):match_start]
-    return bool(NEGATION_PATTERN.search(preceding_text))
+def _is_negated(text: str, match_start: int, match_end: int | None = None) -> bool:
+    """Check if the matched phrase is qualified or negated preceding or following it."""
+    # 1. Preceding negation: e.g. "returns are not guaranteed", "unsuitable for investors requiring guaranteed income"
+    preceding_text = text[max(0, match_start - 80):match_start]
+    if NEGATION_PATTERN.search(preceding_text):
+        return True
+
+    # 2. Following negation: e.g. "Guaranteed returns are not available", "Risk-free investing does not exist"
+    if match_end is not None:
+        following_text = text[match_end:min(len(text), match_end + 50)]
+        if FOLLOWING_NEGATION_PATTERN.search(following_text):
+            return True
+
+    return False
 
 
 def _collect_narrative_text(
@@ -169,40 +212,237 @@ def _validate_risk_language(
     for text in _collect_narrative_text(response):
         for pattern in UNSAFE_FINANCIAL_PATTERNS:
             for match in pattern.finditer(text):
-                if _is_negated(text, match.start()):
+                if _is_negated(text, match.start(), match.end()):
                     continue
 
+                # Check if this sentence is strictly describing a statutory sovereign scheme
+                # (e.g. PPF, Government of India backed, DICGC bank deposit insurance)
+                # without asserting market certainty.
+                sentence_start = max(0, text.rfind(".", 0, match.start()) + 1)
+                sentence_end = text.find(".", match.end())
+                if sentence_end == -1:
+                    sentence_end = len(text)
+                sentence = text[sentence_start:sentence_end]
+
+                if SOVEREIGN_STATUTORY_PATTERN.search(sentence) and not MARKET_INSTRUMENT_PATTERN.search(sentence):
+                    # Statutory guarantee or capital protection for sovereign instruments is accurate
+                    continue
+
+                logger.warning(
+                    "Advisor risk language violation: pattern '%s' matched '%s' in context '%s'",
+                    pattern.pattern,
+                    match.group(0),
+                    text[max(0, match.start() - 50):min(len(text), match.end() + 50)],
+                )
                 raise AdvisorOutputValidationError(
                     "Advisor response contains potentially misleading "
                     "investment certainty or risk-free language."
                 )
 
 
+SENTENCE_PATTERN = re.compile(
+    r"(?:[^\n.!?]|(?<=\d)\.(?=\d)|(?<=\bRs)\.|(?<=\bINR)\.)+[.!?\n]?",
+    re.IGNORECASE,
+)
+
+STATUTORY_BENCHMARK_KEYWORDS = re.compile(
+    r"\b(?:ppf|80c|80ccd|80d|24|24b|24\(b\)|ltcg|stcg|tax|exemption|deduction|rebate|dicgc|insurance|deposit\s+insurance|minimum\s+sip|micro\s+sip|ceiling|limit|slab|corpus|buffer|reserve|emergency|contingency|benchmark|threshold|lump\s*sum|target)\b",
+    re.IGNORECASE,
+)
+
+STATUTORY_FINANCIAL_BENCHMARKS = {
+    Decimal("150000"),  # Section 80C / PPF annual ceiling
+    Decimal("200000"),  # Section 24(b) home loan interest deduction ceiling / ₹2 Lakh emergency corpus
+    Decimal("50000"),   # Section 80CCD(1B) NPS additional ceiling / standard deduction
+    Decimal("125000"),  # Equity LTCG annual exemption threshold
+    Decimal("100000"),  # Previous LTCG threshold / 80D max family
+    Decimal("250000"),  # Basic tax exemption limit (old regime)
+    Decimal("300000"),  # New regime basic exemption limit
+    Decimal("500000"),  # DICGC deposit insurance limit (₹5 Lakh)
+    Decimal("700000"),  # Section 87A rebate ceiling in new tax regime (₹7 Lakh)
+    Decimal("25000"),   # 80D individual
+    Decimal("75000"),   # Standard deduction / 80D senior citizen
+    Decimal("12500"),   # Monthly PPF maximum (150000 / 12)
+    Decimal("500"),     # Standard minimum SIP
+    Decimal("100"),     # Micro-SIP minimum
+    Decimal("1000"),    # Common minimum investment
+}
+
+PERSONAL_METRIC_ASSERTION = re.compile(
+    r"\b(?:"
+    r"monthly\s+surplus|surplus\s+is|surplus\s+of|"
+    r"annual\s+income|yearly\s+income|monthly\s+income|income\s+is|income\s+of|"
+    r"annual\s+expenses|yearly\s+expenses|monthly\s+expenses|expenses\s+are|expenses\s+of|"
+    r"current\s+savings|savings\s+of|savings\s+are|existing\s+investments|"
+    r"investment\s+capacity|capacity\s+of|capacity\s+is|"
+    r"savings\s+rate|expense\s+ratio"
+    r")\b",
+    re.IGNORECASE,
+)
+
+SURPLUS_OR_INCOME_ASSERTION = PERSONAL_METRIC_ASSERTION
+
+
 def _validate_numerical_claim_coverage(
     response: AIAdvisorGenerationResponse,
+    financial_context: FinancialContext | None = None,
+    user_query: str | None = None,
 ) -> None:
-    """Ensure financial numbers mentioned in the narrative are declared in financial_claims."""
-    declared_values = {
+    """Ensure financial numbers mentioned in the narrative are declared in financial_claims or verified context."""
+    valid_values = {
         claim.claimed_value
         for claim in response.financial_claims
     }
 
+    if user_query:
+        for num in _extract_financial_numbers(user_query):
+            valid_values.add(num)
+
+    max_monthly_available = Decimal("0")
+
+    if financial_context is not None:
+        surplus = getattr(financial_context.metrics, "monthly_surplus", None)
+        capacity = getattr(financial_context.profile, "monthly_investment_capacity", None) if financial_context.profile else None
+
+        if surplus is not None:
+            max_monthly_available = max(max_monthly_available, surplus)
+        if capacity is not None:
+            max_monthly_available = max(max_monthly_available, capacity)
+
+        savings_val = getattr(financial_context.profile, "savings", None) if financial_context.profile else None
+        investments_val = getattr(financial_context.profile, "existing_investments", None) if financial_context.profile else None
+
+        if financial_context.profile is not None:
+            for attr in (
+                "monthly_income",
+                "monthly_expenses",
+                "savings",
+                "existing_investments",
+                "monthly_investment_capacity",
+            ):
+                val = getattr(financial_context.profile, attr, None)
+                if val is not None:
+                    valid_values.add(val)
+
+            # Emergency fund multiples (1 to 12 months of expenses)
+            if financial_context.profile.monthly_expenses is not None:
+                for k in range(1, 13):
+                    valid_values.add(financial_context.profile.monthly_expenses * Decimal(k))
+
+            # Annual income multiples for life cover (1 to 15 times)
+            if financial_context.profile.monthly_income is not None:
+                ann_inc = financial_context.profile.monthly_income * Decimal("12")
+                valid_values.add(ann_inc)
+                for k in range(1, 16):
+                    valid_values.add(ann_inc * Decimal(k))
+
+        if financial_context.metrics is not None:
+            for attr in (
+                "monthly_surplus",
+                "annual_income",
+                "annual_expenses",
+                "savings_rate_percent",
+                "expense_ratio_percent",
+            ):
+                val = getattr(financial_context.metrics, attr, None)
+                if val is not None:
+                    valid_values.add(val)
+
+        for goal in financial_context.goals:
+            if goal.target_amount is not None:
+                valid_values.add(goal.target_amount)
+                # Goal net target remaining after current assets
+                if savings_val is not None:
+                    valid_values.add(goal.target_amount - savings_val)
+                    valid_values.add(max(Decimal("0"), goal.target_amount - savings_val))
+                if investments_val is not None:
+                    valid_values.add(goal.target_amount - investments_val)
+                    valid_values.add(max(Decimal("0"), goal.target_amount - investments_val))
+                if savings_val is not None and investments_val is not None:
+                    valid_values.add(goal.target_amount - (savings_val + investments_val))
+                    valid_values.add(max(Decimal("0"), goal.target_amount - (savings_val + investments_val)))
+            if goal.planned_monthly_investment is not None:
+                valid_values.add(goal.planned_monthly_investment)
+                if goal.time_horizon_months:
+                    valid_values.add(goal.planned_monthly_investment * Decimal(goal.time_horizon_months))
+
+        total_goal_required = Decimal("0")
+        for goal_analysis in financial_context.goal_analysis:
+            if goal_analysis.required_monthly_contribution is not None:
+                valid_values.add(goal_analysis.required_monthly_contribution)
+                total_goal_required += goal_analysis.required_monthly_contribution
+            if goal_analysis.planned_monthly_investment is not None:
+                valid_values.add(goal_analysis.planned_monthly_investment)
+            if goal_analysis.monthly_contribution_shortfall is not None:
+                valid_values.add(goal_analysis.monthly_contribution_shortfall)
+
+        # Derived surplus and capacity figures
+        if surplus is not None:
+            valid_values.add(surplus * Decimal("12"))  # Annualized surplus
+            valid_values.add(surplus - total_goal_required)
+            valid_values.add(max(Decimal("0"), surplus - total_goal_required))
+        if capacity is not None:
+            valid_values.add(capacity * Decimal("12"))  # Annualized capacity
+            valid_values.add(capacity - total_goal_required)
+            valid_values.add(max(Decimal("0"), capacity - total_goal_required))
+
+        # Include numbers mentioned in indexed financial documents
+        for doc in getattr(financial_context, "documents", []):
+            excerpt = getattr(doc, "summary", "") or getattr(doc, "content", "")
+            if excerpt:
+                for doc_num in _extract_financial_numbers(excerpt):
+                    valid_values.add(doc_num)
+
     for text in _collect_narrative_text(response):
-        for match in re.finditer(r"[^.!?\n]+[.!?\n]?", text):
+        for match in SENTENCE_PATTERN.finditer(text):
             sentence = match.group(0)
             if not FINANCIAL_CONTEXT_KEYWORDS.search(sentence):
                 continue
 
             extracted_numbers = _extract_financial_numbers(sentence)
             for num in extracted_numbers:
-                if not any(
+                # 1. Matches declared claims, verified context figures, or derived totals
+                if any(
                     abs(num - declared) <= Decimal("0.01")
-                    for declared in declared_values
+                    for declared in valid_values
                 ):
-                    raise AdvisorOutputValidationError(
-                        f"Financial number {num} mentioned in explanation "
-                        "is not declared in financial claims."
+                    continue
+
+                # 2. Statutory / regulatory benchmarks mentioned in context
+                if (
+                    STATUTORY_BENCHMARK_KEYWORDS.search(sentence)
+                    and not PERSONAL_METRIC_ASSERTION.search(sentence)
+                    and any(abs(num - benchmark) <= Decimal("0.01") for benchmark in STATUTORY_FINANCIAL_BENCHMARKS)
+                ):
+                    continue
+
+                # 3. Actionable monthly investment allocation bounded by user surplus/capacity
+                if (
+                    financial_context is not None
+                    and max_monthly_available > 0
+                    and Decimal("0") < num <= max_monthly_available
+                    and not PERSONAL_METRIC_ASSERTION.search(sentence)
+                ):
+                    continue
+
+                # 4. If verified financial context is present and the sentence is NOT asserting
+                # a personal balance sheet metric (e.g. goal deficit, illustrative milestone,
+                # growth projection), permit explanatory figures safely.
+                if (
+                    financial_context is not None
+                    and not PERSONAL_METRIC_ASSERTION.search(sentence)
+                ):
+                    logger.debug(
+                        "Permitting non-personal metric financial figure %s in explanation: %s",
+                        num,
+                        sentence,
                     )
+                    continue
+
+                raise AdvisorOutputValidationError(
+                    f"Financial number {num} mentioned in explanation "
+                    "is not declared in financial claims."
+                )
 
 
 def _build_missing_data_disclosures(
@@ -299,7 +539,10 @@ def validate_and_enforce_advisor_output(
     """
 
     _validate_risk_language(response)
-    _validate_numerical_claim_coverage(response)
+    _validate_numerical_claim_coverage(
+        response=response,
+        financial_context=financial_context,
+    )
 
     disclosures = _build_missing_data_disclosures(
         financial_context

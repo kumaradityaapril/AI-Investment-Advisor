@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 from app.main import app
 from app.models import User
 from app.api.auth import get_current_user
+from app.core.database import get_db
 from app.schemas.investment_comparison import (
     COMPARISON_DISCLAIMER,
     InvestmentComparisonExplanation,
@@ -202,8 +203,9 @@ def test_successful_investment_comparison_flow():
 def test_investment_comparison_api_endpoint():
     mock_user = User(id=1, email="investor@example.com", hashed_password="pw")
 
-    # Override current user dependency
+    # Override current user and database dependencies
     app.dependency_overrides[get_current_user] = lambda: mock_user
+    app.dependency_overrides[get_db] = lambda: Mock()
 
     client = TestClient(app)
 

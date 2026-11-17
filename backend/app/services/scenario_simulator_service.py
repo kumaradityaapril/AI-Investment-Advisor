@@ -23,6 +23,8 @@ from app.schemas.scenario_simulation import (
     TrajectoryPoint,
 )
 from app.services.advisor_output_validation_service import (
+    MARKET_INSTRUMENT_PATTERN,
+    SOVEREIGN_STATUTORY_PATTERN,
     UNSAFE_FINANCIAL_PATTERNS,
     _is_negated,
 )
@@ -252,11 +254,30 @@ def _validate_scenario_safety(explanation: ScenarioAIExplanation) -> None:
     for text in texts:
         for pattern in UNSAFE_FINANCIAL_PATTERNS:
             for match in pattern.finditer(text):
-                if _is_negated(text, match.start()):
+                if _is_negated(text, match.start(), match.end()):
                     continue
+
+                sentence_start = max(0, text.rfind(".", 0, match.start()) + 1)
+                sentence_end = text.find(".", match.end())
+                if sentence_end == -1:
+                    sentence_end = len(text)
+                sentence = text[sentence_start:sentence_end]
+
+                if SOVEREIGN_STATUTORY_PATTERN.search(sentence) and not MARKET_INSTRUMENT_PATTERN.search(sentence):
+                    continue
+
+                logger.warning(
+                    "Scenario simulation safety violation: pattern '%s' matched '%s' in context '%s'",
+                    pattern.pattern,
+                    match.group(0),
+                    text,
+                )
                 raise ScenarioSimulationError(
                     "Scenario explanation contains disallowed certainty or guaranteed returns language."
                 )
+
+
+from app.services.groq_service import call_groq_structured, is_groq_enabled
 
 
 def generate_scenario_explanation(
@@ -267,13 +288,6 @@ def generate_scenario_explanation(
     client: genai.Client | None = None,
 ) -> ScenarioAIExplanation:
     """Generate structured AI narrative analyzing the financial simulation."""
-    if client is None:
-        try:
-            client = _get_gemini_client()
-        except Exception as exc:
-            raise ScenarioSimulationError(
-                f"Failed to initialize Gemini client: {exc}"
-            ) from exc
 
     milestone_years = [1, min(5, len(trajectory)), len(trajectory)]
     milestones = [
@@ -303,6 +317,20 @@ INSTRUCTIONS:
 5. Provide actionable, practical next steps for the investor.
 6. MANDATORY RULE: Never state or imply guaranteed returns or zero risk. All figures are hypothetical mathematical projections.
 7. Return your response matching the ScenarioAIExplanation schema."""
+
+    if client is None:
+        logger.info("Generating scenario explanation using Groq...")
+        try:
+            explanation = call_groq_structured(
+                prompt=prompt,
+                response_model=ScenarioAIExplanation,
+                system_instruction="You are an expert AI Financial Advisor explaining a hypothetical simulation.",
+                temperature=0.2,
+            )
+            _validate_scenario_safety(explanation)
+            return explanation
+        except Exception as exc:
+            raise ScenarioSimulationError(f"Groq scenario generation failed: {exc}") from exc
 
     try:
         response = client.models.generate_content(

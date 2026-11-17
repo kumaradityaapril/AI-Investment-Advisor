@@ -42,8 +42,10 @@ interface HistoryItem {
 }
 
 interface DiffResponse {
-  baseline_id: number;
-  current_id: number;
+  baseline_id?: number;
+  baseline_analysis_id?: number;
+  current_id?: number;
+  current_analysis_id?: number;
   metric_deltas: Array<{
     metric_name: string;
     metric_key: string;
@@ -64,8 +66,10 @@ interface DiffResponse {
   ai_explanation: {
     summary_narrative: string;
     key_improvements: string[];
-    areas_of_concern: string[];
-    obsolete_advice: string[];
+    areas_of_concern?: string[];
+    key_concerns?: string[];
+    obsolete_advice?: string[];
+    stale_recommendations?: string[];
   };
 }
 
@@ -119,6 +123,7 @@ export default function HistoryPage() {
         method: "POST",
         body: JSON.stringify({
           baseline_analysis_id: baselineId,
+          current_analysis_id: comparisonId,
           comparison_analysis_id: comparisonId,
         }),
       });
@@ -313,7 +318,7 @@ export default function HistoryPage() {
                         Deterministic Metric Deltas
                       </h4>
                       <span className="text-xs text-indigo-700 font-semibold">
-                        #{diffResult.baseline_id} &rarr; #{diffResult.current_id}
+                        #{diffResult.baseline_analysis_id || diffResult.baseline_id} &rarr; #{diffResult.current_analysis_id || diffResult.current_id}
                       </span>
                     </div>
 
@@ -361,13 +366,13 @@ export default function HistoryPage() {
                       {diffResult.ai_explanation.summary_narrative}
                     </p>
 
-                    {diffResult.ai_explanation.obsolete_advice?.length > 0 && (
+                    {((diffResult.ai_explanation.stale_recommendations?.length || 0) > 0 || (diffResult.ai_explanation.obsolete_advice?.length || 0) > 0) && (
                       <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 space-y-2">
                         <span className="text-xs font-bold text-rose-800 uppercase tracking-wider block">
                           Superseded / Obsolete Advice
                         </span>
                         <ul className="space-y-1 text-xs text-rose-700 list-disc list-inside">
-                          {diffResult.ai_explanation.obsolete_advice.map((obs, idx) => (
+                          {(diffResult.ai_explanation.stale_recommendations || diffResult.ai_explanation.obsolete_advice || []).map((obs, idx) => (
                             <li key={idx}>{obs}</li>
                           ))}
                         </ul>

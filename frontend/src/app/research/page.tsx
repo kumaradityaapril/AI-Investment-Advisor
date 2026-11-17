@@ -53,7 +53,7 @@ export default function ResearchPage() {
     try {
       const data = await apiRequest<ResearchReport>("/research", {
         method: "POST",
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ question: query, query }),
       });
       setReport(data);
     } catch (err: any) {

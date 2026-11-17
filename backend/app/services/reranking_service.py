@@ -1,14 +1,17 @@
 import json
+import logging
 import math
 from dataclasses import dataclass
 from typing import Any, Sequence
 
 from google import genai
 from google.genai import types
-from pydantic import BaseModel, ConfigDict, Field, ValidationError
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, model_validator
 
 from app.core.config import settings
 from app.services.hybrid_retrieval_service import HybridRetrievedChunk
+
+logger = logging.getLogger(__name__)
 
 
 class RerankingError(Exception):
@@ -26,6 +29,25 @@ class RerankingResponse(BaseModel):
     """Structured response containing relevance scores."""
 
     results: list[RerankingItem]
+
+    @model_validator(mode="before")
+    @classmethod
+    def _normalize_results(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            results = data.get("results")
+            if isinstance(results, dict):
+                for key in ("items", "chunks", "scores", "data", "results"):
+                    if isinstance(results.get(key), list):
+                        data = {**data, "results": results[key]}
+                        break
+            elif results is None:
+                for key in ("items", "chunks", "scores", "data"):
+                    if isinstance(data.get(key), list):
+                        data = {**data, "results": data[key]}
+                        break
+        elif isinstance(data, list):
+            data = {"results": data}
+        return data
 
 
 @dataclass
@@ -133,13 +155,16 @@ def _validate_scores(
     return score_map
 
 
+from app.services.groq_service import call_groq_structured, is_groq_enabled
+
+
 def rerank_chunks(
     query: str,
     chunks: Sequence[HybridRetrievedChunk],
     top_k: int | None = None,
 ) -> list[RerankedChunk]:
     """
-    Rerank hybrid-retrieved candidate chunks using Gemini relevance scoring.
+    Rerank hybrid-retrieved candidate chunks using Groq or Gemini relevance scoring.
 
     Candidate chunks are processed in configurable batches. Results are sorted
     primarily by relevance score (descending), with ties broken by RRF score
@@ -168,10 +193,27 @@ def rerank_chunks(
     relevance_scores: dict[int, float] = {}
 
     try:
-        client = _get_gemini_client()
+        client = None
         for start in range(0, len(chunks), batch_size):
             batch = chunks[start : start + batch_size]
             prompt = _build_reranking_prompt(query, batch)
+
+            if is_groq_enabled():
+                try:
+                    parsed = call_groq_structured(
+                        prompt=prompt,
+                        response_model=RerankingResponse,
+                        system_instruction="You are an expert relevance scoring engine. Score candidate chunks objectively from 0 to 100 based on how well they answer the query.",
+                        temperature=0.0,
+                    )
+                    batch_scores = _validate_scores(batch, parsed)
+                    relevance_scores.update(batch_scores)
+                    continue
+                except Exception as exc:
+                    logger.warning("Groq reranking failed, falling back to Gemini: %s", exc)
+
+            if client is None:
+                client = _get_gemini_client()
 
             try:
                 response = client.models.generate_content(

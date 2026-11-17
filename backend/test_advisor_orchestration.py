@@ -146,8 +146,8 @@ def test_successful_orchestration(
         db=mock_db,
         query=advisor_request.question,
         user_id=user_id,
-        top_k=5,
-        candidate_k=20,
+        top_k=orchestration.ADVISOR_EVIDENCE_TOP_K,
+        candidate_k=orchestration.ADVISOR_EVIDENCE_CANDIDATE_K,
     )
     mock_prompt.assert_called_once_with(
         request=advisor_request,

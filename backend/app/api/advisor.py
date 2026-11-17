@@ -84,12 +84,9 @@ def run_advisor_analysis(
         response.headers["X-Analysis-Id"] = str(saved_history.id)
         return advisor_response
 
-    except AdvisorOrchestrationError as exc:
+    except AdvisorOrchestrationError:
         logger.exception("AI Advisor orchestration failed for user %s.", current_user.id)
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Advisor analysis failed: {exc}",
-        ) from exc
+        raise
     except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

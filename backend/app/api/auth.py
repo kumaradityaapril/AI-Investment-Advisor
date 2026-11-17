@@ -1,4 +1,4 @@
-zoofrom typing import Annotated
+from typing import Annotated
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, status

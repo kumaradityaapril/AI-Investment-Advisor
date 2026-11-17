@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Any, Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 EvidenceSourceType = Literal[
     "financial_document",
@@ -31,15 +31,34 @@ class EvidenceItem(BaseModel):
 class ResearchRequest(BaseModel):
     """User request to initiate an autonomous research workflow."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
-    question: str = Field(min_length=3, max_length=1000, description="Financial research query")
+    question: str = Field(default="", min_length=0, max_length=1000, description="Financial research query")
+    query: str | None = Field(default=None, description="Alias for question")
     max_iterations: int = Field(
         default=3,
         ge=1,
         le=5,
         description="Maximum tool execution rounds before forcing synthesis",
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def resolve_question(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if not data.get("question") and data.get("query"):
+                data["question"] = data["query"]
+        return data
+
+    @model_validator(mode="after")
+    def validate_question_present(self) -> "ResearchRequest":
+        if not self.question and self.query:
+            self.question = self.query
+        s = self.question.strip()
+        if len(s) < 3:
+            raise ValueError("Research question must be at least 3 characters long.")
+        self.question = s
+        return self
 
 
 class ToolSelectionDecision(BaseModel):
@@ -66,6 +85,8 @@ class EvidenceEvaluationResult(BaseModel):
 class ResearchReport(BaseModel):
     """Final grounded research synthesis backed by collected evidence."""
 
+    model_config = ConfigDict(extra="ignore")
+
     research_question: str
     summary: str = Field(min_length=10, max_length=2000)
     key_findings: list[str] = Field(min_length=1, max_length=10)
@@ -73,3 +94,27 @@ class ResearchReport(BaseModel):
     sources: list[str] = Field(min_length=1, max_length=10)
     risks_and_limitations: list[str] = Field(default_factory=list, max_length=10)
     researched_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    # Frontend compatibility aliases
+    query: str | None = None
+    executive_summary: str | None = None
+    synthesis: str | None = None
+    risk_factors: list[str] | None = None
+    regulatory_disclaimer: str | None = None
+
+    @model_validator(mode="after")
+    def populate_report_aliases(self) -> "ResearchReport":
+        if not self.query:
+            self.query = self.research_question
+        if not self.executive_summary:
+            self.executive_summary = self.summary
+        if not self.synthesis:
+            self.synthesis = self.summary
+        if not self.risk_factors:
+            self.risk_factors = list(self.risks_and_limitations)
+        if not self.regulatory_disclaimer:
+            self.regulatory_disclaimer = (
+                "This research report is compiled autonomously using validated financial citations "
+                "and calculations for educational purposes only. It does not constitute certified investment advice."
+            )
+        return self

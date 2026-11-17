@@ -1,7 +1,8 @@
 from contextlib import asynccontextmanager
 import logging
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
@@ -19,6 +20,18 @@ from app.api.research import router as research_router
 from app.api.scenarios import router as scenarios_router
 from app.core.exceptions import register_exception_handlers
 from app.core.logging_middleware import AuditLoggingMiddleware
+
+from app.services.advisor_orchestration_service import (
+    AdvisorOrchestrationError,
+)
+from app.services.groq_service import (
+    GroqContextLengthError,
+    GroqProviderError,
+    GroqRateLimitError,
+)
+from app.services.investment_comparison_service import (
+    InvestmentComparisonError,
+)
 
 logger = logging.getLogger("app.main")
 
@@ -46,6 +59,126 @@ app = FastAPI(
     description="GenAI-powered AI Investment Advisor API",
     lifespan=lifespan,
 )
+
+
+def find_groq_error(exc: Exception) -> Exception | None:
+    """Find a Groq exception inside a wrapped exception chain."""
+    current: Exception | None = exc
+    visited = set()
+    while current is not None and id(current) not in visited:
+        visited.add(id(current))
+        if isinstance(
+            current,
+            (
+                GroqRateLimitError,
+                GroqContextLengthError,
+                GroqProviderError,
+            ),
+        ):
+            return current
+        current = current.__cause__ or current.__context__
+    return None
+
+
+def build_groq_error_response(exc: Exception) -> JSONResponse:
+    """Convert Groq failures into appropriate HTTP responses."""
+    groq_error = find_groq_error(exc) or exc
+
+    if isinstance(groq_error, GroqRateLimitError):
+        headers = {}
+        if groq_error.retry_after is not None:
+            headers["Retry-After"] = str(max(1, int(groq_error.retry_after)))
+        return JSONResponse(
+            status_code=429,
+            content={
+                "error_code": "AI_PROVIDER_RATE_LIMIT",
+                "message": "AI provider rate limit reached. Please retry shortly.",
+                "detail": "AI provider rate limit reached. Please retry shortly.",
+            },
+            headers=headers,
+        )
+
+    if isinstance(groq_error, GroqContextLengthError):
+        return JSONResponse(
+            status_code=502,
+            content={
+                "error_code": "AI_CONTEXT_LIMIT_EXCEEDED",
+                "message": "The AI prompt exceeds the model's context limit.",
+                "detail": "The AI prompt exceeds the model's context limit.",
+            },
+        )
+
+    if isinstance(groq_error, GroqProviderError):
+        return JSONResponse(
+            status_code=502,
+            content={
+                "error_code": "AI_PROVIDER_UNAVAILABLE",
+                "message": "AI service is temporarily unavailable. Please retry shortly.",
+                "detail": "AI service is temporarily unavailable. Please retry shortly.",
+            },
+        )
+
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error_code": "AI_GENERATION_FAILED",
+            "message": "Failed to generate AI financial analysis.",
+            "detail": "Failed to generate AI financial analysis.",
+        },
+    )
+
+
+@app.exception_handler(AdvisorOrchestrationError)
+async def handle_advisor_orchestration_error(
+    _request: Request, exc: AdvisorOrchestrationError
+) -> JSONResponse:
+    return build_groq_error_response(exc)
+
+
+@app.exception_handler(InvestmentComparisonError)
+async def handle_investment_comparison_error(
+    _request: Request, exc: InvestmentComparisonError
+) -> JSONResponse:
+    return build_groq_error_response(exc)
+
+
+@app.exception_handler(GroqRateLimitError)
+async def handle_groq_rate_limit(
+    _request: Request, exc: GroqRateLimitError
+) -> JSONResponse:
+    return build_groq_error_response(exc)
+
+
+@app.exception_handler(GroqContextLengthError)
+async def handle_groq_context_length(
+    _request: Request, exc: GroqContextLengthError
+) -> JSONResponse:
+    return build_groq_error_response(exc)
+
+
+@app.exception_handler(GroqProviderError)
+async def handle_groq_provider_error(
+    _request: Request, exc: GroqProviderError
+) -> JSONResponse:
+    return build_groq_error_response(exc)
+
+
+@app.exception_handler(HTTPException)
+async def handle_http_exception(
+    _request: Request, exc: HTTPException
+) -> JSONResponse:
+    groq_error = find_groq_error(exc)
+    if groq_error is not None:
+        return build_groq_error_response(exc)
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error_code": f"HTTP_{exc.status_code}",
+            "message": str(exc.detail),
+            "detail": str(exc.detail),
+        },
+    )
+
 
 app.add_middleware(AuditLoggingMiddleware)
 app.add_middleware(

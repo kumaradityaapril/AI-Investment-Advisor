@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
 from decimal import Decimal
-from typing import Literal
+from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 DeltaTrend = Literal["improved", "declined", "unchanged", "unavailable"]
 GoalChangeStatus = Literal["new", "removed", "modified", "unchanged"]
@@ -53,16 +53,33 @@ class GoalProgressDelta(BaseModel):
 class AnalysisDiffRequest(BaseModel):
     """Request payload to compare two historical analysis snapshots."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
     baseline_analysis_id: int = Field(gt=0, description="Earlier analysis session ID")
-    current_analysis_id: int = Field(gt=0, description="Later analysis session ID")
+    current_analysis_id: int = Field(default=0, description="Later analysis session ID")
+    comparison_analysis_id: int | None = Field(default=None, description="Alias for current analysis session ID")
+
+    @model_validator(mode="before")
+    @classmethod
+    def resolve_current_id(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if not data.get("current_analysis_id") and data.get("comparison_analysis_id"):
+                data["current_analysis_id"] = data["comparison_analysis_id"]
+        return data
+
+    @model_validator(mode="after")
+    def validate_ids(self) -> "AnalysisDiffRequest":
+        if not self.current_analysis_id and self.comparison_analysis_id:
+            self.current_analysis_id = self.comparison_analysis_id
+        if not self.current_analysis_id or self.current_analysis_id <= 0:
+            raise ValueError("Either current_analysis_id or comparison_analysis_id must be provided and greater than 0.")
+        return self
 
 
 class AnalysisDiffExplanation(BaseModel):
     """AI-generated narrative explaining financial trajectory and obsolete recommendations."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
     summary_narrative: str = Field(min_length=10, max_length=1500)
     key_improvements: list[str] = Field(min_length=1, max_length=10)
@@ -73,15 +90,27 @@ class AnalysisDiffExplanation(BaseModel):
         description="Previous recommendations that are no longer relevant or need revision.",
     )
     updated_strategic_focus: list[str] = Field(min_length=1, max_length=10)
+    areas_of_concern: list[str] = Field(default_factory=list, description="Alias for key_concerns")
+    obsolete_advice: list[str] = Field(default_factory=list, description="Alias for stale_recommendations")
+
+    @model_validator(mode="after")
+    def populate_narrative_aliases(self) -> "AnalysisDiffExplanation":
+        if not self.areas_of_concern and self.key_concerns:
+            self.areas_of_concern = list(self.key_concerns)
+        if not self.obsolete_advice and self.stale_recommendations:
+            self.obsolete_advice = list(self.stale_recommendations)
+        return self
 
 
 class AnalysisDiffResponse(BaseModel):
     """Complete financial progress comparison response."""
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="ignore")
 
     baseline_analysis_id: int
     current_analysis_id: int
+    baseline_id: int | None = None
+    current_id: int | None = None
     baseline_created_at: datetime
     current_created_at: datetime
     elapsed_days: int
@@ -90,4 +119,12 @@ class AnalysisDiffResponse(BaseModel):
     goal_deltas: list[GoalProgressDelta]
     ai_explanation: AnalysisDiffExplanation
     generated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+    @model_validator(mode="after")
+    def populate_id_aliases(self) -> "AnalysisDiffResponse":
+        if self.baseline_id is None:
+            self.baseline_id = self.baseline_analysis_id
+        if self.current_id is None:
+            self.current_id = self.current_analysis_id
+        return self
 

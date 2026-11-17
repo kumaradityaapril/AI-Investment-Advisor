@@ -18,7 +18,10 @@ class Settings(BaseSettings):
     upload_dir: str = "uploads"
     max_upload_size_bytes: int = Field(default=10 * 1024 * 1024, gt=0)
 
-    gemini_api_key: str
+    gemini_api_key: str = ""
+    groq_api_key: str = ""
+    llm_provider: str = "groq"
+    groq_model: str = "openai/gpt-oss-120b"
     embedding_model: str = "gemini-embedding-001"
     embedding_dimensions: int = 768
 

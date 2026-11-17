@@ -419,9 +419,46 @@ export default function DashboardPage() {
                           100% Mathematically Validated
                         </span>
                       </div>
-                      <p className="text-sm text-slate-800 leading-relaxed whitespace-pre-wrap">
-                        {aiAnswer.summary_narrative || aiAnswer.recommendation || JSON.stringify(aiAnswer, null, 2)}
-                      </p>
+                      <div className="space-y-4">
+                        <p className="text-sm text-slate-800 leading-relaxed whitespace-pre-wrap">
+                          {aiAnswer.overall_assessment || aiAnswer.summary_narrative || aiAnswer.recommendation || JSON.stringify(aiAnswer, null, 2)}
+                        </p>
+                        {Array.isArray(aiAnswer.recommendations) && aiAnswer.recommendations.length > 0 && (
+                          <div className="space-y-3 pt-2">
+                            <h5 className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                              Actionable Recommendations
+                            </h5>
+                            {aiAnswer.recommendations.map((rec: { title: string; explanation: string; suggested_action: string; priority: string }, idx: number) => (
+                              <div key={idx} className="bg-white p-3.5 rounded-xl border border-indigo-100 shadow-xs space-y-1">
+                                <div className="flex items-center justify-between">
+                                  <span className="font-semibold text-xs text-slate-900">{rec.title}</span>
+                                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                                    rec.priority === "high" ? "bg-rose-50 text-rose-700 border border-rose-100" :
+                                    rec.priority === "medium" ? "bg-amber-50 text-amber-700 border border-amber-100" :
+                                    "bg-slate-50 text-slate-600 border border-slate-200"
+                                  }`}>
+                                    {rec.priority}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-slate-600">{rec.explanation}</p>
+                                <p className="text-xs font-medium text-indigo-700 pt-0.5">
+                                  Action: {rec.suggested_action}
+                                </p>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        {Array.isArray(aiAnswer.limitations) && aiAnswer.limitations.length > 0 && (
+                          <div className="pt-2 text-[11px] text-slate-500 space-y-1 border-t border-indigo-100/60">
+                            <span className="font-semibold block text-slate-600">Disclosures & Limitations:</span>
+                            <ul className="list-disc pl-4 space-y-0.5">
+                              {aiAnswer.limitations.map((lim: string, i: number) => (
+                                <li key={i}>{lim}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </form>

@@ -58,9 +58,14 @@ export default function WhyThisPlanPage() {
     async function fetchLatestAnalysis() {
       setIsLoading(true);
       try {
-        const data = await apiRequest<HistoryResponse>("/advisor/history?limit=1");
+        const data = await apiRequest<{ items: any[]; total: number }>("/advisor/history?limit=1");
         if (data && data.items && data.items.length > 0) {
-          setLatestAnalysis(data.items[0]);
+          try {
+            const detail = await apiRequest<any>(`/advisor/history/${data.items[0].id}`);
+            setLatestAnalysis(detail || data.items[0]);
+          } catch {
+            setLatestAnalysis(data.items[0]);
+          }
         }
       } catch (err) {
         // ignore
@@ -72,8 +77,48 @@ export default function WhyThisPlanPage() {
     fetchLatestAnalysis();
   }, []);
 
-  const claims = latestAnalysis?.response?.numerical_claims || [];
-  const checklist = latestAnalysis?.response?.regulatory_checklist || {
+  const responseSnapshot = (latestAnalysis as any)?.advisor_response_snapshot || (latestAnalysis as any)?.response || {};
+  const contextSnapshot = (latestAnalysis as any)?.financial_context_snapshot || (latestAnalysis as any)?.financial_context || {};
+  const contextMetrics = contextSnapshot?.metrics || {};
+
+  // Build verified claim list from snapshot or metrics
+  const rawClaims: any[] = responseSnapshot?.financial_claims || responseSnapshot?.numerical_claims || [];
+  const claims = rawClaims.map((c) => ({
+    metric_key: c.metric_key || "Metric",
+    metric_value: c.claimed_value ? `₹${Number(c.claimed_value).toLocaleString("en-IN")}` : (c.metric_value || "—"),
+    claim_text: c.claim_text || `Grounded personal benchmark for ${c.metric_key?.replace(/_/g, " ")}`,
+    grounding_source: c.grounding_source || "PostgreSQL Verified Financial Context",
+  }));
+
+  // Fallback to primary verified financial metrics if no explicit claims were serialized
+  if (claims.length === 0 && Object.keys(contextMetrics).length > 0) {
+    if (contextMetrics.monthly_surplus) {
+      claims.push({
+        metric_key: "monthly_surplus",
+        metric_value: `₹${Number(contextMetrics.monthly_surplus).toLocaleString("en-IN")}`,
+        claim_text: "Calculated disposable monthly surplus available for investments",
+        grounding_source: "Monthly Income - Living Expenses",
+      });
+    }
+    if (contextMetrics.annual_income) {
+      claims.push({
+        metric_key: "annual_income",
+        metric_value: `₹${Number(contextMetrics.annual_income).toLocaleString("en-IN")}`,
+        claim_text: "Annualized gross income based on verified salary record",
+        grounding_source: "Monthly Income × 12",
+      });
+    }
+    if (contextMetrics.savings_rate_percent) {
+      claims.push({
+        metric_key: "savings_rate_percent",
+        metric_value: `${Number(contextMetrics.savings_rate_percent).toFixed(1)}%`,
+        claim_text: "Calculated proportion of disposable income saved monthly",
+        grounding_source: "Monthly Surplus / Monthly Income",
+      });
+    }
+  }
+
+  const checklist = (latestAnalysis as any)?.response?.regulatory_checklist || {
     sebi_disclaimer_present: true,
     risk_warning_present: true,
     no_guaranteed_returns: true,

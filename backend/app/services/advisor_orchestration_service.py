@@ -26,6 +26,9 @@ from app.services.retrieval_pipeline_service import retrieve_and_rerank
 
 logger = logging.getLogger(__name__)
 
+ADVISOR_EVIDENCE_TOP_K = 3
+ADVISOR_EVIDENCE_CANDIDATE_K = 20
+
 
 class AdvisorOrchestrationError(Exception):
     """Raised when the AI Advisor pipeline cannot be completed."""
@@ -38,7 +41,7 @@ def get_ai_advisor_response(
 ) -> AIAdvisorResponse:
     """
     Orchestrate financial context, RAG retrieval, prompt construction,
-    structured Gemini generation, and trusted evidence validation.
+    structured Groq generation, and trusted evidence validation.
     """
     if not isinstance(request, AIAdvisorRequest):
         raise ValueError("Invalid AI Advisor request.")
@@ -70,8 +73,8 @@ def get_ai_advisor_response(
                 db=db,
                 query=request.question,
                 user_id=user_id,
-                top_k=5,
-                candidate_k=20,
+                top_k=ADVISOR_EVIDENCE_TOP_K,
+                candidate_k=ADVISOR_EVIDENCE_CANDIDATE_K,
             )
         except Exception as exc:
             logger.exception(
@@ -88,13 +91,20 @@ def get_ai_advisor_response(
             financial_context=financial_context,
             retrieved_chunks=retrieved_chunks,
         )
+        logger.info(
+            "Advisor prompt prepared: user_id=%s, "
+            "evidence_chunks=%s, prompt_characters=%s",
+            user_id,
+            len(retrieved_chunks),
+            len(prompt),
+        )
     except Exception as exc:
         logger.exception("Failed to build advisor prompt for user %s.", user_id)
         raise AdvisorOrchestrationError(
             "Failed to build advisor prompt."
         ) from exc
 
-    # 4. Generate structured advisor response using Gemini
+    # 4. Generate structured advisor response using Groq
     try:
         generated_response: AIAdvisorGenerationResponse = generate_advisor_response(
             prompt=prompt

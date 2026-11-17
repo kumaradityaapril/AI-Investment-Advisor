@@ -356,3 +356,19 @@ def test_analysis_diff_api_cross_user_isolation(test_users):
     finally:
         app.dependency_overrides.clear()
         db.close()
+
+
+def test_analysis_diff_request_supports_aliases():
+    req1 = AnalysisDiffRequest.model_validate({
+        "baseline_analysis_id": 10,
+        "comparison_analysis_id": 20,
+    })
+    assert req1.baseline_analysis_id == 10
+    assert req1.current_analysis_id == 20
+
+    req2 = AnalysisDiffRequest.model_validate({
+        "baseline_analysis_id": 15,
+        "current_analysis_id": 30,
+    })
+    assert req2.baseline_analysis_id == 15
+    assert req2.current_analysis_id == 30

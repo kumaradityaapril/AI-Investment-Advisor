@@ -96,8 +96,6 @@ class InvestmentComparisonRequest(BaseModel):
 class OptionSuitability(BaseModel):
     """Suitability of an investment option for specific investor profiles."""
 
-    model_config = ConfigDict(extra="forbid")
-
     option_name: str = Field(min_length=2, max_length=100)
     suitable_for: str = Field(min_length=5, max_length=500)
     unsuitable_for: str = Field(min_length=5, max_length=500)
@@ -128,12 +126,10 @@ class InvestmentComparisonItem(BaseModel):
 class InvestmentComparisonExplanation(BaseModel):
     """AI-generated comparative analysis without picking winners."""
 
-    model_config = ConfigDict(extra="forbid")
-
     summary: str = Field(min_length=10, max_length=1500)
     key_differences: list[str] = Field(min_length=1, max_length=10)
     suitability_analysis: list[OptionSuitability] = Field(min_length=2, max_length=5)
-    risk_tradeoffs: list[str] = Field(min_length=1, max_length=10)
+    risk_tradeoffs: list[str] = Field(default_factory=list, max_length=10)
     assumptions_and_missing_info: list[str] = Field(default_factory=list, max_length=10)
 
 

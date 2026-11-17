@@ -1,21 +1,27 @@
 import json
-from typing import Sequence
+from typing import Any, Sequence
 
 from app.schemas.ai_advisor import AIAdvisorRequest
 from app.schemas.financial_context import FinancialContext
 from app.services.reranking_service import RerankedChunk
 
+# Maximum amount of retrieved document text included per chunk.
+# This controls prompt size without changing the stored document.
+MAX_EVIDENCE_CHARS = 800
+
 FINANCIAL_CLAIM_GROUNDING_INSTRUCTIONS = """FINANCIAL CLAIM GROUNDING RULES:
-1. Every numerical financial claim in your response must be included in the financial_claims array.
+1. Every numerical financial claim regarding the investor's personal metrics (surplus, income, expenses, savings rate, expense ratio, goal contributions/shortfalls) in your response must be declared in the financial_claims array.
 2. Only use financial values explicitly available in the trusted financial context.
 3. Never invent, estimate, or independently calculate investor financial metrics.
-4. For investor-level metrics, use the exact metric_key supported by the response schema.
-5. For goal-specific metrics, always include the corresponding goal_id.
-6. If a financial value is unavailable, do not make a claim about it. Explicitly disclose the missing information where relevant.
-7. Do not treat retrieved document statements as verified personal financial metrics.
-8. Never claim guaranteed returns, risk-free investments, or certain investment outcomes.
-9. Financial projections may only be discussed when the backend has explicitly supplied the calculated projection.
-10. Do not omit a financial claim from the ledger merely because it appears inside a recommendation or explanation.
+4. For investor-level metrics, use the exact metric_key supported by the response schema (monthly_surplus, annual_income, annual_expenses, savings_rate_percent, expense_ratio_percent).
+5. For goal-specific metrics (required_monthly_contribution, planned_monthly_investment, monthly_contribution_shortfall), always include the corresponding goal_id.
+6. Portfolio allocation splits (e.g., 70% equity, 30% debt) and market return expectations are general advice and should NOT be placed in financial_claims. Prefer percentage-based allocations.
+7. Any specific rupee allocations recommended should fit strictly within the investor's stated monthly investment capacity or surplus.
+8. If a financial value is unavailable, do not make a claim about it. Explicitly disclose the missing information where relevant.
+9. Do not treat retrieved document statements as verified personal financial metrics.
+10. Never claim guaranteed returns, risk-free investments, or certain investment outcomes.
+11. Financial projections may only be discussed when the backend has explicitly supplied the calculated projection.
+12. Do not omit an investor profile financial claim from the ledger merely because it appears inside a recommendation or explanation.
 If you cannot verify a financial value, leave it out and explicitly disclose the limitation."""
 
 ADVISOR_SYSTEM_INSTRUCTIONS = f"""You are an expert AI Investment Advisor providing objective, personalized, evidence-grounded financial analysis.
@@ -33,7 +39,7 @@ FINANCIAL ACCURACY RULES:
 3. Do not perform financial calculations yourself when deterministic financial metrics are already supplied.
 4. If required information is missing, explicitly say so.
 5. Distinguish verified facts from assumptions and general explanations.
-6. Do not guarantee returns or claim that an investment is risk-free.
+6. Never promise guaranteed returns, zero risk, or absolute safety for market-linked investments (stocks, equities, mutual funds). When discussing statutory or government instruments (such as PPF or Fixed Deposits), refer to them accurately as "government-administered fixed return", "sovereign-backed fixed-income scheme", or "DICGC deposit-insured up to ₹5 Lakh". Never describe any investment as "completely risk-free".
 7. Do not present educational analysis as a guaranteed investment outcome.
 
 DOCUMENT SECURITY RULES:
@@ -55,6 +61,21 @@ RECOMMENDATION RULES:
 {FINANCIAL_CLAIM_GROUNDING_INSTRUCTIONS}
 
 Return a response matching the provided AIAdvisorResponse schema."""
+
+
+def _prepare_evidence_chunk(chunk: RerankedChunk) -> dict[str, Any]:
+    """Prepare and bound evidence chunk content to keep LLM context within token limits."""
+    content = chunk.content.strip()
+    if len(content) > MAX_EVIDENCE_CHARS:
+        content = content[:MAX_EVIDENCE_CHARS].rstrip() + "..."
+
+    return {
+        "chunk_id": chunk.chunk_id,
+        "document_id": chunk.document_id,
+        "filename": chunk.document_name,
+        "page_number": chunk.page_number,
+        "content": content,
+    }
 
 
 def build_advisor_prompt(
@@ -82,7 +103,7 @@ def build_advisor_prompt(
         exclude={"user_id", "generated_at"},
     )
 
-    # Prepare evidence using trusted backend metadata.
+    # Prepare evidence using trusted backend metadata with bounded character length.
     evidence_data = []
     for chunk in retrieved_chunks:
         if not isinstance(chunk, RerankedChunk):
@@ -91,15 +112,7 @@ def build_advisor_prompt(
         if not chunk.content.strip():
             continue
 
-        evidence_data.append(
-            {
-                "chunk_id": chunk.chunk_id,
-                "document_id": chunk.document_id,
-                "filename": chunk.document_name,
-                "page_number": chunk.page_number,
-                "content": chunk.content.strip(),
-            }
-        )
+        evidence_data.append(_prepare_evidence_chunk(chunk))
 
     return (
         f"{ADVISOR_SYSTEM_INSTRUCTIONS}\n\n"

@@ -126,6 +126,12 @@ export default function ScenariosPage() {
         method: "POST",
         body: JSON.stringify({
           scenario_name: scenarioName,
+          parameters: {
+            delta_monthly_investment: sipDelta,
+            one_time_lump_sum: lumpSum,
+            time_horizon_years: horizonYears,
+            assumed_annual_return_percent: returnRate,
+          },
           monthly_investment_delta: sipDelta,
           lump_sum_investment: lumpSum,
           time_horizon_years: horizonYears,

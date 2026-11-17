@@ -20,6 +20,8 @@ from app.schemas.investment_comparison import (
 )
 from app.services.advisor_output_validation_service import (
     UNSAFE_FINANCIAL_PATTERNS,
+    SOVEREIGN_STATUTORY_PATTERN,
+    MARKET_INSTRUMENT_PATTERN,
     _is_negated,
 )
 from app.services.financial_calculation_service import (
@@ -142,7 +144,7 @@ CORE RESPONSIBILITIES:
 3. For each option, specify who it is suitable for, who it is unsuitable for, and its primary trade-off.
 4. If investor context is supplied, tailor the suitability analysis to their risk profile and goals.
 5. NEVER declare one option as universally "better", "the winner", or "the best choice". Every investment involves tradeoffs.
-6. NEVER claim guaranteed returns, risk-free profits, or absolute certainty.
+6. STRICT SAFETY RULE - FORBIDDEN PHRASES: NEVER use phrases such as "guaranteed return", "guaranteed returns", "guaranteed profit", "guaranteed income", "risk-free", "zero-risk", "cannot lose", or "capital is guaranteed" anywhere in your output, even when comparing fixed deposits or government bonds. Instead, use objective terms like "fixed rate", "contractual yield", "predetermined interest", or "deposit insurance".
 7. Return your response matching the InvestmentComparisonExplanation schema."""
 
     prompt_parts = [
@@ -184,15 +186,31 @@ def _validate_comparison_explanation_safety(
     for suitability in explanation.suitability_analysis:
         texts.extend([
             suitability.suitable_for,
-            suitability.unsuitable_for,
+            f"Unsuitable for: {suitability.unsuitable_for}",
             suitability.key_tradeoff,
         ])
 
     for text in texts:
         for pattern in UNSAFE_FINANCIAL_PATTERNS:
             for match in pattern.finditer(text):
-                if _is_negated(text, match.start()):
+                if _is_negated(text, match.start(), match.end()):
                     continue
+
+                sentence_start = max(0, text.rfind(".", 0, match.start()) + 1)
+                sentence_end = text.find(".", match.end())
+                if sentence_end == -1:
+                    sentence_end = len(text)
+                sentence = text[sentence_start:sentence_end]
+
+                if SOVEREIGN_STATUTORY_PATTERN.search(sentence) and not MARKET_INSTRUMENT_PATTERN.search(sentence):
+                    continue
+
+                logger.warning(
+                    "AI comparison safety violation: pattern '%s' matched '%s' in context '%s'",
+                    pattern.pattern,
+                    match.group(0),
+                    text,
+                )
                 raise InvestmentComparisonError(
                     "AI comparison contains disallowed certainty or risk-free language."
                 )
@@ -219,18 +237,34 @@ def _parse_comparison_response(response: Any) -> InvestmentComparisonExplanation
         ) from exc
 
 
+from app.services.groq_service import (
+    call_groq_structured,
+    GroqRateLimitError,
+    GroqContextLengthError,
+    GroqProviderError,
+    is_groq_enabled,
+)
+
+
 def generate_comparison_explanation(
     prompt: str,
     client: genai.Client | None = None,
 ) -> InvestmentComparisonExplanation:
-    """Generate structured comparison explanation from Gemini."""
+    """Generate structured comparison explanation using Groq."""
     if client is None:
-        try:
-            client = _get_gemini_client()
-        except Exception as exc:
-            raise InvestmentComparisonError(
-                f"Failed to initialize Gemini client: {exc}"
-            ) from exc
+        logger.info("Generating comparison explanation using Groq...")
+        explanation = call_groq_structured(
+            prompt=prompt,
+            response_model=InvestmentComparisonExplanation,
+            system_instruction=(
+                "You are an expert investment comparison analyst "
+                "providing objective comparisons."
+            ),
+            temperature=0.2,
+            max_output_tokens=2000,
+        )
+        _validate_comparison_explanation_safety(explanation)
+        return explanation
 
     try:
         response = client.models.generate_content(
@@ -244,7 +278,7 @@ def generate_comparison_explanation(
             ),
         )
     except Exception as exc:
-        logger.exception("Gemini comparison generation failed.")
+        logger.exception("Comparison generation failed.")
         raise InvestmentComparisonError(
             f"Failed to generate comparison explanation: {exc}"
         ) from exc
