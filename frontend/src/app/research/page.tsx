@@ -25,11 +25,21 @@ interface ResearchStep {
   output_summary?: string;
 }
 
+interface EvidenceItem {
+  source_type: string;
+  source_title: string;
+  reference_id: string;
+  content_snippet: string;
+  confidence_score?: number | null;
+}
+
 interface ResearchReport {
   query: string;
   executive_summary: string;
   key_findings: string[];
   synthesis: string;
+  supporting_evidence?: EvidenceItem[];
+  sources?: string[];
   risk_factors: string[];
   execution_steps?: ResearchStep[];
   regulatory_disclaimer: string;
@@ -222,7 +232,7 @@ export default function ResearchPage() {
                       </div>
                     )}
 
-                    {report.synthesis && (
+                    {report.synthesis && report.synthesis !== report.executive_summary && (
                       <div>
                         <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
                           Detailed Synthesis
@@ -230,6 +240,54 @@ export default function ResearchPage() {
                         <p className="text-xs sm:text-sm text-slate-700 leading-relaxed whitespace-pre-wrap">
                           {report.synthesis}
                         </p>
+                      </div>
+                    )}
+
+                    {report.supporting_evidence && report.supporting_evidence.length > 0 && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <ShieldCheck className="w-4 h-4 text-emerald-600" /> Verified Supporting Evidence ({report.supporting_evidence.length})
+                          </h4>
+                        </div>
+                        <div className="space-y-2.5">
+                          {report.supporting_evidence.map((ev, idx) => (
+                            <div
+                              key={idx}
+                              className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5"
+                            >
+                              <div className="flex flex-wrap items-center justify-between gap-2">
+                                <span className="text-xs font-bold text-slate-800">
+                                  {ev.source_title}
+                                </span>
+                                <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                  {ev.source_type === "financial_document"
+                                    ? "Your Document"
+                                    : ev.source_type === "financial_calculation"
+                                    ? "Calculation"
+                                    : "Verified Reference"}{" "}
+                                  • {ev.reference_id}
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-600 leading-relaxed">
+                                {ev.content_snippet}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {report.sources && report.sources.length > 0 && (
+                      <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100 space-y-2">
+                        <h4 className="text-xs font-bold text-emerald-900 uppercase tracking-wider">
+                          Cited Sources
+                        </h4>
+                        <ul className="space-y-1 text-xs text-emerald-800 list-disc list-inside">
+                          {report.sources.map((src, i) => (
+                            <li key={i}>{src}</li>
+                          ))}
+                        </ul>
                       </div>
                     )}
 

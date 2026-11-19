@@ -205,6 +205,7 @@ def rerank_chunks(
                         response_model=RerankingResponse,
                         system_instruction="You are an expert relevance scoring engine. Score candidate chunks objectively from 0 to 100 based on how well they answer the query.",
                         temperature=0.0,
+                        max_output_tokens=350,
                     )
                     batch_scores = _validate_scores(batch, parsed)
                     relevance_scores.update(batch_scores)

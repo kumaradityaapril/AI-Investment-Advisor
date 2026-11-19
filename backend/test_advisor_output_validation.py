@@ -366,3 +366,59 @@ def test_hallucinated_personal_surplus_still_rejected():
         match="Financial number 950000 mentioned in explanation",
     ):
         validate_and_enforce_advisor_output(response, context)
+
+
+def test_surplus_sentence_with_allocation_and_rounded_goal_contribution_passes():
+    from app.schemas.financial_context import (
+        FinancialGoalAnalysis,
+        InvestorGoalContext,
+        InvestorProfileContext,
+    )
+
+    response = build_response(
+        assessment=(
+            "Your monthly surplus is ₹65,000, so you can easily allocate ₹10,000 to a Debt Fund "
+            "and ₹52,083 per month toward your ₹25,00,000 retirement goal."
+        ),
+        claims=[],
+    )
+    context = FinancialContext(
+        user_id=620,
+        profile=InvestorProfileContext(
+            age=56,
+            monthly_income=Decimal("160000"),
+            monthly_expenses=Decimal("95000"),
+            savings=Decimal("1800000"),
+            existing_investments=Decimal("4200000"),
+            monthly_investment_capacity=Decimal("50000"),
+        ),
+        metrics=FinancialMetricsContext(
+            monthly_surplus=Decimal("65000"),
+            annual_income=Decimal("1920000"),
+            annual_expenses=Decimal("1140000"),
+            savings_rate_percent=Decimal("40.63"),
+            expense_ratio_percent=Decimal("59.38"),
+        ),
+        goals=[
+            InvestorGoalContext(
+                id=1,
+                title="Retirement Income Buffer",
+                goal_type="retirement",
+                target_amount=Decimal("2500000"),
+                time_horizon_months=48,
+                planned_monthly_investment=Decimal("45000"),
+            )
+        ],
+        goal_analysis=[
+            FinancialGoalAnalysis(
+                goal_id=1,
+                goal_title="Retirement Income Buffer",
+                required_monthly_contribution=Decimal("52083.33"),
+                planned_monthly_investment=Decimal("45000.00"),
+                monthly_contribution_shortfall=Decimal("7083.33"),
+            )
+        ],
+        generated_at=datetime.now(timezone.utc),
+    )
+    validated = validate_and_enforce_advisor_output(response, context)
+    assert isinstance(validated, AIAdvisorGenerationResponse)

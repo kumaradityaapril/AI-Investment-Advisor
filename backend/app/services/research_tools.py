@@ -43,7 +43,7 @@ APPROVED_FINANCIAL_KNOWLEDGE: list[dict[str, Any]] = [
         "snippet": (
             "Bank Fixed Deposits offer contractual, fixed interest returns for a defined tenure (7 days to 10 years). "
             "Under DICGC (Deposit Insurance and Credit Guarantee Corporation), each depositor in an insured bank "
-            "is insured up to ₹5,00,000 for both principal and interest across all branches. "
+            "is insured up to ₹5,00,000 (₹5 Lakh) for both principal and interest across all branches. "
             "Interest earned is fully taxable at the investor's applicable marginal income tax slab rate. "
             "TDS applies if annual interest exceeds ₹40,000 (₹50,000 for senior citizens)."
         ),
@@ -101,13 +101,111 @@ APPROVED_FINANCIAL_KNOWLEDGE: list[dict[str, Any]] = [
         ),
     },
     {
-        "keywords": ["emergency fund", "liquidity", "contingency", "buffer"],
-        "title": "Prudential Emergency Reserve Standards",
+        "keywords": ["emergency fund", "liquidity", "contingency", "buffer", "salaried", "freelancer", "freelancers", "fluctuating", "self-employed"],
+        "title": "Emergency Fund Calibration: Salaried vs Freelancers",
         "reference_id": "PRUDENTIAL_EMERGENCY_RESERVE",
         "snippet": (
-            "Prudent financial planning recommends maintaining an emergency buffer equal to 3 to 6 months of mandatory living expenses. "
-            "The fund should be preserved in high-liquidity, capital-preserving instruments such as high-yield savings accounts, "
-            "instant-access sweep-in FDs, or liquid debt funds to insulate long-term investments during unexpected shocks."
+            "Prudent financial planning recommends different emergency buffer sizes depending on income stability. "
+            "Salaried individuals with predictable monthly paychecks and employer benefits should hold 3 to 6 months "
+            "of mandatory living expenses (rent, groceries, EMIs, insurance). Freelancers, consultants, and self-employed "
+            "individuals with fluctuating or irregular income should maintain 9 to 12 months of essential expenses plus a "
+            "separate reserve for quarterly advance income tax and business slowdowns. Emergency money should stay in "
+            "high-liquidity, low-volatility avenues such as high-yield savings accounts, sweep-in FDs, or liquid debt funds "
+            "so long-term equity investments never need to be sold during market downturns."
+        ),
+    },
+    {
+        "keywords": ["nifty 50", "nifty", "index fund", "index funds", "passive", "etf", "expense ratio"],
+        "title": "Nifty 50 Index Funds & Passive Equity Investing in India",
+        "reference_id": "SEBI_PASSIVE_INDEX_FUNDS",
+        "snippet": (
+            "Nifty 50 Index Funds passively replicate India's 50 largest listed companies on the National Stock Exchange "
+            "by market capitalization. Direct-plan Nifty 50 index funds typically carry very low expense ratios (0.05% to 0.25% p.a.), "
+            "eliminating fund manager selection bias and style drift. Over long horizons (10 to 15+ years), lower annual fees "
+            "compound meaningfully in the investor's favor. They carry no statutory lock-in period (high liquidity), and profits "
+            "are subject to standard equity taxation: LTCG at 12.5% above ₹1.25 Lakh/year (held > 12 months) and STCG at 20%."
+        ),
+    },
+    {
+        "keywords": ["elss", "equity linked savings scheme", "active fund", "actively managed", "tax saver", "lock-in", "alpha"],
+        "title": "Actively Managed ELSS Mutual Funds & Lock-in Framework",
+        "reference_id": "SEBI_ELSS_GUIDELINES",
+        "snippet": (
+            "ELSS (Equity Linked Savings Scheme) mutual funds are actively managed diversified equity funds investing at least 80% "
+            "in equities. Under the Old Tax Regime, ELSS investments qualify for Section 80C tax deductions up to ₹1,50,000 per year "
+            "with a mandatory 3-year statutory lock-in per installment (the shortest lock-in among Section 80C options). "
+            "Actively managed ELSS funds charge higher expense ratios (typically 0.60% to 1.20% in Direct plans and 1.50% to 2.10% "
+            "in Regular plans) to pay for active stock selection aiming to beat the benchmark. However, SPIVA India studies show "
+            "a substantial share of active large-cap/diversified funds underperform broad indices over 10-to-15-year periods after fees. "
+            "Under the New Tax Regime, ELSS provides no Section 80C tax deduction, making its 3-year lock-in and higher fee a key trade-off vs Index Funds."
+        ),
+    },
+    {
+        "keywords": ["new tax regime", "old tax regime", "tax regime", "87a", "standard deduction", "income tax", "budget 2024"],
+        "title": "India Income Tax Regimes: Old vs New Regime (Finance Act 2024)",
+        "reference_id": "INCOME_TAX_REGIME_2024",
+        "snippet": (
+            "The New Tax Regime is the default personal income tax structure in India, offering lower slab rates and a "
+            "₹75,000 standard deduction for salaried taxpayers plus Section 87A tax rebate for eligible lower-taxable-income brackets, "
+            "while disallowing most exemptions such as Section 80C, 80D, HRA, and Section 24(b) home loan interest. "
+            "The Old Tax Regime retains higher slab rates but permits deductions including Section 80C (₹1.5 Lakh), "
+            "Section 80CCD(1B) NPS (₹50,000), Section 80D health insurance, and Section 24(b) home loan interest (₹2 Lakh)."
+        ),
+    },
+    {
+        "keywords": ["sip", "systematic investment plan", "lump sum", "compounding", "rupee cost averaging", "horizon", "15-year", "long-term"],
+        "title": "SIP vs Lump Sum Investing & Long-Term Compounding Principles",
+        "reference_id": "INVESTOR_EDU_SIP_COMPOUNDING",
+        "snippet": (
+            "Systematic Investment Plans (SIPs) automate fixed monthly investments and apply rupee cost averaging—buying more "
+            "fund units during market dips and fewer at peaks—which helps manage timing risk and behavioral stress. "
+            "Over long horizons (10 to 15+ years), compounding accelerates wealth creation as returns themselves generate "
+            "further returns, while minimizing annual expense ratios and portfolio churn preserves a larger share of the final corpus."
+        ),
+    },
+    {
+        "keywords": ["asset allocation", "rebalancing", "diversification", "portfolio", "risk profile", "drawdown", "volatility"],
+        "title": "Asset Allocation, Diversification & Portfolio Rebalancing",
+        "reference_id": "SEBI_PORTFOLIO_ALLOCATION",
+        "snippet": (
+            "Asset allocation—splitting money across growth assets (equities), stability assets (debt/fixed income), and "
+            "hedges (gold)—is the primary driver of long-term portfolio volatility and drawdown behavior. Annual rebalancing "
+            "restores target weights by trimming appreciated assets and adding to underweighted ones. Investors nearing "
+            "retirement or short-term goals (under 5 years) should gradually shift toward lower-volatility debt instruments "
+            "to reduce sequence-of-returns risk."
+        ),
+    },
+    {
+        "keywords": ["scss", "senior citizen", "post office", "retirement income", "nsc"],
+        "title": "Senior Citizen Savings Scheme (SCSS) & Sovereign Small Savings",
+        "reference_id": "MOF_SCSS_GUIDELINES",
+        "snippet": (
+            "The Senior Citizen Savings Scheme (SCSS) is a sovereign-backed 5-year scheme (extendable by 3 years) for Indian "
+            "residents aged 60+ (or 55+ under voluntary retirement rules), with a maximum deposit ceiling of ₹30 Lakh. "
+            "It offers government-administered quarterly interest (~8.2% p.a. benchmark). Principal qualifies under Section 80C "
+            "(Old Regime), while interest earned is taxable at the investor's slab rate."
+        ),
+    },
+    {
+        "keywords": ["health insurance", "term insurance", "80d", "section 80d", "insurance", "life cover"],
+        "title": "Personal Risk Protection: Term Life & Health Insurance (Section 80D)",
+        "reference_id": "IRDAI_PROTECTION_STANDARDS",
+        "snippet": (
+            "Financial planning frameworks recommend securing adequate protection before aggressive investing: pure term life "
+            "insurance of 10x to 15x annual income for earners with financial dependents, and personal health insurance "
+            "independent of employer group coverage. Under Section 80D (Old Regime), health insurance premiums qualify for "
+            "deductions up to ₹25,000 for self/family and an additional ₹25,000 (₹50,000 if senior citizen) for parents."
+        ),
+    },
+    {
+        "keywords": ["credit card", "personal loan", "debt", "emi", "loan", "high interest", "apr"],
+        "title": "High-Cost Debt Repayment Priority vs Market Investing",
+        "reference_id": "PRUDENTIAL_DEBT_WATERFALL",
+        "snippet": (
+            "Revolving credit card balances in India typically carry 30% to 42% APR, and unsecured personal loans charge "
+            "11% to 16% p.a. Because paying down high-interest debt provides an immediate, predictable interest savings "
+            "far exceeding typical long-term market returns after tax, clearing credit card balances and expensive personal "
+            "loans takes priority over starting new equity investments—once a starter emergency buffer is in place."
         ),
     },
 ]
@@ -268,7 +366,7 @@ def search_financial_information(topic: str) -> list[EvidenceItem]:
     matched.sort(key=lambda x: x[0], reverse=True)
 
     results: list[EvidenceItem] = []
-    for _, item in matched[:2]:
+    for _, item in matched[:4]:
         results.append(
             EvidenceItem(
                 source_type="financial_information",

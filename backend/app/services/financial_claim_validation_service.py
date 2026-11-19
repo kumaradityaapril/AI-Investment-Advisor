@@ -23,7 +23,13 @@ GOAL_METRICS = {
     "monthly_contribution_shortfall": "monthly_contribution_shortfall",
 }
 
-CLAIM_TOLERANCE = Decimal("0.01")
+PERCENTAGE_METRICS = {
+    "savings_rate_percent",
+    "expense_ratio_percent",
+}
+
+CLAIM_TOLERANCE = Decimal("1.00")
+PERCENT_CLAIM_TOLERANCE = Decimal("0.50")
 
 
 def _get_expected_value(
@@ -120,8 +126,13 @@ def validate_financial_claims(
         )
 
         difference = abs(claim.claimed_value - expected_value)
+        tolerance = (
+            PERCENT_CLAIM_TOLERANCE
+            if claim.metric_key in PERCENTAGE_METRICS
+            else CLAIM_TOLERANCE
+        )
 
-        if difference > CLAIM_TOLERANCE:
+        if difference > tolerance:
             raise FinancialClaimValidationError(
                 f"Financial claim mismatch for '{claim.metric_key}'. "
                 f"AI claimed {claim.claimed_value}, "

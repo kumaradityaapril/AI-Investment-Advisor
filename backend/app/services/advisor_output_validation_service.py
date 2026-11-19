@@ -4,6 +4,7 @@ import re
 
 from app.schemas.ai_advisor import AIAdvisorGenerationResponse
 from app.schemas.financial_context import FinancialContext
+from app.services.plain_language_service import annotate_advisor_generation_response
 
 logger = logging.getLogger(__name__)
 
@@ -124,9 +125,11 @@ NUMBER_MULTIPLIERS = {
 }
 
 
-def _extract_financial_numbers(text: str) -> list[Decimal]:
-    """Extract currency, percentage and financial-scale numbers."""
-    values = []
+def _extract_financial_number_spans(
+    text: str,
+) -> list[tuple[Decimal, int, int, bool]]:
+    """Extract (value, start, end, is_percentage) for currency, percentage, and financial-scale numbers."""
+    results: list[tuple[Decimal, int, int, bool]] = []
     for match in NUMBER_PATTERN.finditer(text):
         suffix = match.group(2)
         is_percentage = bool(match.group(3))
@@ -158,11 +161,16 @@ def _extract_financial_numbers(text: str) -> list[Decimal]:
             value = Decimal(match.group(1).replace(",", ""))
             if suffix:
                 value *= NUMBER_MULTIPLIERS[suffix.lower()]
-            values.append(value)
+            results.append((value, match.start(), match.end(), is_percentage))
         except (InvalidOperation, KeyError):
             continue
 
-    return values
+    return results
+
+
+def _extract_financial_numbers(text: str) -> list[Decimal]:
+    """Extract currency, percentage and financial-scale numbers."""
+    return [val for val, _, _, _ in _extract_financial_number_spans(text)]
 
 
 def _is_negated(text: str, match_start: int, match_end: int | None = None) -> bool:
@@ -283,6 +291,32 @@ PERSONAL_METRIC_ASSERTION = re.compile(
 SURPLUS_OR_INCOME_ASSERTION = PERSONAL_METRIC_ASSERTION
 
 
+DIRECT_METRIC_PRECEDING = re.compile(
+    r"\b(?:"
+    r"monthly\s+surplus|surplus|"
+    r"annual\s+income|yearly\s+income|monthly\s+income|"
+    r"annual\s+expenses|yearly\s+expenses|monthly\s+expenses|"
+    r"current\s+savings|existing\s+investments|"
+    r"monthly\s+investment\s+capacity|investment\s+capacity|"
+    r"savings\s+rate|expense\s+ratio"
+    r")\b(?:\s+(?:is|are|was|were|of|at|stands?\s+at|equals?|around|approx\.?|approximately|:|=))?\s*$",
+    re.IGNORECASE,
+)
+
+
+def _matches_financial_value(
+    num: Decimal,
+    target: Decimal,
+    is_percentage: bool = False,
+) -> bool:
+    """Compare extracted financial numbers with realistic rounding tolerance."""
+    if is_percentage:
+        return abs(num - target) <= Decimal("0.5")
+    if abs(target) >= Decimal("100"):
+        return abs(num - target) <= Decimal("1.00")
+    return abs(num - target) <= Decimal("0.01")
+
+
 def _validate_numerical_claim_coverage(
     response: AIAdvisorGenerationResponse,
     financial_context: FinancialContext | None = None,
@@ -399,20 +433,39 @@ def _validate_numerical_claim_coverage(
             if not FINANCIAL_CONTEXT_KEYWORDS.search(sentence):
                 continue
 
-            extracted_numbers = _extract_financial_numbers(sentence)
-            for num in extracted_numbers:
-                # 1. Matches declared claims, verified context figures, or derived totals
+            extracted_spans = _extract_financial_number_spans(sentence)
+            for num, start, end, is_percentage in extracted_spans:
+                # 1. Matches declared claims, verified context figures, or derived totals (with rounding tolerance)
                 if any(
-                    abs(num - declared) <= Decimal("0.01")
+                    _matches_financial_value(num, declared, is_percentage=is_percentage)
                     for declared in valid_values
                 ):
                     continue
 
+                # Check ONLY the immediate local phrase around THIS specific number so
+                # mentioning e.g. "monthly surplus" earlier in a sentence does not taint
+                # other numbers like allocations or goal targets later in the same sentence.
+                local_before = sentence[max(0, start - 45):start]
+                local_after = sentence[end:min(len(sentence), end + 30)]
+                is_direct_metric_claim = bool(
+                    DIRECT_METRIC_PRECEDING.search(local_before)
+                    or (
+                        is_percentage
+                        and (
+                            PERCENTAGE_METRIC_PRECEDING.search(local_before)
+                            or PERCENTAGE_METRIC_FOLLOWING.search(local_after)
+                        )
+                    )
+                )
+
                 # 2. Statutory / regulatory benchmarks mentioned in context
                 if (
                     STATUTORY_BENCHMARK_KEYWORDS.search(sentence)
-                    and not PERSONAL_METRIC_ASSERTION.search(sentence)
-                    and any(abs(num - benchmark) <= Decimal("0.01") for benchmark in STATUTORY_FINANCIAL_BENCHMARKS)
+                    and not is_direct_metric_claim
+                    and any(
+                        _matches_financial_value(num, benchmark, is_percentage=False)
+                        for benchmark in STATUTORY_FINANCIAL_BENCHMARKS
+                    )
                 ):
                     continue
 
@@ -421,16 +474,15 @@ def _validate_numerical_claim_coverage(
                     financial_context is not None
                     and max_monthly_available > 0
                     and Decimal("0") < num <= max_monthly_available
-                    and not PERSONAL_METRIC_ASSERTION.search(sentence)
+                    and not is_direct_metric_claim
                 ):
                     continue
 
-                # 4. If verified financial context is present and the sentence is NOT asserting
-                # a personal balance sheet metric (e.g. goal deficit, illustrative milestone,
-                # growth projection), permit explanatory figures safely.
+                # 4. If verified financial context is present and THIS specific number is NOT
+                # directly asserting a personal balance-sheet metric, permit explanatory figures safely.
                 if (
                     financial_context is not None
-                    and not PERSONAL_METRIC_ASSERTION.search(sentence)
+                    and not is_direct_metric_claim
                 ):
                     logger.debug(
                         "Permitting non-personal metric financial figure %s in explanation: %s",
@@ -543,6 +595,9 @@ def validate_and_enforce_advisor_output(
         response=response,
         financial_context=financial_context,
     )
+
+    # Annotate financial jargon with plain-English bracketed definitions after AI generation
+    response = annotate_advisor_generation_response(response)
 
     disclosures = _build_missing_data_disclosures(
         financial_context

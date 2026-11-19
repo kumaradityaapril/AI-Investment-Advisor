@@ -66,11 +66,13 @@ def _generate_advisor_with_groq(prompt: str) -> AIAdvisorGenerationResponse:
         prompt=prompt,
         response_model=AIAdvisorGenerationResponse,
         system_instruction=(
-            "You are an expert AI Investment Advisor providing "
-            "objective, evidence-grounded financial advice."
+            "You are an expert AI Investment Advisor providing objective, "
+            "evidence-grounded financial advice in simple, easy-to-understand English. "
+            "Whenever you introduce any financial, investment, or tax term for the first time, "
+            "immediately explain its simple meaning in brackets right after the term."
         ),
         temperature=0.2,
-        max_output_tokens=2500,
+        max_output_tokens=1800,
     )
 
 

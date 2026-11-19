@@ -3,6 +3,7 @@ from typing import Any, Sequence
 
 from app.schemas.ai_advisor import AIAdvisorRequest
 from app.schemas.financial_context import FinancialContext
+from app.services.plain_language_service import PLAIN_LANGUAGE_COMMUNICATION_RULES
 from app.services.reranking_service import RerankedChunk
 
 # Maximum amount of retrieved document text included per chunk.
@@ -59,6 +60,8 @@ RECOMMENDATION RULES:
 5. If the investor's information is insufficient, communicate uncertainty.
 
 {FINANCIAL_CLAIM_GROUNDING_INSTRUCTIONS}
+
+{PLAIN_LANGUAGE_COMMUNICATION_RULES}
 
 Return a response matching the provided AIAdvisorResponse schema."""
 

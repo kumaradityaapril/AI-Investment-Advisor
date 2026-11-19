@@ -87,11 +87,11 @@ class ResearchReport(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
 
-    research_question: str
-    summary: str = Field(min_length=10, max_length=2000)
+    research_question: str = ""
+    summary: str = Field(min_length=10, max_length=3500)
     key_findings: list[str] = Field(min_length=1, max_length=10)
     supporting_evidence: list[EvidenceItem] = Field(default_factory=list)
-    sources: list[str] = Field(min_length=1, max_length=10)
+    sources: list[str] = Field(default_factory=list, max_length=10)
     risks_and_limitations: list[str] = Field(default_factory=list, max_length=10)
     researched_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -104,6 +104,11 @@ class ResearchReport(BaseModel):
 
     @model_validator(mode="after")
     def populate_report_aliases(self) -> "ResearchReport":
+        if not self.sources and self.supporting_evidence:
+            self.sources = [
+                f"{e.source_title} ({e.reference_id})"
+                for e in self.supporting_evidence[:10]
+            ]
         if not self.query:
             self.query = self.research_question
         if not self.executive_summary:

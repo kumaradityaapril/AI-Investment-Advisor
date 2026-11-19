@@ -28,6 +28,10 @@ from app.services.financial_calculation_service import (
     calculate_future_value_lumpsum,
     calculate_future_value_sip,
 )
+from app.services.plain_language_service import (
+    PLAIN_LANGUAGE_COMMUNICATION_RULES,
+    annotate_comparison_explanation,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -136,7 +140,7 @@ def build_comparison_prompt(
                 for g in financial_context.goals
             ]
 
-    instructions = """You are an objective, professional financial analyst comparing investment options.
+    instructions = f"""You are an objective, professional financial analyst comparing investment options.
 
 CORE RESPONSIBILITIES:
 1. Provide an objective, balanced comparison of the specified options.
@@ -145,7 +149,9 @@ CORE RESPONSIBILITIES:
 4. If investor context is supplied, tailor the suitability analysis to their risk profile and goals.
 5. NEVER declare one option as universally "better", "the winner", or "the best choice". Every investment involves tradeoffs.
 6. STRICT SAFETY RULE - FORBIDDEN PHRASES: NEVER use phrases such as "guaranteed return", "guaranteed returns", "guaranteed profit", "guaranteed income", "risk-free", "zero-risk", "cannot lose", or "capital is guaranteed" anywhere in your output, even when comparing fixed deposits or government bonds. Instead, use objective terms like "fixed rate", "contractual yield", "predetermined interest", or "deposit insurance".
-7. Return your response matching the InvestmentComparisonExplanation schema."""
+7. Return your response matching the InvestmentComparisonExplanation schema.
+
+{PLAIN_LANGUAGE_COMMUNICATION_RULES}"""
 
     prompt_parts = [
         instructions,
@@ -258,13 +264,13 @@ def generate_comparison_explanation(
             response_model=InvestmentComparisonExplanation,
             system_instruction=(
                 "You are an expert investment comparison analyst "
-                "providing objective comparisons."
+                "providing objective, beginner-friendly comparisons in plain English."
             ),
             temperature=0.2,
             max_output_tokens=2000,
         )
         _validate_comparison_explanation_safety(explanation)
-        return explanation
+        return annotate_comparison_explanation(explanation)
 
     try:
         response = client.models.generate_content(
@@ -285,7 +291,7 @@ def generate_comparison_explanation(
 
     explanation = _parse_comparison_response(response)
     _validate_comparison_explanation_safety(explanation)
-    return explanation
+    return annotate_comparison_explanation(explanation)
 
 
 def compare_investments(

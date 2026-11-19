@@ -33,6 +33,10 @@ from app.services.financial_calculation_service import (
     calculate_future_value_sip,
     calculate_monthly_surplus,
 )
+from app.services.plain_language_service import (
+    PLAIN_LANGUAGE_COMMUNICATION_RULES,
+    annotate_scenario_explanation,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -316,7 +320,9 @@ INSTRUCTIONS:
 4. If goal information is present, explain how the scenario closes or impacts the target shortfall.
 5. Provide actionable, practical next steps for the investor.
 6. MANDATORY RULE: Never state or imply guaranteed returns or zero risk. All figures are hypothetical mathematical projections.
-7. Return your response matching the ScenarioAIExplanation schema."""
+7. Return your response matching the ScenarioAIExplanation schema.
+
+{PLAIN_LANGUAGE_COMMUNICATION_RULES}"""
 
     if client is None:
         logger.info("Generating scenario explanation using Groq...")
@@ -324,11 +330,11 @@ INSTRUCTIONS:
             explanation = call_groq_structured(
                 prompt=prompt,
                 response_model=ScenarioAIExplanation,
-                system_instruction="You are an expert AI Financial Advisor explaining a hypothetical simulation.",
+                system_instruction="You are an expert AI Financial Advisor explaining a hypothetical simulation in simple, everyday English.",
                 temperature=0.2,
             )
             _validate_scenario_safety(explanation)
-            return explanation
+            return annotate_scenario_explanation(explanation)
         except Exception as exc:
             raise ScenarioSimulationError(f"Groq scenario generation failed: {exc}") from exc
 
@@ -365,7 +371,7 @@ INSTRUCTIONS:
             raise ScenarioSimulationError(f"Validation failed on scenario explanation: {exc}") from exc
 
     _validate_scenario_safety(explanation)
-    return explanation
+    return annotate_scenario_explanation(explanation)
 
 
 def run_scenario_simulation(

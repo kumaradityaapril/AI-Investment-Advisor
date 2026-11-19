@@ -1,6 +1,7 @@
 import json
 import logging
 import re
+import time
 from typing import Any, TypeVar
 import httpx
 from pydantic import BaseModel, ValidationError
@@ -12,8 +13,9 @@ logger = logging.getLogger(__name__)
 T = TypeVar("T", bound=BaseModel)
 
 GROQ_CHAT_COMPLETIONS_URL = "https://api.groq.com/openai/v1/chat/completions"
-DEFAULT_MAX_OUTPUT_TOKENS = 2500
+DEFAULT_MAX_OUTPUT_TOKENS = 1800
 MAX_ALLOWED_OUTPUT_TOKENS = 3500
+MAX_RATE_LIMIT_WAIT_SECONDS = 16.0
 
 
 class GroqRateLimitError(Exception):
@@ -187,7 +189,22 @@ def call_groq_structured(
                 json=payload,
             )
 
-            # 429: Rate / TPM limit exceeded
+            # 429: Rate / TPM limit exceeded — wait briefly and retry once if within budget
+            if resp.status_code == 429:
+                retry_sec = _parse_retry_after(resp.headers, resp.text)
+                if retry_sec is not None and 0 < retry_sec <= MAX_RATE_LIMIT_WAIT_SECONDS:
+                    wait_sec = min(retry_sec + 0.5, MAX_RATE_LIMIT_WAIT_SECONDS + 0.5)
+                    logger.warning(
+                        "Groq TPM rate limit hit (429); sleeping %.1fs before automatic retry...",
+                        wait_sec,
+                    )
+                    time.sleep(wait_sec)
+                    resp = client.post(
+                        GROQ_CHAT_COMPLETIONS_URL,
+                        headers=headers,
+                        json=payload,
+                    )
+
             if resp.status_code == 429:
                 retry_sec = _parse_retry_after(resp.headers, resp.text)
                 logger.error("Groq rate limit exceeded (429): %s (retry_after=%s)", resp.text, retry_sec)

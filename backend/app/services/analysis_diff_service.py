@@ -26,6 +26,10 @@ from app.services.advisor_output_validation_service import (
     _is_negated,
 )
 from app.services.analysis_history_service import get_user_analysis_by_id
+from app.services.plain_language_service import (
+    PLAIN_LANGUAGE_COMMUNICATION_RULES,
+    annotate_analysis_diff_explanation,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -295,7 +299,9 @@ INSTRUCTIONS:
 3. Identify any concerns (e.g. rising expense ratio, enlarged deficit).
 4. CRITICAL: Identify which previous recommendations from the baseline session are now STALE, OBSOLETE, or need adjustment due to the changes in their financial context.
 5. Provide updated strategic focus points going forward.
-6. Return your analysis matching the AnalysisDiffExplanation schema."""
+6. Return your analysis matching the AnalysisDiffExplanation schema.
+
+{PLAIN_LANGUAGE_COMMUNICATION_RULES}"""
 
     if client is None:
         logger.info("Generating diff explanation using Groq...")
@@ -303,11 +309,11 @@ INSTRUCTIONS:
             explanation = call_groq_structured(
                 prompt=prompt,
                 response_model=AnalysisDiffExplanation,
-                system_instruction="You are an expert AI financial advisor comparing two historical snapshots.",
+                system_instruction="You are an expert AI financial advisor comparing two historical snapshots in simple, everyday English.",
                 temperature=0.2,
             )
             _validate_diff_explanation_safety(explanation)
-            return explanation
+            return annotate_analysis_diff_explanation(explanation)
         except Exception as exc:
             raise AnalysisDiffError(f"Groq diff generation failed: {exc}") from exc
 
@@ -344,7 +350,7 @@ INSTRUCTIONS:
             raise AnalysisDiffError(f"Validation failed on diff explanation: {exc}") from exc
 
     _validate_diff_explanation_safety(explanation)
-    return explanation
+    return annotate_analysis_diff_explanation(explanation)
 
 
 def compute_analysis_diff(
