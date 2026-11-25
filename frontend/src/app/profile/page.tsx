@@ -229,7 +229,7 @@ export default function ProfilePage() {
           {/* HEADER CONTEXT */}
           <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 border-b border-slate-200 gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-xs tracking-wider uppercase mb-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-xs tracking-wider uppercase mb-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
                 <span>Deterministic Financial Profile Engine</span>
               </div>
@@ -279,7 +279,7 @@ export default function ProfilePage() {
                       </p>
                     </div>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-slate-100 text-slate-600">
                     Live Sync
                   </span>
                 </div>
@@ -399,7 +399,7 @@ export default function ProfilePage() {
                       </p>
                     </div>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700">
                     {goals.length} Registered
                   </span>
                 </div>
@@ -421,7 +421,7 @@ export default function ProfilePage() {
                         <div>
                           <div className="flex items-center gap-2">
                             <h4 className="text-sm font-bold text-slate-900">{g.title}</h4>
-                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700">
+                            <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-700">
                               {g.goal_type}
                             </span>
                           </div>
@@ -519,7 +519,7 @@ export default function ProfilePage() {
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm">
                 <div className="flex items-center justify-between pb-6 border-b border-slate-100 mb-6">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
                       <TrendingUp className="w-5 h-5" />
                     </div>
                     <div>
@@ -532,7 +532,7 @@ export default function ProfilePage() {
                     </div>
                   </div>
                   {riskAssessment && (
-                    <span className="text-xs font-bold px-3 py-1 rounded-full bg-purple-100 text-purple-800 uppercase tracking-wide">
+                    <span className="text-xs font-bold px-3 py-1 rounded-md bg-indigo-100 text-indigo-800 uppercase tracking-wide">
                       {riskAssessment.risk_category}
                     </span>
                   )}
@@ -540,17 +540,17 @@ export default function ProfilePage() {
 
                 {/* Active Risk Score Display */}
                 {riskAssessment && (
-                  <div className="p-5 rounded-2xl bg-purple-50/60 border border-purple-100 mb-6 flex items-center justify-between">
+                  <div className="p-5 rounded-2xl bg-indigo-50/60 border border-indigo-100 mb-6 flex items-center justify-between">
                     <div>
-                      <span className="text-xs text-purple-800 font-medium">Assessed Risk Score</span>
-                      <h3 className="text-2xl font-black text-purple-900 font-display">
+                      <span className="text-xs text-indigo-800 font-medium">Assessed Risk Score</span>
+                      <h3 className="text-2xl font-black text-indigo-900 font-display">
                         {riskAssessment.risk_score} / 20
                       </h3>
-                      <p className="text-[11px] text-purple-700 mt-0.5">
+                      <p className="text-[11px] text-indigo-700 mt-0.5">
                         Tier: <strong className="capitalize">{riskAssessment.risk_category}</strong>
                       </p>
                     </div>
-                    <div className="w-12 h-12 rounded-full border-4 border-purple-300 border-t-purple-700 flex items-center justify-center font-bold text-sm text-purple-900">
+                    <div className="w-12 h-12 rounded-xl bg-white border-2 border-indigo-600 flex items-center justify-center font-bold text-sm text-indigo-900 shadow-xs">
                       {riskAssessment.risk_score}
                     </div>
                   </div>
@@ -661,7 +661,7 @@ export default function ProfilePage() {
                     type="button"
                     onClick={handleSubmitRisk}
                     disabled={isSubmittingRisk}
-                    className="w-full py-3.5 rounded-xl bg-purple-700 hover:bg-purple-800 text-white font-semibold text-xs shadow-md shadow-purple-100 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
+                    className="w-full py-3.5 rounded-xl bg-indigo-700 hover:bg-indigo-800 text-white font-semibold text-xs shadow-md shadow-indigo-100 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70"
                   >
                     {isSubmittingRisk ? "Evaluating Score..." : "Calibrate & Save Risk Tier"}
                   </button>

@@ -16,7 +16,7 @@ from typing import Any
 PLAIN_LANGUAGE_COMMUNICATION_RULES = """PLAIN-LANGUAGE & CLARITY RULES (MANDATORY):
 1. Write in simple, clear, everyday English so that even a beginner investor can immediately understand what the analysis means for their money and what steps to take next.
 2. Avoid dense banking or Wall Street jargon. Explain the practical meaning of numbers and recommendations in plain words.
-3. Whenever you introduce a financial, investment, or tax term for the first time (such as SIP, PPF, ELSS, LTCG, STCG, Expense Ratio, Asset Allocation, Rebalancing, CAGR, Liquidity, Volatility, Inflation, Compounding, Corpus, Drawdown, DICGC, Index Fund, Debt Fund, Section 80C, Section 24(b), Lock-in, Sovereign-backed, NAV, Exit Load, Diversification), immediately write its simple meaning in brackets right after it — for example: "SIP (Systematic Investment Plan — investing a fixed amount regularly every month)" or "Expense Ratio (the small yearly fee a fund charges to manage your money)".
+3. Whenever you introduce a financial, investment, or tax term for the first time (such as SIP, PPF, ELSS, LTCG, STCG, Expense Ratio, Asset Allocation, Rebalancing, CAGR, Liquidity, Volatility, Inflation, Compounding, Corpus, Drawdown, DICGC, Index Fund, Debt Fund, Section 80C, Section 24(b), Lock-in, Sovereign-backed, NAV, Exit Load, Diversification), immediately write its simple meaning in brackets right after it: for example: "SIP (Systematic Investment Plan: investing a fixed amount regularly every month)" or "Expense Ratio (the small yearly fee a fund charges to manage your money)".
 4. Define each term only once (on its first mention) so the report stays clean, friendly, and easy to read."""
 
 
@@ -181,139 +181,139 @@ _GLOSSARY_TERMS: tuple[_GlossaryTerm, ...] = (
     _GlossaryTerm(
         r"SIP",
         "sip",
-        "Systematic Investment Plan — investing a fixed amount regularly every month",
+        "Systematic Investment Plan: investing a fixed amount regularly every month",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"PPF",
         "ppf",
-        "Public Provident Fund — a long-term government-backed tax-saving account",
+        "Public Provident Fund: a long-term government-backed tax-saving account",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"EPF",
         "epf",
-        "Employees' Provident Fund — a retirement savings account for salaried employees",
+        "Employees' Provident Fund: a retirement savings account for salaried employees",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"VPF",
         "vpf",
-        "Voluntary Provident Fund — extra voluntary savings added to your EPF account",
+        "Voluntary Provident Fund: extra voluntary savings added to your EPF account",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"NPS",
         "nps",
-        "National Pension System — a government-regulated retirement savings scheme",
+        "National Pension System: a government-regulated retirement savings scheme",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"ELSS",
         "elss",
-        "Equity Linked Savings Scheme — a tax-saving stock mutual fund with a 3-year lock-in",
+        "Equity Linked Savings Scheme: a tax-saving stock mutual fund with a 3-year lock-in",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"LTCG",
         "ltcg",
-        "Long-Term Capital Gains — tax on profits from investments held for the long term",
+        "Long-Term Capital Gains: tax on profits from investments held for the long term",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"STCG",
         "stcg",
-        "Short-Term Capital Gains — tax on profits from investments sold quickly",
+        "Short-Term Capital Gains: tax on profits from investments sold quickly",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"CAGR",
         "cagr",
-        "Compound Annual Growth Rate — the average yearly growth rate of an investment",
+        "Compound Annual Growth Rate: the average yearly growth rate of an investment",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"XIRR",
         "xirr",
-        "Extended Internal Rate of Return — your true yearly return across multiple investment dates",
+        "Extended Internal Rate of Return: your true yearly return across multiple investment dates",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"DICGC",
         "dicgc",
-        "Deposit Insurance and Credit Guarantee Corporation — the RBI body that insures bank deposits",
+        "Deposit Insurance and Credit Guarantee Corporation: the RBI body that insures bank deposits",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"SGB",
         "sgb",
-        "Sovereign Gold Bond — a government-issued bond linked to gold prices",
+        "Sovereign Gold Bond: a government-issued bond linked to gold prices",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"ETF",
         "etf",
-        "Exchange-Traded Fund — a basket of stocks or bonds traded live on the stock market",
+        "Exchange-Traded Fund: a basket of stocks or bonds traded live on the stock market",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"FD",
         "fd",
-        "Fixed Deposit — a bank deposit earning a fixed interest rate for a chosen period",
+        "Fixed Deposit: a bank deposit earning a fixed interest rate for a chosen period",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"RD",
         "rd",
-        "Recurring Deposit — a bank deposit where you save a fixed amount every month",
+        "Recurring Deposit: a bank deposit where you save a fixed amount every month",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"NAV",
         "nav",
-        "Net Asset Value — the current price of one unit of a mutual fund",
+        "Net Asset Value: the current price of one unit of a mutual fund",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"AUM",
         "aum",
-        "Assets Under Management — the total investor money managed by a fund",
+        "Assets Under Management: the total investor money managed by a fund",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"EMI",
         "emi",
-        "Equated Monthly Installment — the fixed monthly payment toward a loan",
+        "Equated Monthly Installment: the fixed monthly payment toward a loan",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"G-Sec",
         "gsec",
-        "Government Security — a bond issued directly by the government",
+        "Government Security: a bond issued directly by the government",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"SWP",
         "swp",
-        "Systematic Withdrawal Plan — withdrawing a fixed amount regularly from your investments",
+        "Systematic Withdrawal Plan: withdrawing a fixed amount regularly from your investments",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"STP",
         "stp",
-        "Systematic Transfer Plan — automatically shifting money regularly from one fund to another",
+        "Systematic Transfer Plan: automatically shifting money regularly from one fund to another",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"TER",
         "expense_ratio",
-        "Total Expense Ratio — the yearly fee a mutual fund charges to manage your money",
+        "Total Expense Ratio: the yearly fee a mutual fund charges to manage your money",
         case_sensitive=True,
     ),
     _GlossaryTerm(
         r"IDCW",
         "idcw",
-        "Income Distribution cum Capital Withdrawal — periodic payouts distributed by a mutual fund",
+        "Income Distribution cum Capital Withdrawal: periodic payouts distributed by a mutual fund",
         case_sensitive=True,
     ),
     # Single-word technical financial terms

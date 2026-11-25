@@ -59,7 +59,7 @@ class EvaluationSuiteReport(BaseModel):
             "|---|---|---|---|---|",
         ])
         for c in self.case_results:
-            status = "✅ PASS" if c.passed else "❌ FAIL"
+            status = "[PASS]" if c.passed else "[FAIL]"
             reasons = "; ".join(c.failure_reasons) if c.failure_reasons else "All criteria satisfied"
             lines.append(f"| {c.case_id} | {c.category} | {status} | {round(c.overall_score * 100, 1)}% | {reasons} |")
 

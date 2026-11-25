@@ -20,13 +20,13 @@ export default function Footer() {
             deterministic Python math, pgvector hybrid search, and strict
             regulatory guardrails.
           </p>
-          <div className="flex items-center gap-2 text-xs font-semibold text-[#00442d] bg-[#85f8c4]/40 px-3 py-1 rounded-full w-fit">
+          <div className="flex items-center gap-2 text-xs font-semibold text-[#00442d] bg-[#85f8c4]/40 px-3 py-1 rounded-md w-fit">
             <span className="w-2 h-2 rounded-full bg-[#10b981]"></span>
             <span>SEC &amp; SEBI Disclaimers Grounded</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-xs">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 text-xs">
           <div className="flex flex-col gap-2">
             <span className="font-bold text-[#0b1c30] uppercase tracking-wider text-[11px]">
               Platform Modules
@@ -72,11 +72,31 @@ export default function Footer() {
             <span className="text-[#777586]">Deterministic Decimal Math</span>
             <span className="text-[#777586]">Audit Trail Verification</span>
           </div>
+
+          <div className="flex flex-col gap-2">
+            <span className="font-bold text-[#0b1c30] uppercase tracking-wider text-[11px]">
+              Legal &amp; Compliance
+            </span>
+            <Link href="/privacy" className="hover:text-[#2a14b4] transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="hover:text-[#2a14b4] transition-colors">
+              Terms &amp; Conditions
+            </Link>
+            <span className="text-[#777586]">SEBI Grounding</span>
+            <span className="text-[#777586]">Tenant Isolation</span>
+          </div>
         </div>
       </div>
 
       <div className="max-w-[1600px] mx-auto mt-10 pt-6 border-t border-[#e2e8f0]/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#777586]">
-        <p>© 2026 AI Investment Advisor. For educational &amp; analytical guidance.</p>
+        <div className="flex items-center gap-4">
+          <p>© 2026 AI Investment Advisor. For educational &amp; analytical guidance.</p>
+          <span className="text-slate-300">|</span>
+          <Link href="/privacy" className="hover:text-slate-900 underline">Privacy Policy</Link>
+          <span className="text-slate-300">|</span>
+          <Link href="/terms" className="hover:text-slate-900 underline">Terms of Service</Link>
+        </div>
         <p className="max-w-md text-center sm:text-right">
           Investments carry market risk. Past performance does not guarantee future results.
         </p>

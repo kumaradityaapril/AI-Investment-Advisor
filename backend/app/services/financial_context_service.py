@@ -65,6 +65,17 @@ def calculate_investor_metrics(profile) -> FinancialMetricsContext:
             expenses,
         )
 
+    savings = profile.savings
+    investments = profile.existing_investments
+    if savings is not None or investments is not None:
+        total_w = Decimal(str(savings or 0)) + Decimal(str(investments or 0))
+        metrics.total_savings_and_investments = total_w
+
+    if expenses is not None and expenses > 0 and savings is not None:
+        metrics.emergency_fund_coverage_months = (
+            Decimal(str(savings)) / Decimal(str(expenses))
+        ).quantize(Decimal("0.1"))
+
     return metrics
 
 

@@ -85,6 +85,8 @@ class FinancialMetricsContext(BaseModel):
     annual_expenses: Decimal | None = None
     savings_rate_percent: Decimal | None = None
     expense_ratio_percent: Decimal | None = None
+    total_savings_and_investments: Decimal | None = None
+    emergency_fund_coverage_months: Decimal | None = None
 
 
 class FinancialGoalAnalysis(BaseModel):

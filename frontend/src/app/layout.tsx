@@ -3,7 +3,7 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
-  title: "AI Investment Advisor — Intelligent Wealth Planning & Compliance",
+  title: "AI Investment Advisor: Intelligent Wealth Planning & Compliance",
   description:
     "Autonomous AI Investment Advisor with deterministic financial calculations, hybrid pgvector RAG document grounding, and SEBI regulatory guardrails.",
 };

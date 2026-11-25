@@ -157,8 +157,8 @@ APPROVED_FINANCIAL_KNOWLEDGE: list[dict[str, Any]] = [
         "title": "SIP vs Lump Sum Investing & Long-Term Compounding Principles",
         "reference_id": "INVESTOR_EDU_SIP_COMPOUNDING",
         "snippet": (
-            "Systematic Investment Plans (SIPs) automate fixed monthly investments and apply rupee cost averaging—buying more "
-            "fund units during market dips and fewer at peaks—which helps manage timing risk and behavioral stress. "
+            "Systematic Investment Plans (SIPs) automate fixed monthly investments and apply rupee cost averaging: buying more "
+            "fund units during market dips and fewer at peaks, which helps manage timing risk and behavioral stress. "
             "Over long horizons (10 to 15+ years), compounding accelerates wealth creation as returns themselves generate "
             "further returns, while minimizing annual expense ratios and portfolio churn preserves a larger share of the final corpus."
         ),
@@ -168,8 +168,8 @@ APPROVED_FINANCIAL_KNOWLEDGE: list[dict[str, Any]] = [
         "title": "Asset Allocation, Diversification & Portfolio Rebalancing",
         "reference_id": "SEBI_PORTFOLIO_ALLOCATION",
         "snippet": (
-            "Asset allocation—splitting money across growth assets (equities), stability assets (debt/fixed income), and "
-            "hedges (gold)—is the primary driver of long-term portfolio volatility and drawdown behavior. Annual rebalancing "
+            "Asset allocation: splitting money across growth assets (equities), stability assets (debt/fixed income), and "
+            "hedges (gold), is the primary driver of long-term portfolio volatility and drawdown behavior. Annual rebalancing "
             "restores target weights by trimming appreciated assets and adding to underweighted ones. Investors nearing "
             "retirement or short-term goals (under 5 years) should gradually shift toward lower-volatility debt instruments "
             "to reduce sequence-of-returns risk."
@@ -205,7 +205,7 @@ APPROVED_FINANCIAL_KNOWLEDGE: list[dict[str, Any]] = [
             "Revolving credit card balances in India typically carry 30% to 42% APR, and unsecured personal loans charge "
             "11% to 16% p.a. Because paying down high-interest debt provides an immediate, predictable interest savings "
             "far exceeding typical long-term market returns after tax, clearing credit card balances and expensive personal "
-            "loans takes priority over starting new equity investments—once a starter emergency buffer is in place."
+            "loans takes priority over starting new equity investments, once a starter emergency buffer is in place."
         ),
     },
 ]

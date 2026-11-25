@@ -23,20 +23,20 @@ export default function HomePage() {
         {/* HERO SECTION WITH 3D CANVAS */}
         <section className="relative overflow-hidden pt-8 sm:pt-12 pb-14 sm:pb-20 px-4 sm:px-8 lg:px-12 2xl:px-16 max-w-[1600px] mx-auto w-full">
           {/* Subtle Ambient Backdrops */}
-          <div className="absolute top-10 left-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl pointer-events-none"></div>
-          <div className="absolute top-20 right-10 w-96 h-96 bg-emerald-400/5 rounded-full blur-3xl pointer-events-none"></div>
+          
+          
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 xl:col-span-7 flex flex-col gap-6 z-10">
-              <div className="inline-flex items-center gap-2.5 self-start px-4 py-1.5 rounded-full bg-indigo-50 border border-indigo-100/90 text-indigo-900 font-semibold text-xs tracking-wide shadow-xs">
+              <div className="inline-flex items-center gap-2.5 self-start px-3.5 py-1 rounded-md bg-indigo-50 border border-indigo-100/90 text-indigo-900 font-semibold text-xs tracking-wide shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>ENTERPRISE WEALTH INTELLIGENCE • SEC &amp; SEBI GROUNDED</span>
               </div>
 
               <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-[#0b1c30] tracking-tight leading-[1.08]">
                 Private Wealth Clarity. <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2a14b4] via-[#4648d4] to-[#10b981]">
+                <span className="text-[#0b1c30]">
                   Zero Hallucinations.
                 </span>
               </h1>
@@ -185,7 +185,7 @@ export default function HomePage() {
         <section className="py-16 px-4 sm:px-8 lg:px-12 2xl:px-16 bg-white border-y border-[#e2e8f0]">
           <div className="max-w-[1600px] mx-auto flex flex-col gap-10">
             <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
-              <span className="px-3 py-1 rounded-full bg-[#eff4ff] text-[#2a14b4] text-xs font-semibold mb-2">
+              <span className="px-3 py-1 rounded-md bg-[#eff4ff] text-[#2a14b4] text-xs font-semibold mb-2">
                 COMPLETE PRD PLATFORM CAPABILITIES
               </span>
               <h2 className="font-display font-bold text-3xl text-[#0b1c30]">
@@ -229,7 +229,7 @@ export default function HomePage() {
               {activeTab === "overview" && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                   <div className="md:col-span-1 space-y-4">
-                    <span className="px-2.5 py-1 rounded-full bg-[#85f8c4]/40 text-[#00442d] font-semibold text-xs">
+                    <span className="px-2.5 py-1 rounded-md bg-[#85f8c4]/40 text-[#00442d] font-semibold text-xs">
                       Deterministic Metric Engine
                     </span>
                     <h3 className="font-display font-bold text-2xl text-[#0b1c30]">
@@ -280,7 +280,7 @@ export default function HomePage() {
               {activeTab === "rag" && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                   <div className="md:col-span-1 space-y-4">
-                    <span className="px-2.5 py-1 rounded-full bg-[#e1e0ff] text-[#07006c] font-semibold text-xs">
+                    <span className="px-2.5 py-1 rounded-md bg-[#e1e0ff] text-[#07006c] font-semibold text-xs">
                       Hybrid Vector + BM25 RAG
                     </span>
                     <h3 className="font-display font-bold text-2xl text-[#0b1c30]">
@@ -315,7 +315,7 @@ export default function HomePage() {
                           </div>
                         </div>
                       </div>
-                      <span className="px-2.5 py-1 rounded-full bg-[#85f8c4]/40 text-[#00442d] font-semibold text-xs">
+                      <span className="px-2.5 py-1 rounded-md bg-[#85f8c4]/40 text-[#00442d] font-semibold text-xs">
                         Verified Clean
                       </span>
                     </div>
@@ -333,7 +333,7 @@ export default function HomePage() {
               {activeTab === "simulator" && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                   <div className="md:col-span-1 space-y-4">
-                    <span className="px-2.5 py-1 rounded-full bg-[#85f8c4]/40 text-[#00442d] font-semibold text-xs">
+                    <span className="px-2.5 py-1 rounded-md bg-[#85f8c4]/40 text-[#00442d] font-semibold text-xs">
                       What-If Compounding Engine
                     </span>
                     <h3 className="font-display font-bold text-2xl text-[#0b1c30]">
@@ -356,11 +356,11 @@ export default function HomePage() {
                       <span className="text-xs font-bold text-[#0b1c30]">
                         Scenario: Step Up Monthly SIP +₹5,000
                       </span>
-                      <span className="px-2 py-0.5 rounded-full bg-[#85f8c4] text-[#00442d] text-xs font-bold">
+                      <span className="px-2 py-0.5 rounded-md bg-[#85f8c4] text-[#00442d] text-xs font-bold">
                         +₹18.4 Lakhs Compounded Gain
                       </span>
                     </div>
-                    <div className="h-3 rounded-full bg-slate-100 overflow-hidden flex">
+                    <div className="h-2.5 rounded-md bg-slate-100 overflow-hidden flex">
                       <div className="h-full bg-[#2a14b4] w-[45%]"></div>
                       <div className="h-full bg-[#10b981] w-[35%]"></div>
                     </div>
@@ -377,7 +377,7 @@ export default function HomePage() {
               {activeTab === "guardrails" && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                   <div className="md:col-span-1 space-y-4">
-                    <span className="px-2.5 py-1 rounded-full bg-[#ffdad6] text-[#ba1a1a] font-semibold text-xs">
+                    <span className="px-2.5 py-1 rounded-md bg-[#ffdad6] text-[#ba1a1a] font-semibold text-xs">
                       Multi-Layer Safety Engine
                     </span>
                     <h3 className="font-display font-bold text-2xl text-[#0b1c30]">
@@ -420,7 +420,7 @@ export default function HomePage() {
         {/* 9 MODULAR APP SCREENS CATALOG */}
         <section className="py-20 px-4 sm:px-8 lg:px-12 2xl:px-16 max-w-[1600px] mx-auto w-full">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="px-3 py-1 rounded-full bg-[#eff4ff] text-[#2a14b4] text-xs font-semibold">
+            <span className="px-3 py-1 rounded-md bg-[#eff4ff] text-[#2a14b4] text-xs font-semibold">
               FULL SUITE EXPERIENCE
             </span>
             <h2 className="font-display font-bold text-3xl text-[#0b1c30] mt-2">
@@ -510,7 +510,7 @@ export default function HomePage() {
                           {feature.icon}
                         </span>
                       </div>
-                      <span className="px-2.5 py-0.5 rounded-full bg-[#f1f5f9] text-[#475569] font-medium text-[11px]">
+                      <span className="px-2.5 py-0.5 rounded-md bg-[#f1f5f9] text-[#475569] font-medium text-[11px]">
                         {feature.tag}
                       </span>
                     </div>
@@ -533,7 +533,7 @@ export default function HomePage() {
         {/* CALL TO ACTION */}
         <section className="py-20 px-6 lg:px-12 bg-[#2a14b4] text-white text-center">
           <div className="max-w-3xl mx-auto space-y-6">
-            <span className="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold">
+            <span className="px-3 py-1 rounded-md bg-white/20 text-white text-xs font-semibold">
               READY FOR PRODUCTION
             </span>
             <h2 className="font-display font-bold text-3xl sm:text-4xl">

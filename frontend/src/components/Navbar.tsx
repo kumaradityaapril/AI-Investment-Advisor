@@ -45,10 +45,10 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 bg-slate-100/90 p-1.5 rounded-full border border-slate-200/70 flex-shrink-0">
+          <nav className="hidden lg:flex items-center gap-1 bg-slate-100/90 p-1 rounded-xl border border-slate-200/70 flex-shrink-0">
             <Link
               href="/"
-              className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 whitespace-nowrap ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 whitespace-nowrap ${
                 pathname === "/"
                   ? "bg-indigo-700 text-white shadow-xs"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
@@ -62,7 +62,7 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 whitespace-nowrap ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-150 whitespace-nowrap ${
                     isActive
                       ? "bg-indigo-700 text-white shadow-xs"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/60"
@@ -77,7 +77,7 @@ export default function Navbar() {
           {/* Right Action Tools */}
           <div className="flex items-center gap-3.5 flex-shrink-0">
             {/* Live Data Badge */}
-            <div className="hidden xl:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 border border-slate-200 text-slate-600 text-xs font-medium whitespace-nowrap flex-shrink-0">
+            <div className="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 text-xs font-medium whitespace-nowrap flex-shrink-0">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
               <span>SEC / SEBI Grounded</span>
             </div>
@@ -87,9 +87,9 @@ export default function Navbar() {
               <div className="flex items-center gap-2.5 flex-shrink-0">
                 <Link
                   href="/profile"
-                  className="flex items-center gap-2 py-1 px-2.5 rounded-full bg-slate-50 border border-slate-200 hover:bg-indigo-50/60 transition-colors flex-shrink-0"
+                  className="flex items-center gap-2 py-1 px-2.5 rounded-lg bg-slate-50 border border-slate-200 hover:bg-indigo-50/60 transition-colors flex-shrink-0"
                 >
-                  <div className="w-6 h-6 rounded-full bg-indigo-700 flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0">
+                  <div className="w-6 h-6 rounded-md bg-indigo-700 flex items-center justify-center text-white text-[11px] font-bold flex-shrink-0">
                     {user.name
                       ? user.name.trim().substring(0, 2).toUpperCase()
                       : user.email.substring(0, 2).toUpperCase()}
@@ -102,7 +102,7 @@ export default function Navbar() {
                 <button
                   onClick={logout}
                   title="Sign Out"
-                  className="p-1.5 rounded-full text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer flex-shrink-0"
+                  className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer flex-shrink-0"
                 >
                   <LogOut className="w-4 h-4" />
                 </button>
@@ -111,13 +111,13 @@ export default function Navbar() {
               <div className="flex items-center gap-2 flex-shrink-0">
                 <Link
                   href="/login"
-                  className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-700 hover:text-indigo-700 hover:bg-slate-100 transition-colors whitespace-nowrap"
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-700 hover:text-indigo-700 hover:bg-slate-100 transition-colors whitespace-nowrap"
                 >
                   Sign In
                 </Link>
                 <Link
                   href="/register"
-                  className="px-4 py-1.5 rounded-full bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-semibold shadow-xs transition-all whitespace-nowrap"
+                  className="px-4 py-1.5 rounded-lg bg-indigo-700 hover:bg-indigo-800 text-white text-xs font-semibold shadow-xs transition-all whitespace-nowrap"
                 >
                   Register
                 </Link>

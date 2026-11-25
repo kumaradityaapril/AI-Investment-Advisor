@@ -85,7 +85,7 @@ export default function WhyThisPlanPage() {
   const rawClaims: any[] = responseSnapshot?.financial_claims || responseSnapshot?.numerical_claims || [];
   const claims = rawClaims.map((c) => ({
     metric_key: c.metric_key || "Metric",
-    metric_value: c.claimed_value ? `₹${Number(c.claimed_value).toLocaleString("en-IN")}` : (c.metric_value || "—"),
+    metric_value: c.claimed_value ? `₹${Number(c.claimed_value).toLocaleString("en-IN")}` : (c.metric_value || "-"),
     claim_text: c.claim_text || `Grounded personal benchmark for ${c.metric_key?.replace(/_/g, " ")}`,
     grounding_source: c.grounding_source || "PostgreSQL Verified Financial Context",
   }));
@@ -134,7 +134,7 @@ export default function WhyThisPlanPage() {
           {/* HEADER */}
           <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 border-b border-slate-200 gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 font-semibold text-xs tracking-wider uppercase mb-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-emerald-700 font-semibold text-xs tracking-wider uppercase mb-2">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 <span>Deterministic Mathematical Audit Trail</span>
               </div>
@@ -171,7 +171,7 @@ export default function WhyThisPlanPage() {
                       Audit log comparing AI generated numbers with backend Python Decimal metrics
                     </p>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700">
                     100% Validated
                   </span>
                 </div>

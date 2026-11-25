@@ -189,7 +189,7 @@ def call_groq_structured(
                 json=payload,
             )
 
-            # 429: Rate / TPM limit exceeded — wait briefly and retry once if within budget
+            # 429: Rate / TPM limit exceeded: wait briefly and retry once if within budget
             if resp.status_code == 429:
                 retry_sec = _parse_retry_after(resp.headers, resp.text)
                 if retry_sec is not None and 0 < retry_sec <= MAX_RATE_LIMIT_WAIT_SECONDS:

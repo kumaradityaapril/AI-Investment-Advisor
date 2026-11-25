@@ -458,7 +458,7 @@ INSTRUCTIONS:
 2. Write a clear, structured summary comparing key points, trade-offs, costs, tax rules, and practical takeaways.
 3. Provide 4 to 6 concrete, actionable key findings backed by the evidence.
 4. Populate the `sources` list with the exact titles/references from the VERIFIED EVIDENCE items you relied on.
-5. Leave `supporting_evidence` as an empty array `[]` (the backend attaches the full verified evidence records automatically — do NOT copy long snippets into your JSON).
+5. Leave `supporting_evidence` as an empty array `[]` (the backend attaches the full verified evidence records automatically; do NOT copy long snippets into your JSON).
 6. Always include 3 to 5 clear `risks_and_limitations` (e.g. market volatility, inflation, liquidity/lock-in constraints, tax policy changes).
 7. NEVER state or imply guaranteed returns, risk-free investments, or certain profits for market-linked products.
 8. Return ONLY a JSON object matching the ResearchReport schema.

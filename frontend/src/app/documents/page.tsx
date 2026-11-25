@@ -177,7 +177,7 @@ export default function DocumentsPage() {
           {/* TOP BAR */}
           <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 border-b border-slate-200 gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-xs tracking-wider uppercase mb-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-xs tracking-wider uppercase mb-2">
                 <Database className="w-4 h-4 text-indigo-600" />
                 <span>Hybrid RAG • PostgreSQL pgvector &amp; BM25</span>
               </div>
@@ -272,7 +272,7 @@ export default function DocumentsPage() {
                       </p>
                     </div>
                   </div>
-                  <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700">
+                  <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700">
                     {documents.length} Files
                   </span>
                 </div>
@@ -298,7 +298,7 @@ export default function DocumentsPage() {
                           <div className="flex items-center gap-2">
                             <h4 className="text-sm font-bold text-slate-900">{doc.filename}</h4>
                             <span
-                              className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+                              className={`text-[10px] font-semibold px-2 py-0.5 rounded-md ${
                                 doc.indexing_status === "indexed"
                                   ? "bg-emerald-100 text-emerald-800"
                                   : "bg-amber-100 text-amber-800"
@@ -346,7 +346,7 @@ export default function DocumentsPage() {
             <div className="lg:col-span-5 space-y-6">
               <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs">
                 <div className="flex items-center gap-3 pb-6 border-b border-slate-100 mb-6">
-                  <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center">
                     <Search className="w-5 h-5" />
                   </div>
                   <div>
@@ -387,7 +387,7 @@ export default function DocumentsPage() {
                         <span className="text-xs font-bold text-indigo-900 uppercase tracking-wider flex items-center gap-1.5">
                           <Sparkles className="w-4 h-4 text-indigo-600" /> Grounded Analysis
                         </span>
-                        <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-md">
                           Citation Verified
                         </span>
                       </div>

@@ -47,6 +47,7 @@ interface FinancialContextData {
     total_savings_and_investments?: string | number;
     monthly_surplus?: string | number;
     savings_rate?: string | number;
+    savings_rate_percent?: string | number;
     emergency_fund_coverage_months?: string | number;
     emergency_fund_target?: string | number;
     emergency_fund_shortfall?: string | number;
@@ -118,21 +119,38 @@ export default function DashboardPage() {
   const risk = data?.risk_assessment;
   const goalAnalysis = data?.goal_analysis || [];
 
+  const rawSavings = Number(profile.savings || 0);
+  const rawInvestments = Number(profile.existing_investments || 0);
+  const computedTotalWealth = rawSavings + rawInvestments;
+
   const totalWealth = metrics.total_savings_and_investments
     ? `₹${Number(metrics.total_savings_and_investments).toLocaleString("en-IN")}`
+    : computedTotalWealth > 0
+    ? `₹${computedTotalWealth.toLocaleString("en-IN")}`
     : "₹0";
 
   const monthlySurplus = metrics.monthly_surplus
     ? `₹${Number(metrics.monthly_surplus).toLocaleString("en-IN")}`
     : "₹0";
 
-  const savingsRate = metrics.savings_rate
-    ? `${Number(metrics.savings_rate).toFixed(1)}%`
-    : "0.0%";
+  const rawSavingsRate =
+    metrics.savings_rate_percent !== undefined && metrics.savings_rate_percent !== null
+      ? metrics.savings_rate_percent
+      : metrics.savings_rate !== undefined && metrics.savings_rate !== null
+      ? metrics.savings_rate
+      : profile.monthly_income && Number(profile.monthly_income) > 0 && metrics.monthly_surplus
+      ? (Number(metrics.monthly_surplus) / Number(profile.monthly_income)) * 100
+      : 0;
+
+  const savingsRate = `${Number(rawSavingsRate).toFixed(1)}%`;
+
+  const monthlyExp = Number(profile.monthly_expenses || 0);
+  const computedEmergencyMonths =
+    monthlyExp > 0 && rawSavings > 0 ? rawSavings / monthlyExp : 0;
 
   const emergencyMonths = metrics.emergency_fund_coverage_months
     ? `${Number(metrics.emergency_fund_coverage_months).toFixed(1)} mos`
-    : "0.0 mos";
+    : `${computedEmergencyMonths.toFixed(1)} mos`;
 
   return (
     <ProtectedRoute>
@@ -143,12 +161,12 @@ export default function DashboardPage() {
           {/* TOP WELCOME BAR */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-8 border-b border-slate-200 gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-xs tracking-wider uppercase mb-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-xs tracking-wider uppercase mb-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Live Institutional Intelligence</span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 font-display tracking-tight">
-                Welcome back, {user?.name || (user?.email ? user.email.split("@")[0] : "Investor")} 👋
+                Welcome back, {user?.name || (user?.email ? user.email.split("@")[0] : "Investor")}
               </h1>
               <p className="text-sm sm:text-base text-slate-500 mt-1">
                 Here is your live wealth overview calibrated with Python Decimal math and verified SEBI regulatory guardrails.
@@ -177,7 +195,7 @@ export default function DashboardPage() {
           {!isLoading && !hasProfile && (
             <div className="mb-8 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-indigo-700 to-indigo-600 text-white shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
               <div>
-                <span className="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-semibold uppercase tracking-wider">
+                <span className="px-3 py-1 rounded-md bg-white/20 text-white text-xs font-semibold uppercase tracking-wider">
                   Profile Setup Needed
                 </span>
                 <h3 className="text-2xl font-bold font-display mt-2">
@@ -244,12 +262,12 @@ export default function DashboardPage() {
                 <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                   Savings Rate
                 </span>
-                <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center">
+                <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center">
                   <PieIcon className="w-5 h-5" />
                 </div>
               </div>
               <div>
-                <h2 className="text-3xl font-extrabold text-purple-700 font-display tracking-tight">
+                <h2 className="text-3xl font-extrabold text-slate-900 font-display tracking-tight">
                   {savingsRate}
                 </h2>
                 <p className="text-xs text-slate-400 mt-1">
@@ -334,7 +352,7 @@ export default function DashboardPage() {
                           <div>
                             <div className="flex items-center gap-2">
                               <h4 className="text-base font-bold text-slate-900">{g.title}</h4>
-                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 uppercase">
+                              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-indigo-100 text-indigo-700 uppercase">
                                 {g.goal_type}
                               </span>
                             </div>
@@ -415,7 +433,7 @@ export default function DashboardPage() {
                           <Sparkles className="w-4 h-4 text-indigo-600" />
                           Advisor Recommendation
                         </span>
-                        <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
+                        <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">
                           100% Mathematically Validated
                         </span>
                       </div>
@@ -432,7 +450,7 @@ export default function DashboardPage() {
                               <div key={idx} className="bg-white p-3.5 rounded-xl border border-indigo-100 shadow-xs space-y-1">
                                 <div className="flex items-center justify-between">
                                   <span className="font-semibold text-xs text-slate-900">{rec.title}</span>
-                                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${
+                                  <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md ${
                                     rec.priority === "high" ? "bg-rose-50 text-rose-700 border border-rose-100" :
                                     rec.priority === "medium" ? "bg-amber-50 text-amber-700 border border-amber-100" :
                                     "bg-slate-50 text-slate-600 border border-slate-200"
@@ -481,14 +499,14 @@ export default function DashboardPage() {
                       Calibrated score: <strong>{risk?.risk_score ?? 12} / 20</strong>
                     </p>
                   </div>
-                  <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-700 flex items-center justify-center font-bold text-base border border-purple-100">
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-base border border-indigo-100">
                     {risk?.risk_score ?? 12}
                   </div>
                 </div>
 
-                <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden mb-4">
+                <div className="w-full bg-slate-100 h-2.5 rounded-md overflow-hidden mb-4">
                   <div
-                    className="bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 h-full rounded-full"
+                    className="bg-gradient-to-r from-emerald-500 via-amber-500 to-rose-500 h-full rounded-md"
                     style={{ width: `${((risk?.risk_score ?? 12) / 20) * 100}%` }}
                   ></div>
                 </div>
@@ -548,7 +566,7 @@ export default function DashboardPage() {
                   className="flex items-center justify-between p-3.5 rounded-2xl bg-slate-50 hover:bg-indigo-50/50 hover:border-indigo-200 border border-slate-100 transition-all group"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-700 flex items-center justify-center">
                       <Sparkles className="w-4 h-4" />
                     </div>
                     <div>

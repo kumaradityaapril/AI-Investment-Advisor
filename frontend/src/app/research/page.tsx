@@ -82,7 +82,7 @@ export default function ResearchPage() {
           {/* HEADER */}
           <div className="flex flex-col md:flex-row md:items-end justify-between pb-8 border-b border-slate-200 gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-xs tracking-wider uppercase mb-2">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-indigo-50 border border-indigo-100 text-indigo-700 font-semibold text-xs tracking-wider uppercase mb-2">
                 <Sparkles className="w-4 h-4 text-indigo-600" />
                 <span>Autonomous LangGraph Research Agent</span>
               </div>
@@ -205,7 +205,7 @@ export default function ResearchPage() {
                       <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider flex items-center gap-1.5">
                         <FileText className="w-4 h-4" /> Research Dossier
                       </span>
-                      <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                      <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-md">
                         Evidence Grounded
                       </span>
                     </div>
@@ -260,7 +260,7 @@ export default function ResearchPage() {
                                 <span className="text-xs font-bold text-slate-800">
                                   {ev.source_title}
                                 </span>
-                                <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-100">
+                                <span className="text-[10px] font-semibold uppercase tracking-wide px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 border border-indigo-100">
                                   {ev.source_type === "financial_document"
                                     ? "Your Document"
                                     : ev.source_type === "financial_calculation"
