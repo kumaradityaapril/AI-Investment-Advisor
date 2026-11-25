@@ -5,9 +5,9 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroWealthShowcase3D from "@/components/HeroWealthShowcase3D";
-import TiltCard from "@/components/TiltCard";
 import AuthModal from "@/components/AuthModal";
 import { useAuth } from "@/context/AuthContext";
+import { SpotlightCard, Particles, CountUp, DecryptedText } from "@/components/reactbits";
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -22,16 +22,26 @@ export default function HomePage() {
       <main className="flex-1 pt-20">
         {/* HERO SECTION WITH 3D CANVAS */}
         <section className="relative overflow-hidden pt-8 sm:pt-12 pb-14 sm:pb-20 px-4 sm:px-8 lg:px-12 2xl:px-16 max-w-[1600px] mx-auto w-full">
-          {/* Subtle Ambient Backdrops */}
-          
-          
+          {/* React Bits Interactive 3D Particle Constellation */}
+          <Particles
+            particleCount={38}
+            speed={0.4}
+            particleColor="rgba(42, 20, 180, 0.22)"
+            lineColor="rgba(42, 20, 180, 0.08)"
+          />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 xl:gap-14 items-center relative z-10">
             {/* Left Content */}
             <div className="lg:col-span-7 xl:col-span-7 flex flex-col gap-6 z-10">
               <div className="inline-flex items-center gap-2.5 self-start px-3.5 py-1 rounded-md bg-indigo-50 border border-indigo-100/90 text-indigo-900 font-semibold text-xs tracking-wide shadow-xs">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>ENTERPRISE WEALTH INTELLIGENCE • SEC &amp; SEBI GROUNDED</span>
+                <DecryptedText
+                  text="ENTERPRISE WEALTH INTELLIGENCE • SEC & SEBI GROUNDED"
+                  speed={35}
+                  maxIterations={12}
+                  className="font-semibold text-xs tracking-wide"
+                  encryptedClassName="text-indigo-600 font-mono text-xs"
+                />
               </div>
 
               <h1 className="font-display font-extrabold text-4xl sm:text-5xl lg:text-6xl xl:text-7xl text-[#0b1c30] tracking-tight leading-[1.08]">
@@ -100,17 +110,21 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* Key Platform Accreditations - Interactive 3D Tilt Ribbon */}
+              {/* Key Platform Accreditations - React Bits Spotlight Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-3">
-                <TiltCard maxTilt={8} scale={1.03}>
-                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-emerald-200 transition-colors h-full flex flex-col justify-between">
+                <SpotlightCard
+                  className="h-full border border-slate-200/80 hover:border-emerald-300"
+                  spotlightColor="rgba(16, 185, 129, 0.08)"
+                  borderColor="rgba(16, 185, 129, 0.25)"
+                >
+                  <div className="p-4 rounded-2xl h-full flex flex-col justify-between">
                     <div>
                       <div className="flex items-center gap-1.5 text-emerald-600 mb-1">
                         <span className="material-symbols-outlined text-[17px]">verified</span>
                         <span className="text-[10px] font-bold uppercase tracking-wider">Grounding</span>
                       </div>
                       <div className="font-display font-extrabold text-2xl text-[#0b1c30]">
-                        100%
+                        <CountUp to={100} suffix="%" duration={1.8} />
                       </div>
                       <div className="text-xs text-[#777586] font-semibold mt-0.5">
                         Claim Ledger Grounding
@@ -120,17 +134,21 @@ export default function HomePage() {
                       Every currency &amp; % cross-referenced against facts
                     </div>
                   </div>
-                </TiltCard>
+                </SpotlightCard>
 
-                <TiltCard maxTilt={8} scale={1.03}>
-                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-indigo-200 transition-colors h-full flex flex-col justify-between">
+                <SpotlightCard
+                  className="h-full border border-slate-200/80 hover:border-indigo-300"
+                  spotlightColor="rgba(42, 20, 180, 0.08)"
+                  borderColor="rgba(42, 20, 180, 0.25)"
+                >
+                  <div className="p-4 rounded-2xl h-full flex flex-col justify-between">
                     <div>
                       <div className="flex items-center gap-1.5 text-indigo-600 mb-1">
                         <span className="material-symbols-outlined text-[17px]">hub</span>
                         <span className="text-[10px] font-bold uppercase tracking-wider">Hybrid RAG</span>
                       </div>
                       <div className="font-display font-extrabold text-2xl text-[#2a14b4]">
-                        768-dim
+                        <CountUp to={768} suffix="-dim" duration={2.2} />
                       </div>
                       <div className="text-xs text-[#777586] font-semibold mt-0.5">
                         HNSW Vector Embeddings
@@ -140,10 +158,14 @@ export default function HomePage() {
                       SEC 10-K &amp; statement ingestion in pgvector
                     </div>
                   </div>
-                </TiltCard>
+                </SpotlightCard>
 
-                <TiltCard maxTilt={8} scale={1.03}>
-                  <div className="p-4 rounded-2xl bg-white border border-slate-200/80 shadow-xs hover:border-teal-200 transition-colors h-full flex flex-col justify-between">
+                <SpotlightCard
+                  className="h-full border border-slate-200/80 hover:border-teal-300"
+                  spotlightColor="rgba(14, 165, 233, 0.08)"
+                  borderColor="rgba(14, 165, 233, 0.25)"
+                >
+                  <div className="p-4 rounded-2xl h-full flex flex-col justify-between">
                     <div>
                       <div className="flex items-center gap-1.5 text-teal-600 mb-1">
                         <span className="material-symbols-outlined text-[17px]">calculate</span>
@@ -160,7 +182,7 @@ export default function HomePage() {
                       Zero floating point drift or LLM hallucination
                     </div>
                   </div>
-                </TiltCard>
+                </SpotlightCard>
               </div>
 
               {/* Live Institutional Signal Ribbon */}
@@ -498,10 +520,15 @@ export default function HomePage() {
                 tag: "Security",
               },
             ].map((feature, i) => (
-              <TiltCard key={i} maxTilt={6} scale={1.02} className="h-full">
+              <SpotlightCard
+                key={i}
+                className="h-full border border-slate-200/90 hover:border-indigo-300 transition-all"
+                spotlightColor="rgba(42, 20, 180, 0.08)"
+                borderColor="rgba(42, 20, 180, 0.22)"
+              >
                 <Link
                   href={feature.path}
-                  className="group p-6 rounded-2xl bg-white border border-[#e2e8f0] shadow-sm hover:shadow-md transition-all flex flex-col justify-between h-full"
+                  className="group p-6 rounded-2xl flex flex-col justify-between h-full"
                 >
                   <div>
                     <div className="flex items-center justify-between mb-4">
@@ -525,7 +552,7 @@ export default function HomePage() {
                     Launch View →
                   </div>
                 </Link>
-              </TiltCard>
+              </SpotlightCard>
             ))}
           </div>
         </section>
