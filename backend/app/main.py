@@ -189,6 +189,9 @@ app.add_middleware(SecurityHeadersMiddleware)
 cors_origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "https://ai-investment-advisor-inky.vercel.app",
+    "https://ai-investment-advisor-git-main-kumaradityaaprils-projects.vercel.app",
+    "https://ai-investment-advisor-nqo1mcvs7-kumaradityaaprils-projects.vercel.app",
 ]
 extra_origins = os.getenv("FRONTEND_URL", "")
 if extra_origins:
