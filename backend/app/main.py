@@ -63,10 +63,10 @@ app = FastAPI(
 )
 
 
-def find_groq_error(exc: Exception) -> Exception | None:
+def find_groq_error(exc: BaseException) -> Exception | None:
     """Find a Groq exception inside a wrapped exception chain."""
-    current: Exception | None = exc
-    visited = set()
+    current: BaseException | None = exc
+    visited: set[int] = set()
     while current is not None and id(current) not in visited:
         visited.add(id(current))
         if isinstance(
@@ -82,7 +82,7 @@ def find_groq_error(exc: Exception) -> Exception | None:
     return None
 
 
-def build_groq_error_response(exc: Exception) -> JSONResponse:
+def build_groq_error_response(exc: BaseException) -> JSONResponse:
     """Convert Groq failures into appropriate HTTP responses."""
     groq_error = find_groq_error(exc) or exc
 
