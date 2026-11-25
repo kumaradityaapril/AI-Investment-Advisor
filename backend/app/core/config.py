@@ -38,5 +38,19 @@ class Settings(BaseSettings):
         extra="ignore",
     )
 
+    def __repr__(self) -> str:
+        return f"<Settings app_name='{self.app_name}' app_env='{self.app_env}'>"
+
+    def __str__(self) -> str:
+        return self.__repr__()
+
+    @property
+    def has_groq_key(self) -> bool:
+        return bool(self.groq_api_key and self.groq_api_key.strip())
+
+    @property
+    def has_gemini_key(self) -> bool:
+        return bool(self.gemini_api_key and self.gemini_api_key.strip())
+
 
 settings = Settings()

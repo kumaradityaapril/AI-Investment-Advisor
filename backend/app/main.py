@@ -20,6 +20,8 @@ from app.api.research import router as research_router
 from app.api.scenarios import router as scenarios_router
 from app.core.exceptions import register_exception_handlers
 from app.core.logging_middleware import AuditLoggingMiddleware
+from app.core.rate_limit_middleware import RateLimitMiddleware
+from app.core.security_headers_middleware import SecurityHeadersMiddleware
 
 from app.services.advisor_orchestration_service import (
     AdvisorOrchestrationError,
@@ -180,7 +182,9 @@ async def handle_http_exception(
     )
 
 
+app.add_middleware(RateLimitMiddleware)
 app.add_middleware(AuditLoggingMiddleware)
+app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -211,6 +215,8 @@ def health_check():
     return {
         "status": "healthy",
         "service": "ai-investment-advisor-api",
+        "rate_limiting": "active",
+        "security_headers": "active",
     }
 
 
