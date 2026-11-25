@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 import logging
+import os
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -185,12 +186,18 @@ async def handle_http_exception(
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(AuditLoggingMiddleware)
 app.add_middleware(SecurityHeadersMiddleware)
+cors_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+extra_origins = os.getenv("FRONTEND_URL", "")
+if extra_origins:
+    cors_origins.extend([o.strip() for o in extra_origins.split(",") if o.strip()])
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=cors_origins,
+    allow_origin_regex=r"^https://.*\.vercel\.app$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
