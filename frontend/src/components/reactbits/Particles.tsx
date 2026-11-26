@@ -28,8 +28,8 @@ interface Particle {
 export default function Particles({
   className = "w-full h-full absolute inset-0 pointer-events-none",
   particleCount = 45,
-  particleColor = "rgba(42, 20, 180, 0.25)",
-  lineColor = "rgba(42, 20, 180, 0.08)",
+  particleColor = "rgba(16, 185, 129, 0.35)",
+  lineColor = "rgba(16, 185, 129, 0.12)",
   speed = 0.6,
   interactive = true,
 }: ParticlesProps) {
@@ -72,7 +72,7 @@ export default function Particles({
 
     // Initialize particles
     const particles: Particle[] = [];
-    const colors = [particleColor, "rgba(16, 185, 129, 0.28)", "rgba(14, 165, 233, 0.22)"];
+    const colors = [particleColor, "rgba(52, 211, 153, 0.35)", "rgba(45, 212, 191, 0.25)"];
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({

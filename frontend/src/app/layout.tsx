@@ -27,7 +27,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-[#f8f9ff] text-[#0b1c30] antialiased">
+      <body className="min-h-screen bg-[#090a0f] text-[#f8fafc] antialiased selection:bg-emerald-500/30 selection:text-emerald-300">
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

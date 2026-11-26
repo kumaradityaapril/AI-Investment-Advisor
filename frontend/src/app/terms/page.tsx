@@ -7,7 +7,7 @@ import { ShieldAlert, FileText, ArrowLeft, AlertTriangle } from "lucide-react";
 
 export default function TermsAndConditionsPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-[#f8f9ff]">
+    <div className="flex flex-col min-h-screen bg-[#090a0f] text-[#f8fafc]">
       <Navbar />
 
       <main className="flex-1 pt-28 pb-20 px-4 sm:px-8 lg:px-12 2xl:px-16 max-w-[1200px] mx-auto w-full">

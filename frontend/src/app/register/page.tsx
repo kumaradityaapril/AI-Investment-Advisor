@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { UserPlus, Mail, Lock, ArrowRight, ShieldCheck, AlertCircle, User as UserIcon } from "lucide-react";
+import { UserPlus, Mail, Lock, ArrowRight, ShieldCheck, AlertCircle, User as UserIcon, Sparkles } from "lucide-react";
 
 export default function RegisterPage() {
   const { register } = useAuth();
@@ -44,96 +44,103 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f9ff]">
+    <div className="min-h-screen flex flex-col bg-[#090a0f] text-[#f8fafc] relative overflow-hidden">
+      {/* Ambient Emerald Glow Orbs */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-10 left-10 w-[350px] h-[350px] bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="absolute inset-0 dark-grid opacity-30 pointer-events-none" />
+
       <Navbar />
 
-      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12 md:py-20">
-        <div className="w-full max-w-xl">
-          <div className="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/80 shadow-xl shadow-indigo-50/50">
+      <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 md:py-24 relative z-10">
+        <div className="w-full max-w-xl animate-popup">
+          {/* Main Glassy 3D Card */}
+          <div className="relative rounded-3xl p-8 sm:p-12 backdrop-blur-2xl bg-zinc-900/60 border border-white/10 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.95),0_0_50px_rgba(16,185,129,0.1)] transition-all duration-300 hover:border-emerald-500/30">
+            {/* Top Glowing Header */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-700 border border-indigo-100 mb-4 shadow-sm">
-                <UserPlus className="w-7 h-7" />
+              <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-950/60 text-emerald-400 border border-emerald-500/30 mb-4 shadow-[0_0_25px_rgba(16,185,129,0.35)] transition-transform hover:scale-110 duration-300">
+                <UserPlus className="w-8 h-8" />
               </div>
-              <h1 className="text-3xl font-extrabold text-slate-900 font-display tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-white font-display tracking-tight">
                 Create Your Account
               </h1>
-              <p className="text-sm text-slate-500 mt-2">
-                Get started with institutional-grade AI wealth analysis & simulations
+              <p className="text-sm text-zinc-400 mt-2">
+                Institutional-grade AI wealth analysis, portfolio simulations &amp; audit trails
               </p>
             </div>
 
             {error && (
-              <div className="mb-6 p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 flex items-start gap-3 text-sm">
-                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-600" />
+              <div className="mb-6 p-4 rounded-2xl bg-rose-950/40 border border-rose-500/40 text-rose-300 flex items-start gap-3 text-sm shadow-[0_0_20px_rgba(244,63,94,0.15)]">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-rose-400" />
                 <div className="flex-1 font-medium">{error}</div>
               </div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">
                   Full Name
                 </label>
                 <div className="relative">
-                  <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <UserIcon className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Rahul Sharma"
-                    className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all text-sm outline-none text-slate-900 bg-slate-50/50"
+                    className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-zinc-800 bg-zinc-950/80 text-white placeholder-zinc-500 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all text-sm outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">
                   Email Address
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="investor@example.com"
-                    className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all text-sm outline-none text-slate-900 bg-slate-50/50"
+                    className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-zinc-800 bg-zinc-950/80 text-white placeholder-zinc-500 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all text-sm outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">
-                  Password (min 8 characters)
+                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">
+                  Password (Min 8 Characters)
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all text-sm outline-none text-slate-900 bg-slate-50/50"
+                    className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-zinc-800 bg-zinc-950/80 text-white placeholder-zinc-500 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all text-sm outline-none"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-600 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-400 mb-2">
                   Confirm Password
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
                   <input
                     type="password"
                     required
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="••••••••"
-                    className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-slate-200 focus:border-indigo-600 focus:ring-4 focus:ring-indigo-100 transition-all text-sm outline-none text-slate-900 bg-slate-50/50"
+                    className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-zinc-800 bg-zinc-950/80 text-white placeholder-zinc-500 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 transition-all text-sm outline-none"
                   />
                 </div>
               </div>
@@ -141,36 +148,38 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-indigo-700 to-indigo-600 hover:from-indigo-800 hover:to-indigo-700 text-white font-semibold text-sm shadow-lg shadow-indigo-200 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-70 mt-2"
+                className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-400 hover:from-emerald-400 hover:to-emerald-300 text-zinc-950 font-bold text-sm shadow-[0_4px_25px_rgba(16,185,129,0.35)] hover:shadow-[0_8px_35px_rgba(16,185,129,0.55)] hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 mt-3"
               >
                 {isLoading ? (
-                  <span className="flex items-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                    Creating Account...
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="w-4 h-4 rounded-full border-2 border-zinc-950 border-t-transparent animate-spin"></span>
+                    <span>Creating Protected Portfolio...</span>
+                  </div>
                 ) : (
                   <>
-                    Complete Registration <ArrowRight className="w-4 h-4" />
+                    <span>Unlock AI Investment Advisor</span>
+                    <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
             </form>
 
-            <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-              <p className="text-sm text-slate-600">
-                Already registered?{" "}
+            <div className="mt-8 pt-6 border-t border-white/10 text-center">
+              <p className="text-sm text-zinc-400">
+                Already have an account?{" "}
                 <Link
                   href="/login"
-                  className="font-semibold text-indigo-600 hover:text-indigo-700 underline underline-offset-4"
+                  className="font-semibold text-emerald-400 hover:text-emerald-300 underline underline-offset-4 transition-colors"
                 >
-                  Sign In
+                  Sign in here
                 </Link>
               </p>
             </div>
 
-            <div className="mt-6 flex items-center justify-center gap-2 text-xs text-slate-400">
-              <ShieldCheck className="w-4 h-4 text-emerald-500" />
-              <span>Full privacy: Your financial data is isolated with row-level tenant security</span>
+            {/* Institutional Security Badge */}
+            <div className="mt-6 flex items-center justify-center gap-2 text-xs text-zinc-400 bg-zinc-950/60 border border-zinc-800/80 py-2.5 px-4 rounded-xl">
+              <ShieldCheck className="w-4 h-4 text-emerald-400" />
+              <span>Full SEBI &amp; SEC Grounding • Multi-Tenant Isolation</span>
             </div>
           </div>
         </div>
@@ -180,4 +189,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-

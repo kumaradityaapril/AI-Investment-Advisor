@@ -64,19 +64,19 @@ export default function Globe3D({ className = "w-full h-full", size = 420 }: Glo
 
     pointsGeometry.setAttribute("position", new THREE.Float32BufferAttribute(pointPositions, 3));
     const pointsMaterial = new THREE.PointsMaterial({
-      color: 0x4338ca, // Indigo-600
+      color: 0x10b981, // Emerald-500
       size: 1.6,
       transparent: true,
-      opacity: 0.65,
+      opacity: 0.75,
     });
     const globePoints = new THREE.Points(pointsGeometry, pointsMaterial);
     globeGroup.add(globePoints);
 
     // 2. Latitude and Longitude Rings
     const ringMaterial = new THREE.LineBasicMaterial({
-      color: 0x2a14b4,
+      color: 0x064e3b, // Emerald-900
       transparent: true,
-      opacity: 0.18,
+      opacity: 0.35,
     });
 
     for (let r = -2; r <= 2; r++) {
@@ -98,10 +98,10 @@ export default function Globe3D({ className = "w-full h-full", size = 420 }: Glo
     // 3. Financial Hubs (Latitude, Longitude in degrees)
     const hubs = [
       { name: "Mumbai (NSE/BSE)", lat: 19.076, lon: 72.8777, color: 0x10b981 }, // Emerald
-      { name: "New York (NYSE/NASDAQ)", lat: 40.7128, lon: -74.006, color: 0x2a14b4 }, // Deep Indigo
-      { name: "London (LSE)", lat: 51.5074, lon: -0.1278, color: 0x0ea5e9 }, // Sky
+      { name: "New York (NYSE/NASDAQ)", lat: 40.7128, lon: -74.006, color: 0x34d399 }, // Mint
+      { name: "London (LSE)", lat: 51.5074, lon: -0.1278, color: 0x06b6d4 }, // Cyan
       { name: "Singapore (SGX)", lat: 1.3521, lon: 103.8198, color: 0x10b981 }, // Emerald
-      { name: "Tokyo (TSE)", lat: 35.6762, lon: 139.6503, color: 0x6366f1 }, // Indigo
+      { name: "Tokyo (TSE)", lat: 35.6762, lon: 139.6503, color: 0x2dd4bf }, // Teal
     ];
 
     function latLonToVector3(lat: number, lon: number, r: number) {
@@ -167,9 +167,9 @@ export default function Globe3D({ className = "w-full h-full", size = 420 }: Glo
       const curvePoints = curve.getPoints(50);
       const curveGeom = new THREE.BufferGeometry().setFromPoints(curvePoints);
       const curveMat = new THREE.LineBasicMaterial({
-        color: pairIdx % 2 === 0 ? 0x10b981 : 0x4338ca,
+        color: pairIdx % 2 === 0 ? 0x10b981 : 0x34d399,
         transparent: true,
-        opacity: 0.35,
+        opacity: 0.45,
       });
       const arcLine = new THREE.Line(curveGeom, curveMat);
       globeGroup.add(arcLine);
@@ -177,7 +177,7 @@ export default function Globe3D({ className = "w-full h-full", size = 420 }: Glo
       // Animated signal packet along arc
       const packetGeom = new THREE.SphereGeometry(1.8, 12, 12);
       const packetMat = new THREE.MeshBasicMaterial({
-        color: pairIdx % 2 === 0 ? 0x85f8c4 : 0xa5b4fc,
+        color: pairIdx % 2 === 0 ? 0x6ee7b7 : 0xa7f3d0,
       });
       const packetMesh = new THREE.Mesh(packetGeom, packetMat);
       globeGroup.add(packetMesh);
