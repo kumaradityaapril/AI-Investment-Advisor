@@ -46,20 +46,55 @@ html, body {
   font-family: 'JetBrains Mono', monospace;
 }
 
-/* Glassmorphism Classes */
+/* ==========================================================
+   AUTHENTIC GLASSMORPHISM OBJECT (Matches Figma/Apple frosted glass)
+   ========================================================== */
+.glass-panel {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+  background-color: rgba(14, 18, 24, 0.42);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.85),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4),
+    inset 0 0 24px 0 rgba(255, 255, 255, 0.03);
+}
+
+.glass-panel:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  border-top-color: rgba(167, 243, 208, 0.65);
+  border-left-color: rgba(167, 243, 208, 0.45);
+  box-shadow: 
+    0 30px 75px -15px rgba(0, 0, 0, 0.9),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.6),
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4),
+    0 0 35px 0 rgba(16, 185, 129, 0.2);
+  transform: translateY(-4px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .glass-nav {
-  background: rgba(9, 10, 15, 0.85);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(9, 10, 15, 0.82);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6), inset 0 -1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 .glass-card {
-  background: rgba(18, 20, 28, 0.7);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.55);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+  background-color: rgba(14, 18, 24, 0.45);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 20px 50px -10px rgba(0, 0, 0, 0.75),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
 }
 
 .glass-card-hover {
@@ -69,19 +104,31 @@ html, body {
 .glass-card-hover:hover {
   transform: translateY(-4px) scale(1.01);
   border-color: rgba(16, 185, 129, 0.45);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 25px rgba(16, 185, 129, 0.15);
+  border-top-color: rgba(167, 243, 208, 0.6);
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.85),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.5),
+    0 0 25px rgba(16, 185, 129, 0.2);
 }
 
 .glass-input {
-  background: rgba(15, 17, 23, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(10, 12, 18, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
   color: #f8fafc;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.4);
   transition: all 0.2s ease;
 }
 
 .glass-input:focus {
   border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  border-top-color: #34d399;
+  box-shadow: 
+    inset 0 2px 4px 0 rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(16, 185, 129, 0.25),
+    0 0 20px rgba(16, 185, 129, 0.15);
   outline: none;
 }
 
@@ -89,7 +136,7 @@ html, body {
 @keyframes popupEntrance {
   0% {
     opacity: 0;
-    transform: scale(0.96) translateY(12px);
+    transform: scale(0.95) translateY(14px);
   }
   100% {
     opacity: 1;
@@ -116,14 +163,14 @@ html, body {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #021a12;
   font-weight: 700;
-  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 20px rgba(16, 185, 129, 0.35);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-emerald:hover {
   background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.55);
 }
 
 /* Dark subtle dot grid */
@@ -134,10 +181,27 @@ html, body {
 
 /* Institutional Matte Dark Theme Overrides for Core Platform Pages */
 .bg-white {
-  background-color: rgba(18, 20, 28, 0.72) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%) !important;
+  background-color: rgba(14, 18, 24, 0.45) !important;
+  backdrop-filter: blur(24px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 
+    0 20px 50px -10px rgba(0, 0, 0, 0.75),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.4) !important;
   color: #f8fafc;
+}
+
+.bg-white:hover {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  border-top-color: rgba(167, 243, 208, 0.6) !important;
+  box-shadow: 
+    0 25px 60px -10px rgba(0, 0, 0, 0.85),
+    inset 0 1px 2px 0 rgba(255, 255, 255, 0.5),
+    0 0 25px rgba(16, 185, 129, 0.18) !important;
+  transition: all 0.25s ease-out;
 }
 
 .border-slate-200,
@@ -145,7 +209,7 @@ html, body {
 .border-slate-200\/90,
 .border-slate-200\/70,
 .border-slate-100 {
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.09) !important;
 }
 
 .text-slate-900,
@@ -175,7 +239,7 @@ html, body {
 .bg-slate-100,
 .bg-\[\#eff4ff\],
 .bg-\[\#f8f9ff\] {
-  background-color: rgba(15, 17, 23, 0.75) !important;
+  background-color: rgba(10, 14, 20, 0.6) !important;
 }
 
 .bg-indigo-700,
@@ -216,11 +280,4 @@ html, body {
 .hover\:text-indigo-800:hover,
 .hover\:text-indigo-900:hover {
   color: #34d399 !important;
-}
-
-/* Card Hover 3D Popping */
-.bg-white:hover {
-  border-color: rgba(16, 185, 129, 0.35) !important;
-  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(16, 185, 129, 0.12) !important;
-  transition: all 0.25s ease-out;
 }

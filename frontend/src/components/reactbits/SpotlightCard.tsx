@@ -58,7 +58,7 @@ export default function SpotlightCard({
       onBlur={handleBlur}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative rounded-2xl border border-white/10 bg-zinc-900/70 overflow-hidden transition-all duration-300 hover:shadow-xl hover:shadow-black/60 ${className}`}
+      className={`relative rounded-3xl glass-panel overflow-hidden transition-all duration-300 ${className}`}
       {...props}
     >
       {/* Dynamic Pointer Spotlight Glow */}

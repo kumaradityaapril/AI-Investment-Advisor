@@ -221,8 +221,11 @@ export default function HomePage() {
         </section>
 
         {/* INTERACTIVE CAPABILITY TABS */}
-        <section className="py-20 px-4 sm:px-8 lg:px-12 2xl:px-16 bg-[#0c0d13] border-y border-white/10 relative">
-          <div className="max-w-[1600px] mx-auto flex flex-col gap-12">
+        <section className="py-20 px-4 sm:px-8 lg:px-12 2xl:px-16 bg-[#0c0d13] border-y border-white/10 relative overflow-hidden">
+          {/* Ambient Refraction Glow Orb behind Bento section */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-emerald-500/15 rounded-full blur-[140px] pointer-events-none" />
+
+          <div className="max-w-[1600px] mx-auto flex flex-col gap-12 relative z-10">
             <div className="flex flex-col items-center text-center max-w-2xl mx-auto">
               <span className="px-3.5 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-3 shadow-[0_0_12px_rgba(16,185,129,0.2)]">
                 COMPLETE PLATFORM ARCHITECTURE
@@ -238,7 +241,7 @@ export default function HomePage() {
 
             {/* Navigation Tabs */}
             <div className="flex justify-center">
-              <div className="inline-flex p-1.5 rounded-2xl bg-zinc-950 border border-zinc-800 shadow-xl">
+              <div className="inline-flex p-1.5 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 shadow-xl">
                 {[
                   { id: "overview", label: "Wealth Overview", icon: "wallet" },
                   { id: "rag", label: "Document RAG", icon: "menu_book" },
@@ -263,8 +266,8 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Interactive Preview Bento Card */}
-            <div className="rounded-3xl border border-white/10 bg-zinc-900/60 backdrop-blur-2xl p-6 lg:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.8)]">
+            {/* Interactive Preview Bento Card (Authentic Glassmorphism Object) */}
+            <div className="rounded-[32px] glass-panel p-6 lg:p-12">
               {activeTab === "overview" && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
                   <div className="md:col-span-1 space-y-4">
