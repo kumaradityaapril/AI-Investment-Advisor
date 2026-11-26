@@ -200,7 +200,7 @@ if extra_origins:
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
-    allow_origin_regex=r"^https://.*\.vercel\.app$",
+    allow_origin_regex=r".*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -225,6 +225,7 @@ def health_check():
     return {
         "status": "healthy",
         "service": "ai-investment-advisor-api",
+        "version": "1.0.1-cors-all",
         "rate_limiting": "active",
         "security_headers": "active",
     }
